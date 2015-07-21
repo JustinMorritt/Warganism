@@ -60,10 +60,14 @@ public:
 	void UseGoOneDir(bool on);
 	void RotateToDir(bool on);
 	void CalculateRotation();
+	void CheckPlayerBounds();
+	void CheckProjectileBounds();
 	void TurnOnCollider(bool square, bool circle);
 	void UpdateColliders();
 	void CenterPlayers();
 	void SetMousePos(int x, int y);
+	bool IsProjectileDone();
+	
 	
 	std::string m_name;
 	double m_Roation;
@@ -116,5 +120,6 @@ private:
 	bool m_UseGoToPoint;
 	bool m_UseKeyForces;
 	bool m_UseGoOneDirForever;
+	bool m_ProjectileDone;
 };
 

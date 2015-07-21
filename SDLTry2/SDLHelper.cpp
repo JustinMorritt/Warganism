@@ -237,7 +237,7 @@ void SDLHelper::SpawnProjectile(bool p1, bool p2)
 	{
 		std::cout << "Made a Projectile" << std::endl;
 		Projectile* proj = new Projectile(m_pPlayer2->getCenter().x, m_pPlayer2->getCenter().y, m_pPlayer2->getWidth() / 2, m_pPlayer2->getHeight() / 2, m_pPlayer2->m_Roation, "green", m_pRenderer, "P2projectile");
-		m_P1Projectiles.push_back(proj);
+		m_P2Projectiles.push_back(proj);
 	}
 	
 }
@@ -251,6 +251,25 @@ void SDLHelper::UpdateProjectiles()
 		{
 			m_P1Projectiles[i]->m_pProjTex->Update(m_dt);
 			m_P1Projectiles[i]->m_pProjTex->Render();
+			if (m_P1Projectiles[i]->m_pProjTex->IsProjectileDone())
+			{
+				std::cout << "Erased a P1 Projectile" << std::endl;
+				m_P1Projectiles.erase(m_P1Projectiles.begin()+i);
+			}
+		}
+	}
+
+	if (m_P2Projectiles.size() > 0)
+	{
+		for (int i = 0; i < m_P2Projectiles.size(); i++)
+		{
+			m_P2Projectiles[i]->m_pProjTex->Update(m_dt);
+			m_P2Projectiles[i]->m_pProjTex->Render();
+			if (m_P2Projectiles[i]->m_pProjTex->IsProjectileDone())
+			{
+				std::cout << "Erased a P1 Projectile" << std::endl;
+				m_P2Projectiles.erase(m_P2Projectiles.begin() + i);
+			}
 		}
 	}
 	

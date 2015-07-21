@@ -127,7 +127,6 @@ void GameEntity::Update(float dt)
 	{
 		if (m_GoDown || m_GoLeft || m_GoRight || m_GoUp){ CalculateRotation(); } //ONLY IF A KEY BEING PRESSED 
 		if (m_UseGoToPoint){ CalculateRotation();}
-		
 	}
 	
 	m_dt = dt; //Assigned for use in SpriteAnimation
@@ -149,48 +148,22 @@ void GameEntity::Update(float dt)
 		}
 	}
 
-	//ASSIGN NEW POSITION AFTER FORCES HAVE BEEN APPLIED
-	m_pPos->x += m_pVel->x * dt;		//STEP ON X
-	UpdateColliders();					//UPDATE COLLIDERS
-	//****PLAYER 1****
-	if (m_name == "player1")			//CHECK COLLISION ON X
+
+
+
+
+	if (m_name == "player1" || m_name == "player2"){ CheckPlayerBounds(); }
+	else
 	{
-		if ((m_pCenter->x - m_pCircleCollider->r < 0) || (m_pCenter->x + m_pCircleCollider->r > MyWindow::m_Width / 2))
-		{
-			m_pPos->x -= m_pVel->x * dt;
-			UpdateColliders();
-		}
+		m_pPos->x += m_pVel->x * dt; //STEP ON THE X 
+		m_pPos->y += m_pVel->y * dt; //STEP ON THE Y 
 	}
-	//*****PLAYER 2*****
-	else if (m_name == "player2")		//CHECK COLLISION ON X
-		{
-			if (m_pCenter->x - m_pCircleCollider->r < MyWindow::m_Width / 2 || m_pCenter->x + m_pCircleCollider->r > MyWindow::m_Width)
-			{
-				m_pPos->x -= m_pVel->x * dt;
-				m_pcurrSpeed->x = 0;
-				UpdateColliders();
-			}
-		}
 
-	m_pPos->y += m_pVel->y * dt; //STEP ON THE Y SAME FOR BOTH PLAYERS
-	UpdateColliders();
-	if ((m_pCenter->y - m_pCircleCollider->r < 0) || (m_pCenter->y + m_pCircleCollider->r > MyWindow::m_Height))
+
+	if (m_name == "P1projectile" || m_name == "P1projectile")
 	{
-		if (m_name == "player2")
-		{
-			m_pPos->y -= m_pVel->y * dt;
-			m_pcurrSpeed->y = 0;
-		}
-		else
-		{
-			m_pPos->y -= m_pVel->y * dt;
-		}
-		UpdateColliders();
+		CheckProjectileBounds();
 	}
-	
-
-
-
 
 
 
@@ -520,6 +493,66 @@ void GameEntity::CalculateRotation()
 	m_Roation = atan2(-m_pVel->x, m_pVel->y) * 180 / pi;
 }
 
+void GameEntity::CheckPlayerBounds()
+{
+
+	//ASSIGN NEW POSITION AFTER FORCES HAVE BEEN APPLIED
+	m_pPos->x += m_pVel->x * m_dt;		//STEP ON X
+	UpdateColliders();					//UPDATE COLLIDERS
+	//****PLAYER 1****
+	if (m_name == "player1")			//CHECK COLLISION ON X
+	{
+		if ((m_pCenter->x - m_pCircleCollider->r < 0) || (m_pCenter->x + m_pCircleCollider->r > MyWindow::m_Width / 2))
+		{
+			m_pPos->x -= m_pVel->x * m_dt;
+			UpdateColliders();
+		}
+	}
+	//*****PLAYER 2*****
+	else if (m_name == "player2")		//CHECK COLLISION ON X
+	{
+		if (m_pCenter->x - m_pCircleCollider->r < MyWindow::m_Width / 2 || m_pCenter->x + m_pCircleCollider->r > MyWindow::m_Width)
+		{
+			m_pPos->x -= m_pVel->x * m_dt;
+			m_pcurrSpeed->x = 0;
+			UpdateColliders();
+		}
+	}
+
+	m_pPos->y += m_pVel->y * m_dt; //STEP ON THE Y SAME FOR BOTH PLAYERS
+	UpdateColliders();
+	if ((m_pCenter->y - m_pCircleCollider->r < 0) || (m_pCenter->y + m_pCircleCollider->r > MyWindow::m_Height))
+	{
+		if (m_name == "player2")
+		{
+			m_pPos->y -= m_pVel->y * m_dt;
+			m_pcurrSpeed->y = 0;
+		}
+		else if (m_name == "player1")
+		{
+			m_pPos->y -= m_pVel->y * m_dt;
+		}
+		UpdateColliders();
+	}
+}
+
+void GameEntity::CheckProjectileBounds()
+{
+	UpdateColliders();
+	m_pPos->x += m_pVel->x * m_dt; //STEP ON THE X 
+	m_pPos->y += m_pVel->y * m_dt; //STEP ON THE Y 
+
+	if ((m_pCenter->x + (m_pCircleCollider->r*2) < 0) || (m_pCenter->x - (m_pCircleCollider->r*2) > MyWindow::m_Width))
+	{
+		m_ProjectileDone = true;
+	}
+	if ((m_pCenter->y + (m_pCircleCollider->r*2) < 0) || (m_pCenter->y - (m_pCircleCollider->r*2) > MyWindow::m_Height))
+	{
+		m_ProjectileDone = true;
+	}
+	UpdateColliders();
+}
+
 void GameEntity::TurnOnCollider(bool square, bool circle)
 {
 	m_UseCircleCollider = circle;
@@ -559,4 +592,9 @@ void GameEntity::SetMousePos(int x, int y)
 {
 	m_MouseX = x;
 	m_MouseY = y;
+}
+
+bool GameEntity::IsProjectileDone()
+{
+	return m_ProjectileDone;
 }
