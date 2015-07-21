@@ -166,6 +166,7 @@ void GameEntity::Update(float dt)
 		{
 			if (m_pCenter->x - m_pCircleCollider->r < MyWindow::m_Width / 2 || m_pCenter->x + m_pCircleCollider->r > MyWindow::m_Width)
 			{
+				m_pPos->x -= m_pVel->x * dt;
 				m_pcurrSpeed->x = 0;
 				UpdateColliders();
 			}
@@ -177,6 +178,7 @@ void GameEntity::Update(float dt)
 	{
 		if (m_name == "player2")
 		{
+			m_pPos->y -= m_pVel->y * dt;
 			m_pcurrSpeed->y = 0;
 		}
 		else

@@ -90,6 +90,9 @@ void SDLHelper::loadMedia()
 	m_pPlayer1->TurnOnCollider(false, true); // Turn on colliders
 	m_pPlayer1->RotateToDir(true);			  // Turn on Rotation
 	m_pPlayer1->UseKeyForces(true);
+	m_pPlayer1->SetColorMod("red"); //COLOUR FOR PLAYER AND BACKDROP BLOB
+	
+
 
 	//PLAYER 2
 	//SET UP CHARACTER       x   y    w    h   maxS Accel					
@@ -98,7 +101,7 @@ void SDLHelper::loadMedia()
 	m_pPlayer2->TurnOnCollider(false, true);  // Turn on colliders
 	m_pPlayer2->RotateToDir(true);			  // Turn on Rotation
 	m_pPlayer2->UseGoToPoint(true);
-
+	m_pPlayer2->SetColorMod("green"); //COLOUR FOR PLAYER AND BACKDROP BLOB
 	//TITLE
 	m_pTextTest = new GameEntity(0, 0, 300, 80,100,5, "Title", m_pRenderer, false);
 	m_pTextTest->LoadTextFile(m_pFont2, "Warganism", "royalblue");
@@ -158,7 +161,8 @@ SDL_Texture* SDLHelper::loadText(std::string text, SDL_Color color, int font)
 		}
 	}
 	SDL_FreeSurface(textSurface);
-	return retText;
+	return retText;
+
 }
 
 bool SDLHelper::Done()
@@ -196,14 +200,12 @@ void SDLHelper::Update()
 	//PLAYER 1
 	m_pPlayer1->Update(m_dt);
 	//m_pTexture2->SetScale(200, 200);
-	m_pPlayer1->SetColorMod("red");
 	m_pPlayer1->Render();
 
 
 	//PLAYER 2
 	//m_pTexture->SetScale(-100, -100);
 	m_pPlayer2->Update(m_dt);
-	m_pPlayer2->SetColorMod("black");
 	m_pPlayer2->Render();
 
 
