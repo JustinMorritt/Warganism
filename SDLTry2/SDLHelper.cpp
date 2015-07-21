@@ -83,25 +83,38 @@ void SDLHelper::loadMedia()
 // 	m_pTexture->SetAnimation(0, 384, 4, 128, 128, 200, true);  // Walk Backward	[3]
 // 	m_pTexture->SetAnimation(0, 512, 19, 128, 128, 50, false); // EXPLOSION	[4]
 
+	//COLORS .. SO FAR ****************USE LOWERCASE*****************
+	//Pink			//White		//Black			//Red		//Green	
+	//DarkGreen		//Blue		//RoyalBlue		//BabyBlue	//MintGreen	
+	//Orange		//Yellow	//Gold			//Fuchsia	//Purple
+	//Brown			//DarkGray	//LightGray
+	//**************************************************************
+
 	//PLAYER 1
+	GameEntity::m_P1color = "royalblue";
 	//SET UP CHARACTER       x   y    w    h   maxS Accel					
 	m_pPlayer1 = new GameEntity((SCREEN_WIDTH / 2) - (SCREEN_WIDTH / 4)-64 , (SCREEN_HEIGHT / 2) - (SCREEN_HEIGHT / 4)+64, 128, 128, 350, 20, "player1", m_pRenderer, false);
 	m_pPlayer1->LoadFile("Pics/blobee.png"); // Load Up The Full Sprite Sheet
 	m_pPlayer1->TurnOnCollider(false, true); // Turn on colliders
 	m_pPlayer1->RotateToDir(true);			  // Turn on Rotation
 	m_pPlayer1->UseKeyForces(true);
-	m_pPlayer1->SetColorMod("orange"); //COLOUR FOR PLAYER AND BACKDROP BLOB
+	m_pPlayer1->SetColorMod(GameEntity::m_P1color); //COLOUR FOR PLAYER AND BACKDROP BLOB
 	
 
 
 	//PLAYER 2
+	GameEntity::m_P2color = "fuchsia";
 	//SET UP CHARACTER       x   y    w    h   maxS Accel					
 	m_pPlayer2 = new GameEntity((SCREEN_WIDTH / 2) + (SCREEN_WIDTH / 4)-64, (SCREEN_HEIGHT / 2) - (SCREEN_HEIGHT / 4)+64, 128, 128, 350, 20, "player2", m_pRenderer, false);
 	m_pPlayer2->LoadFile("Pics/blobee.png");  // Load Up The Full Sprite Sheet
 	m_pPlayer2->TurnOnCollider(false, true);  // Turn on colliders
 	m_pPlayer2->RotateToDir(true);			  // Turn on Rotation
 	m_pPlayer2->UseGoToPoint(true);
-	m_pPlayer2->SetColorMod("halfblack"); //COLOUR FOR PLAYER AND BACKDROP BLOB
+	m_pPlayer2->SetColorMod(GameEntity::m_P2color); //COLOUR FOR PLAYER AND BACKDROP BLOB
+	
+
+
+
 	//TITLE
 	m_pTextTest = new GameEntity(0, 0, 300, 80,100,5, "Title", m_pRenderer, false);
 	m_pTextTest->LoadTextFile(m_pFont2, "Warganism", "royalblue");
@@ -230,13 +243,13 @@ void SDLHelper::SpawnProjectile(bool p1, bool p2)
 {
 	if (p1)
 	{
-		Projectile* proj = new Projectile(m_pPlayer1->getCenter().x, m_pPlayer1->getCenter().y, m_pPlayer1->getWidth() / 2, m_pPlayer1->getHeight() / 2, m_pPlayer1->m_Roation, "red", m_pRenderer, "P1projectile");
+		Projectile* proj = new Projectile(m_pPlayer1->getCenter().x, m_pPlayer1->getCenter().y, m_pPlayer1->getWidth() / 2, m_pPlayer1->getHeight() / 2, m_pPlayer1->m_Roation, GameEntity::m_P1color, m_pRenderer, "P1projectile");
 		m_P1Projectiles.push_back(proj);
 	}
 	else if (p2)
 	{
 		std::cout << "Made a Projectile" << std::endl;
-		Projectile* proj = new Projectile(m_pPlayer2->getCenter().x, m_pPlayer2->getCenter().y, m_pPlayer2->getWidth() / 2, m_pPlayer2->getHeight() / 2, m_pPlayer2->m_Roation, "green", m_pRenderer, "P2projectile");
+		Projectile* proj = new Projectile(m_pPlayer2->getCenter().x, m_pPlayer2->getCenter().y, m_pPlayer2->getWidth() / 2, m_pPlayer2->getHeight() / 2, m_pPlayer2->m_Roation, GameEntity::m_P2color, m_pRenderer, "P2projectile");
 		m_P2Projectiles.push_back(proj);
 	}
 	

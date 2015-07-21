@@ -28,11 +28,13 @@ private:
 
 	SDL_Texture* m_pbackground		= NULL;
 	
-	GameEntity* m_pPlayer2				= NULL;
+	//PLAYERS
+	GameEntity* m_pPlayer2			= NULL;
 	GameEntity* m_pPlayer1			= NULL;
 
-	SDL_Texture* m_pP1BG = NULL;
-	SDL_Texture* m_pP2BG = NULL;
+	//BACKGROUNDS
+	SDL_Texture* m_pP1BG			= NULL;
+	SDL_Texture* m_pP2BG			= NULL;
 
 	GameEntity* m_pTextTest			= NULL;
 	
@@ -48,6 +50,7 @@ private:
 	std::vector<Projectile*> m_P2Projectiles;
 
 public:
+
 	MyWindow* m_pMyWindow = NULL;
 	//Starts up SDL and creates window
 	SDLHelper();

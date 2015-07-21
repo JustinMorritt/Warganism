@@ -71,6 +71,8 @@ public:
 	
 	std::string m_name;
 	double m_Roation;
+	static std::string m_P1color;
+	static std::string m_P2color;
 private:
 	SDL_Renderer* m_pTheRenderer;
 	Vec2* m_pPos;
@@ -121,5 +123,6 @@ private:
 	bool m_UseKeyForces;
 	bool m_UseGoOneDirForever;
 	bool m_ProjectileDone;
+	
 };
 

@@ -148,10 +148,6 @@ void GameEntity::Update(float dt)
 		}
 	}
 
-
-
-
-
 	if (m_name == "player1" || m_name == "player2"){ CheckPlayerBounds(); }
 	else
 	{
@@ -160,7 +156,7 @@ void GameEntity::Update(float dt)
 	}
 
 
-	if (m_name == "P1projectile" || m_name == "P1projectile")
+	if (m_name == "P1projectile" || m_name == "P2projectile")
 	{
 		CheckProjectileBounds();
 	}
@@ -598,3 +594,7 @@ bool GameEntity::IsProjectileDone()
 {
 	return m_ProjectileDone;
 }
+
+//STATIC STUFF
+std::string GameEntity::m_P1color = "";
+std::string GameEntity::m_P2color = "";
