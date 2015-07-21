@@ -3,11 +3,14 @@
 #include <iostream>
 #include <string>
 #include <Windows.h>
+#include <vector>
 #include "SDL_image.h"
 #include "SDL_ttf.h"
 #include "MathUtils.h"
 #include "GameEntity.h"
 #include "MyWindow.h"
+#include "Projectile.h"
+
 
 
 //Fonts: ANUDRG__.ttf
@@ -41,6 +44,9 @@ private:
 
 	SDL_Texture* m_pfontTest			= NULL;
 
+	std::vector<Projectile*> m_P1Projectiles;
+	std::vector<Projectile*> m_P2Projectiles;
+
 public:
 	MyWindow* m_pMyWindow = NULL;
 	//Starts up SDL and creates window
@@ -57,7 +63,8 @@ public:
 	void Update();
 	void SetDT(float dt);
 
-
+	void SpawnProjectile(bool p1,bool p2);
+	void UpdateProjectiles();
 	void HandleEvents();
 	void KeyBoardHandler(SDL_Event &e);
 	void MouseHandler(SDL_Event &e);

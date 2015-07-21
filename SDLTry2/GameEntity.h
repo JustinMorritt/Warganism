@@ -43,6 +43,7 @@ public:
 	void ApplyForces();
 	void SetAnimate(bool on);
 	bool Animating();
+	SDL_Point getCenter();
 	void SetCurrentAnimation(int num);
 	int GetCurrentAnimation();
 	SDL_Rect GetCurrentFrame();
@@ -53,8 +54,10 @@ public:
 	void addForce(std::string dir);
 	void removeForce(std::string dir);
 	void GoToPoint(int x, int y);
+	void GoOneDirForever(float x, float y);
 	void UseGoToPoint(bool on);
 	void UseKeyForces(bool on);
+	void UseGoOneDir(bool on);
 	void RotateToDir(bool on);
 	void CalculateRotation();
 	void TurnOnCollider(bool square, bool circle);
@@ -63,7 +66,7 @@ public:
 	void SetMousePos(int x, int y);
 	
 	std::string m_name;
-
+	double m_Roation;
 private:
 	SDL_Renderer* m_pTheRenderer;
 	Vec2* m_pPos;
@@ -76,7 +79,7 @@ private:
 	float m_accel;
 	SDL_Texture* m_pTexture;
 	SDL_Rect m_pRect;
-	double m_Roation;
+	
 	SDL_RendererFlip m_RenderFlip;
 	int m_MouseX;
 	int m_MouseY;
@@ -112,5 +115,6 @@ private:
 	bool m_UseSquareCollider;
 	bool m_UseGoToPoint;
 	bool m_UseKeyForces;
+	bool m_UseGoOneDirForever;
 };
 

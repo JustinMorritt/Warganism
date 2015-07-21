@@ -90,7 +90,7 @@ void SDLHelper::loadMedia()
 	m_pPlayer1->TurnOnCollider(false, true); // Turn on colliders
 	m_pPlayer1->RotateToDir(true);			  // Turn on Rotation
 	m_pPlayer1->UseKeyForces(true);
-	m_pPlayer1->SetColorMod("red"); //COLOUR FOR PLAYER AND BACKDROP BLOB
+	m_pPlayer1->SetColorMod("orange"); //COLOUR FOR PLAYER AND BACKDROP BLOB
 	
 
 
@@ -101,7 +101,7 @@ void SDLHelper::loadMedia()
 	m_pPlayer2->TurnOnCollider(false, true);  // Turn on colliders
 	m_pPlayer2->RotateToDir(true);			  // Turn on Rotation
 	m_pPlayer2->UseGoToPoint(true);
-	m_pPlayer2->SetColorMod("green"); //COLOUR FOR PLAYER AND BACKDROP BLOB
+	m_pPlayer2->SetColorMod("halfblack"); //COLOUR FOR PLAYER AND BACKDROP BLOB
 	//TITLE
 	m_pTextTest = new GameEntity(0, 0, 300, 80,100,5, "Title", m_pRenderer, false);
 	m_pTextTest->LoadTextFile(m_pFont2, "Warganism", "royalblue");
@@ -195,7 +195,9 @@ void SDLHelper::Update()
 
 // 	SDL_Rect rec2 = { 0, 0, 1000, 100 };
 // 	SDL_RenderCopy(m_pRenderer, m_pfontTest, NULL, &rec2); //ALWAYS USE  DSTRect on Render.. Otherwise wont render ... wierd
+
 	
+	UpdateProjectiles();
 
 	//PLAYER 1
 	m_pPlayer1->Update(m_dt);
@@ -212,6 +214,8 @@ void SDLHelper::Update()
 	m_pTextTest->setPos((MyWindow::m_Width / 2) - (m_pTextTest->getWidth() / 2), 0);
 	m_pTextTest->Render(); //RENDER THE TEST TEXT
 
+	
+
 	//Update screen
 	SDL_RenderPresent(m_pRenderer);
 }
@@ -220,6 +224,36 @@ void SDLHelper::Update()
 void SDLHelper::SetDT(float dt)
 {
 	m_dt = dt;
+}
+
+void SDLHelper::SpawnProjectile(bool p1, bool p2)
+{
+	if (p1)
+	{
+		Projectile* proj = new Projectile(m_pPlayer1->getCenter().x, m_pPlayer1->getCenter().y, m_pPlayer1->getWidth() / 2, m_pPlayer1->getHeight() / 2, m_pPlayer1->m_Roation, "red", m_pRenderer, "P1projectile");
+		m_P1Projectiles.push_back(proj);
+	}
+	else if (p2)
+	{
+		std::cout << "Made a Projectile" << std::endl;
+		Projectile* proj = new Projectile(m_pPlayer2->getCenter().x, m_pPlayer2->getCenter().y, m_pPlayer2->getWidth() / 2, m_pPlayer2->getHeight() / 2, m_pPlayer2->m_Roation, "green", m_pRenderer, "P2projectile");
+		m_P1Projectiles.push_back(proj);
+	}
+	
+}
+
+void SDLHelper::UpdateProjectiles()
+{
+
+	if (m_P1Projectiles.size() > 0)
+	{
+		for (int i = 0; i < m_P1Projectiles.size(); i++)
+		{
+			m_P1Projectiles[i]->m_pProjTex->Update(m_dt);
+			m_P1Projectiles[i]->m_pProjTex->Render();
+		}
+	}
+	
 }
 
 void SDLHelper::HandleEvents() //Returns true if Quit is Clicked
@@ -268,6 +302,7 @@ void SDLHelper::KeyBoardHandler(SDL_Event &e)
 			break;
 
 		case SDLK_SPACE:
+			SpawnProjectile(true, false);
 			break;
 
 		//PLAYER 2
@@ -342,6 +377,7 @@ void SDLHelper::MouseHandler(SDL_Event &e)
 	int x, y;
 	SDL_GetMouseState(&x, &y);
 	m_pPlayer2->SetMousePos(x, y);
+	
 	//std::cout << "Mouse X: " << x << " Mouse Y: " << y << std::endl;
 	//CHECK BOUNDS OF WHAT MOUSE IS IN ...
 	//m_pTexture->setPos((float)x, (float)y);
@@ -353,11 +389,12 @@ void SDLHelper::MouseHandler(SDL_Event &e)
 		break;
 
 	case SDL_MOUSEBUTTONDOWN:
-		std::cout << "Mouse CLICK DOWN "<< std::endl;
+		SpawnProjectile(false, true);
+		//std::cout << "Mouse CLICK DOWN "<< std::endl;
 		break;
 
 	case SDL_MOUSEBUTTONUP:
-		std::cout << "Mouse CLICK UP " << std::endl;
+		//std::cout << "Mouse CLICK UP " << std::endl;
 		break;
 	}
 

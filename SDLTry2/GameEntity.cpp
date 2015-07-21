@@ -52,7 +52,6 @@ GameEntity::GameEntity(int x, int y, int w, int h, int maxSpeed, int accel, std:
 	m_pCenter->x		= m_pPos->x + (m_pRect.w/2);
 	m_pCenter->y		= m_pPos->y + (m_pRect.h / 2);
 
-
 }
 
 GameEntity::~GameEntity()
@@ -128,6 +127,7 @@ void GameEntity::Update(float dt)
 	{
 		if (m_GoDown || m_GoLeft || m_GoRight || m_GoUp){ CalculateRotation(); } //ONLY IF A KEY BEING PRESSED 
 		if (m_UseGoToPoint){ CalculateRotation();}
+		
 	}
 	
 	m_dt = dt; //Assigned for use in SpriteAnimation
@@ -355,6 +355,11 @@ bool GameEntity::Animating()
 	return m_Animate;
 }
 
+SDL_Point GameEntity::getCenter()
+{
+	return *m_pCenter;
+}
+
 void GameEntity::SetCurrentAnimation(int num)
 {
 	if (!m_Animations.at(m_currentAnimation).second.loop)
@@ -478,48 +483,16 @@ void GameEntity::GoToPoint(int x, int y)
 		 m_pcurrSpeed->y += m_accel*DIR.y; 
 		 m_pcurrSpeed->x += m_accel*DIR.x;
 
-
-// 		 //ACCELERATION
-// 		 if (y < m_pCenter->y) //GO UP 
-// 		 {
-// 			 if (m_pcurrSpeed->y != -m_maxSpeed){ m_pcurrSpeed->y -= m_accel*DIR.y;  if (m_pcurrSpeed->y < -m_maxSpeed){ m_pcurrSpeed->y = -m_maxSpeed; } }
-// 		 }
-// 		 if (y > m_pCenter->y) //GO DOWN
-// 		 {
-// 			 if (m_pcurrSpeed->y != m_maxSpeed){ m_pcurrSpeed->y += m_accel*DIR.y;  if (m_pcurrSpeed->y > m_maxSpeed){ m_pcurrSpeed->y = m_maxSpeed; } }
-// 		 }
-// 		 if (x < m_pCenter->x) //GO LEFT
-// 		 {
-// 			 if (m_pcurrSpeed->x != -m_maxSpeed){ m_pcurrSpeed->x -= m_accel*DIR.y; if (m_pcurrSpeed->x < -m_maxSpeed){ m_pcurrSpeed->x = -m_maxSpeed; } }
-// 		 }
-// 		 if (x > m_pCenter->x) // GO RIGHT
-// 		 {
-// 			 if (m_pcurrSpeed->x != m_maxSpeed){ m_pcurrSpeed->x += m_accel*DIR.y; if (m_pcurrSpeed->x > m_maxSpeed){ m_pcurrSpeed->x = m_maxSpeed; } }
-// 		 }
-// 
-// 		 //DECELLERATION
-// 		 if (y > m_pCenter->y) //GO UP 
-// 		 {
-// 			 m_pcurrSpeed->y += m_accel*DIR.y; if (m_pcurrSpeed->y > 0){ m_SlowUp = false; m_pcurrSpeed->y = 0; }
-// 		 }
-// 		 if (y < m_pCenter->y) //GO DOWN
-// 		 {
-// 			 m_pcurrSpeed->y -= m_accel*DIR.y; if (m_pcurrSpeed->y < 0){ m_SlowDown = false; m_pcurrSpeed->y = 0; }
-// 		 }
-// 		 if (x > m_pCenter->x) //GO LEFT
-// 		 {
-// 			 m_pcurrSpeed->x += m_accel*DIR.y; if (m_pcurrSpeed->x > 0){ m_SlowLeft = false; m_pcurrSpeed->x = 0; }
-// 		 }
-// 		 if (x < m_pCenter->x) // GO RIGHT
-// 		 {
-// 			 m_pcurrSpeed->x -= m_accel*DIR.y; if (m_pcurrSpeed->x < 0){ m_SlowRight = false; m_pcurrSpeed->x = 0; }
-// 		 }
-
-
 		//ASSIGN NEW VELOCITYS 
 		m_pVel->x = (m_pcurrSpeed->x);
 		m_pVel->y = (m_pcurrSpeed->y);
 	}
+}
+
+void GameEntity::GoOneDirForever(float x, float y)
+{
+	m_pVel->x = x * m_maxSpeed;
+	m_pVel->y = y * m_maxSpeed;
 }
 
 void GameEntity::UseGoToPoint(bool on)
@@ -530,6 +503,11 @@ void GameEntity::UseGoToPoint(bool on)
 void GameEntity::UseKeyForces(bool on)
 {
 	m_UseKeyForces = on;
+}
+
+void GameEntity::UseGoOneDir(bool on)
+{
+	m_UseGoOneDirForever = on;
 }
 
 void GameEntity::RotateToDir(bool on)
