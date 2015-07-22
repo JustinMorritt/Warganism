@@ -3,10 +3,11 @@
 
 PickUp::PickUp(int x, int y, int w, int h, SDL_Renderer* theRenderer, std::string name, std::string color)
 {
-	m_pPickUpTex = new GameEntity(x, y, w, h, 0, 0, name, theRenderer, false);
+	m_pPickUpTex = new GameEntity(x - (w / 2), y - (h / 2), w, h, 0, 0, name, theRenderer, false);
 	m_pPickUpTex->LoadFile("Pics/PickUp.png");
 	m_pPickUpTex->SetColorMod(color);
-
+	
+	m_pPickUpTex->UpdateColliders();
 }
 
 
