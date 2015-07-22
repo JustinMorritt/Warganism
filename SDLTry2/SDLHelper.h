@@ -24,7 +24,11 @@ private:
 	RandGen m_RG;
 	float m_dt;
 	bool m_done;
-	int pickUpCounter;
+	float m_LPickUpSpawnTimeElapsed;
+	float m_RPickUpSpawnTimeElapsed;
+	float m_LPickUpSpawnTime;
+	float m_RPickUpSpawnTime;
+
 	SDL_Renderer* m_pRenderer		= NULL;				//The window renderer 
 	SDL_Surface* m_pScreenSurface	= NULL;				//The surface contained by the window
 
@@ -71,7 +75,8 @@ public:
 	void SetDT(float dt);
 
 	void SpawnProjectile(bool p1,bool p2);
-	void SpawnPickUp();
+	void SpawnRPickUp();
+	void SpawnLPickUp();
 	void UpdateProjectiles();
 	void UpdatePickUp();
 	void HandleEvents();

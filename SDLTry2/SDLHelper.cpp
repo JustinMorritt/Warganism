@@ -49,7 +49,8 @@ SDLHelper::SDLHelper() : m_dt(0.0f), m_done(false)
 	
 
 
-	srand(time(NULL));
+		m_RPickUpSpawnTime = m_RG(15 - 7) + 7;
+		m_LPickUpSpawnTime = m_RG(15 - 7) + 7;
 	loadMedia();
 }
 
@@ -187,8 +188,10 @@ bool SDLHelper::Done()
 void SDLHelper::Update()
 {
 	HandleEvents();
-
-
+	m_RPickUpSpawnTimeElapsed += m_dt;
+	m_LPickUpSpawnTimeElapsed += m_dt;
+	std::cout << m_LPickUpSpawnTime << std::endl;
+	std::cout << m_RPickUpSpawnTime << std::endl;
 	//Clear screen
 	SDL_RenderClear(m_pRenderer);
 
@@ -203,17 +206,30 @@ void SDLHelper::Update()
 	SDL_SetTextureColorMod(m_pP2BG, m_pPlayer2->getColor().r, m_pPlayer2->getColor().g, m_pPlayer2->getColor().b);
 	SDL_RenderCopy(m_pRenderer, m_pP1BG, NULL, &rec);
 	SDL_RenderCopy(m_pRenderer, m_pP2BG, NULL, &rec);
-	SDL_RenderCopy(m_pRenderer, m_pbackground, NULL , &rec);
+	SDL_RenderCopy(m_pRenderer, m_pbackground, NULL, &rec);
 
 
 
-// 	SDL_Rect rec2 = { 0, 0, 1000, 100 };
-// 	SDL_RenderCopy(m_pRenderer, m_pfontTest, NULL, &rec2); //ALWAYS USE  DSTRect on Render.. Otherwise wont render ... wierd
+	// 	SDL_Rect rec2 = { 0, 0, 1000, 100 };
+	// 	SDL_RenderCopy(m_pRenderer, m_pfontTest, NULL, &rec2); //ALWAYS USE  DSTRect on Render.. Otherwise wont render ... wierd
 
+
+	if (m_RPickUpSpawnTimeElapsed > m_RPickUpSpawnTime)
+	{
 	
-	
- 		//SpawnPickUp();
-	
+		SpawnRPickUp();
+		m_RPickUpSpawnTimeElapsed = 0;
+		m_RPickUpSpawnTime = m_RG(15 - 7) + 7;
+	}
+	if (m_LPickUpSpawnTimeElapsed > m_LPickUpSpawnTime)
+	{
+
+		SpawnLPickUp();
+		m_LPickUpSpawnTimeElapsed = 0;
+		m_LPickUpSpawnTime = m_RG(15 - 7) + 7;
+	}
+
+
 	UpdateProjectiles();
 	UpdatePickUp();
 	//PLAYER 1
@@ -259,24 +275,34 @@ void SDLHelper::SpawnProjectile(bool p1, bool p2)
 	
 }
 
-void SDLHelper::SpawnPickUp()
+void SDLHelper::SpawnRPickUp()
 {
 	
-	int randomX = m_RG(MyWindow::getWidth()) + 1;
+	int randomX = m_RG(MyWindow::getWidth() - MyWindow::getWidth()/2) + MyWindow::getWidth()/2;
 	int randomY = m_RG(MyWindow::getHeight()) + 1;
 
 	if (randomX > MyWindow::getWidth() / 2)
 	{
-		PickUp* pickUp = new PickUp(randomX, randomY, m_pPlayer2->getWidth() / 2, m_pPlayer2->getHeight() / 2, m_pRenderer, "PickUp", GameEntity::m_P2color);
+		PickUp* pickUp = new PickUp(randomX, randomY, 50, 50, m_pRenderer, "PickUp", GameEntity::m_P2color);
 		m_P2PickUps.push_back(pickUp);
 	}
-	else if (randomX < MyWindow::getWidth() / 2)
+
+	 
+}
+
+void SDLHelper::SpawnLPickUp()
+{
+
+	int randomX = m_RG(MyWindow::getWidth() / 2) + 1;
+	int randomY = m_RG(MyWindow::getHeight()) + 1;
+
+	if (randomX < MyWindow::getWidth() / 2)
 	{
-		PickUp* pickUp = new PickUp(randomX, randomY, m_pPlayer1->getWidth() / 2, m_pPlayer1->getHeight() / 2, m_pRenderer, "PickUp", GameEntity::m_P1color);
+		PickUp* pickUp = new PickUp(randomX, randomY, 50, 50, m_pRenderer, "PickUp", GameEntity::m_P1color);
 		m_P1PickUps.push_back(pickUp);
 	}
 
-	pickUpCounter++; 
+
 }
 
 void SDLHelper::UpdatePickUp()
@@ -285,13 +311,12 @@ void SDLHelper::UpdatePickUp()
 	{
 		for (int i = 0; i < m_P1PickUps.size(); ++i)
 		{
-			m_P1PickUps[i]->m_pPickUpTex->Update(m_dt);
 			m_P1PickUps[i]->m_pPickUpTex->Render();
 
 			if (Collision::CircleVsCircle(m_P1PickUps[i]->m_pPickUpTex->GetCircleCollider(), m_pPlayer1->GetCircleCollider()))
 			{
 				m_P1PickUps.erase(m_P1PickUps.begin() + i);
-				//m_pPlayer1->SetScale()
+				m_pPlayer1->SetScale(m_pPlayer1->getWidth() + 50, m_pPlayer1->getHeight() + 50);
 				break;
 			}
 		}
@@ -301,8 +326,15 @@ void SDLHelper::UpdatePickUp()
 	{
 		for (int i = 0; i < m_P2PickUps.size(); ++i)
 		{
-			m_P2PickUps[i]->m_pPickUpTex->Update(m_dt);
+		
 			m_P2PickUps[i]->m_pPickUpTex->Render();
+
+			if (Collision::CircleVsCircle(m_P2PickUps[i]->m_pPickUpTex->GetCircleCollider(), m_pPlayer2->GetCircleCollider()))
+			{
+				m_P2PickUps.erase(m_P2PickUps.begin() + i);
+				m_pPlayer2->SetScale(m_pPlayer2->getWidth() + 50, m_pPlayer2->getHeight() + 50);
+				break;
+			}
 		}
 	}
 }
