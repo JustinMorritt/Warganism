@@ -91,7 +91,7 @@ void SDLHelper::loadMedia()
 	//**************************************************************
 
 	//PLAYER 1
-	GameEntity::m_P1color = "royalblue";
+	GameEntity::m_P1color = "babyblue";
 	//SET UP CHARACTER       x   y    w    h   maxS Accel					
 	m_pPlayer1 = new GameEntity((SCREEN_WIDTH / 2) - (SCREEN_WIDTH / 4)-64 , (SCREEN_HEIGHT / 2) - (SCREEN_HEIGHT / 4)+64, 128, 128, 350, 20, "player1", m_pRenderer, false);
 	m_pPlayer1->LoadFile("Pics/blobee.png"); // Load Up The Full Sprite Sheet
@@ -103,7 +103,7 @@ void SDLHelper::loadMedia()
 
 
 	//PLAYER 2
-	GameEntity::m_P2color = "fuchsia";
+	GameEntity::m_P2color = "gold";
 	//SET UP CHARACTER       x   y    w    h   maxS Accel					
 	m_pPlayer2 = new GameEntity((SCREEN_WIDTH / 2) + (SCREEN_WIDTH / 4)-64, (SCREEN_HEIGHT / 2) - (SCREEN_HEIGHT / 4)+64, 128, 128, 350, 20, "player2", m_pRenderer, false);
 	m_pPlayer2->LoadFile("Pics/blobee.png");  // Load Up The Full Sprite Sheet
