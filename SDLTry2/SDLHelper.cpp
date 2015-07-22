@@ -7,7 +7,7 @@ SDLHelper::SDLHelper() : m_dt(0.0f), m_done(false)
 {
 	//SET INITIAL GAMESTATE
 	m_pGameState = new GameState;
-	*m_pGameState = GameState::MAINMENU;
+	*m_pGameState = GameState::GAMEON;
 	if (*m_pGameState == GameState::MAINMENU){ std::cout << "MAINMENU ON" << std::endl; }
 	if (*m_pGameState == GameState::GAMEON){ std::cout << "GAMESCREEN ON" << std::endl; }
 
