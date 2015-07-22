@@ -246,10 +246,11 @@ void SDLHelper::SpawnRPickUp()
 	
 	int randomX = m_RG(MyWindow::getWidth() - MyWindow::getWidth()/2) + MyWindow::getWidth()/2;
 	int randomY = m_RG(MyWindow::getHeight()) + 1;
-
+	int randomDir = m_RG(360);
+	int randomSize = m_RG(70 - 35) + 35;
 	if (randomX > MyWindow::getWidth() / 2)
 	{
-		PickUp* pickUp = new PickUp(randomX, randomY, 50, 50, m_pRenderer, "PickUp", GameEntity::m_P1color);
+		PickUp* pickUp = new PickUp(randomX, randomY, randomSize, randomSize, m_pRenderer, "PickUp", GameEntity::m_P1color,randomDir);
 		m_P2PickUps.push_back(pickUp);
 	}
 
@@ -261,10 +262,15 @@ void SDLHelper::SpawnLPickUp()
 
 	int randomX = m_RG(MyWindow::getWidth() / 2) + 1;
 	int randomY = m_RG(MyWindow::getHeight()) + 1;
+	int randomDir = m_RG(360);
+	
+	int randomSize = m_RG(70 - 35) + 35;
+
+	std::cout << randomSize << std::endl;
 
 	if (randomX < MyWindow::getWidth() / 2)
 	{
-		PickUp* pickUp = new PickUp(randomX, randomY, 50, 50, m_pRenderer, "PickUp", GameEntity::m_P2color);
+		PickUp* pickUp = new PickUp(randomX, randomY, randomSize, randomSize, m_pRenderer, "PickUp", GameEntity::m_P2color, randomDir);
 		m_P1PickUps.push_back(pickUp);
 	}
 
