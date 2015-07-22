@@ -187,8 +187,8 @@ void SDLHelper::Update()
 	HandleEvents();
 	m_RPickUpSpawnTimeElapsed += m_dt;
 	m_LPickUpSpawnTimeElapsed += m_dt;
-	std::cout << m_LPickUpSpawnTime << std::endl;
-	std::cout << m_RPickUpSpawnTime << std::endl;
+	//std::cout << m_LPickUpSpawnTime << std::endl;
+	//std::cout << m_RPickUpSpawnTime << std::endl;
 	//Clear screen
 	SDL_RenderClear(m_pRenderer);
 
@@ -313,15 +313,15 @@ void SDLHelper::UpdatePickUp()
 			if (Collision::CircleVsCircle(m_P1PickUps[i]->m_pPickUpTex->GetCircleCollider(), m_pPlayer1->GetCircleCollider()))
 			{
 				m_P1PickUps.erase(m_P1PickUps.begin() + i);
-				m_pPlayer1->SetScale(m_pPlayer1->getWidth() + 50, m_pPlayer1->getHeight() + 50);
-				if (m_pPlayer1->getPos()->y < SCREEN_HEIGHT / 2)
-				{
-					m_pPlayer1->setPos(m_pPlayer1->getPos()->x + 50, m_pPlayer1->getPos()->y + 50);
-				}
-				else
-				{
-					m_pPlayer1->setPos(m_pPlayer1->getPos()->x - 50, m_pPlayer1->getPos()->y - 50);
-				}
+				m_pPlayer1->GetBigger();
+// 				if (m_pPlayer1->getPos()->y < SCREEN_HEIGHT / 2)
+// 				{
+// 					m_pPlayer1->setPos(m_pPlayer1->getPos()->x + 50, m_pPlayer1->getPos()->y + 50);
+// 				}
+// 				else
+// 				{
+// 					m_pPlayer1->setPos(m_pPlayer1->getPos()->x - 50, m_pPlayer1->getPos()->y - 50);
+// 				}
 					break;
 			}
 		}
@@ -337,16 +337,16 @@ void SDLHelper::UpdatePickUp()
 			if (Collision::CircleVsCircle(m_P2PickUps[i]->m_pPickUpTex->GetCircleCollider(), m_pPlayer2->GetCircleCollider()))
 			{
 				m_P2PickUps.erase(m_P2PickUps.begin() + i);
-				m_pPlayer2->SetScale(m_pPlayer2->getWidth() + 50, m_pPlayer2->getHeight() + 50);
-				if (m_pPlayer2->getPos()->y < SCREEN_HEIGHT / 2)
-				{
-				
-					m_pPlayer2->setPos(m_pPlayer2->getPos()->x + 50, m_pPlayer2->getPos()->y + 50);
-				}
-				else
-				{
-					m_pPlayer2->setPos(m_pPlayer2->getPos()->x - 50, m_pPlayer2->getPos()->y - 50);
-				}
+				m_pPlayer2->GetBigger();
+// 				if (m_pPlayer2->getPos()->y < SCREEN_HEIGHT / 2)
+// 				{
+// 				
+// 					m_pPlayer2->setPos(m_pPlayer2->getPos()->x + 50, m_pPlayer2->getPos()->y + 50);
+// 				}
+// 				else
+// 				{
+// 					m_pPlayer2->setPos(m_pPlayer2->getPos()->x - 50, m_pPlayer2->getPos()->y - 50);
+// 				}
 				break;
 			}
 		}

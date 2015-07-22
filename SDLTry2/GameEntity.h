@@ -68,6 +68,8 @@ public:
 	void CenterPlayers();
 	void SetMousePos(int x, int y);
 	bool IsProjectileDone();
+	void GetBigger();
+	void GetSmaller();
 	
 	
 	std::string m_name;
@@ -124,6 +126,9 @@ private:
 	bool m_UseKeyForces;
 	bool m_UseGoOneDirForever;
 	bool m_ProjectileDone;
+	int  m_AccumulatedGrowth;
+	bool m_GetBig;
+	bool m_GetSmall;
 	
 };
 

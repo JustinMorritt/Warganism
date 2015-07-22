@@ -496,9 +496,11 @@ void GameEntity::CalculateRotation()
 
 void GameEntity::CheckPlayerBounds()
 {
+	
+	bool collision = false;
 
 	//ASSIGN NEW POSITION AFTER FORCES HAVE BEEN APPLIED
-	m_pPos->x += m_pVel->x * m_dt;		//STEP ON X
+	m_pPos->x += (m_pVel->x * m_dt);		//STEP ON X
 	UpdateColliders();					//UPDATE COLLIDERS
 	//****PLAYER 1****
 	if (m_name == "player1")			//CHECK COLLISION ON X
@@ -506,8 +508,10 @@ void GameEntity::CheckPlayerBounds()
 		if ((m_pCenter->x - m_pCircleCollider->r < 0) || (m_pCenter->x + m_pCircleCollider->r > MyWindow::m_Width / 2))
 		{
 			m_pPos->x -= m_pVel->x * m_dt;
+			collision = true;
 			UpdateColliders();
 		}
+
 	}
 	//*****PLAYER 2*****
 	else if (m_name == "player2")		//CHECK COLLISION ON X
@@ -515,10 +519,13 @@ void GameEntity::CheckPlayerBounds()
 		if (m_pCenter->x - m_pCircleCollider->r < MyWindow::m_Width / 2 || m_pCenter->x + m_pCircleCollider->r > MyWindow::m_Width)
 		{
 			m_pPos->x -= m_pVel->x * m_dt;
+			collision = true;
 			m_pcurrSpeed->x = 0;
 			UpdateColliders();
 		}
 	}
+
+
 
 	m_pPos->y += m_pVel->y * m_dt; //STEP ON THE Y SAME FOR BOTH PLAYERS
 	UpdateColliders();
@@ -526,14 +533,31 @@ void GameEntity::CheckPlayerBounds()
 	{
 		if (m_name == "player2")
 		{
+			collision = true;
 			m_pPos->y -= m_pVel->y * m_dt;
 			m_pcurrSpeed->y = 0;
 		}
 		else if (m_name == "player1")
 		{
+			collision = true;
 			m_pPos->y -= m_pVel->y * m_dt;
 		}
 		UpdateColliders();
+	}
+	if (!collision)
+	{
+		if (m_GetBig)
+		{
+			SetScale(getWidth() + 1, getHeight()+1);
+			m_AccumulatedGrowth -= 1;
+			if (m_AccumulatedGrowth <= 0){ m_GetBig = false; }
+		}
+		if (m_GetSmall)
+		{
+			SetScale(getWidth() - 1, getHeight() - 1);
+			m_AccumulatedGrowth += 1;
+			if (m_AccumulatedGrowth >= 0){ m_GetSmall = false; }
+		}
 	}
 }
 
@@ -598,6 +622,18 @@ void GameEntity::SetMousePos(int x, int y)
 bool GameEntity::IsProjectileDone()
 {
 	return m_ProjectileDone;
+}
+
+void GameEntity::GetBigger()
+{
+	m_GetBig = true;
+	m_AccumulatedGrowth += 10;
+}
+
+void GameEntity::GetSmaller()
+{
+	m_GetSmall = true;
+	m_AccumulatedGrowth -= 10;
 }
 
 //STATIC STUFF
