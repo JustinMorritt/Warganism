@@ -45,9 +45,6 @@ SDLHelper::SDLHelper() : m_dt(0.0f), m_done(false)
 
 		//Get window surface
 		m_pScreenSurface = SDL_GetWindowSurface(m_pMyWindow->m_pWindow);
-		
-	
-
 
 		m_RPickUpSpawnTime = m_RG(15 - 7) + 7;
 		m_LPickUpSpawnTime = m_RG(15 - 7) + 7;
@@ -283,7 +280,7 @@ void SDLHelper::SpawnRPickUp()
 
 	if (randomX > MyWindow::getWidth() / 2)
 	{
-		PickUp* pickUp = new PickUp(randomX, randomY, 50, 50, m_pRenderer, "PickUp", GameEntity::m_P2color);
+		PickUp* pickUp = new PickUp(randomX, randomY, 50, 50, m_pRenderer, "PickUp", GameEntity::m_P1color);
 		m_P2PickUps.push_back(pickUp);
 	}
 
@@ -298,7 +295,7 @@ void SDLHelper::SpawnLPickUp()
 
 	if (randomX < MyWindow::getWidth() / 2)
 	{
-		PickUp* pickUp = new PickUp(randomX, randomY, 50, 50, m_pRenderer, "PickUp", GameEntity::m_P1color);
+		PickUp* pickUp = new PickUp(randomX, randomY, 50, 50, m_pRenderer, "PickUp", GameEntity::m_P2color);
 		m_P1PickUps.push_back(pickUp);
 	}
 
@@ -317,7 +314,15 @@ void SDLHelper::UpdatePickUp()
 			{
 				m_P1PickUps.erase(m_P1PickUps.begin() + i);
 				m_pPlayer1->SetScale(m_pPlayer1->getWidth() + 50, m_pPlayer1->getHeight() + 50);
-				break;
+				if (m_pPlayer1->getPos()->y < SCREEN_HEIGHT / 2)
+				{
+					m_pPlayer1->setPos(m_pPlayer1->getPos()->x + 50, m_pPlayer1->getPos()->y + 50);
+				}
+				else
+				{
+					m_pPlayer1->setPos(m_pPlayer1->getPos()->x - 50, m_pPlayer1->getPos()->y - 50);
+				}
+					break;
 			}
 		}
 	}
@@ -333,6 +338,15 @@ void SDLHelper::UpdatePickUp()
 			{
 				m_P2PickUps.erase(m_P2PickUps.begin() + i);
 				m_pPlayer2->SetScale(m_pPlayer2->getWidth() + 50, m_pPlayer2->getHeight() + 50);
+				if (m_pPlayer2->getPos()->y < SCREEN_HEIGHT / 2)
+				{
+				
+					m_pPlayer2->setPos(m_pPlayer2->getPos()->x + 50, m_pPlayer2->getPos()->y + 50);
+				}
+				else
+				{
+					m_pPlayer2->setPos(m_pPlayer2->getPos()->x - 50, m_pPlayer2->getPos()->y - 50);
+				}
 				break;
 			}
 		}
