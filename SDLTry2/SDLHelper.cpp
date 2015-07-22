@@ -464,8 +464,7 @@ void SDLHelper::MouseHandler(SDL_Event &e)
 			m_pPlayer2->decreaseCurrAmmo();
 		}
 
-		if (*m_pGameState == GameState::GAMEON && *m_pLoadedState == LoadedState::GAMEON)
-		{SpawnProjectile(false, true);}
+		
 
 		//std::cout << "Mouse CLICK DOWN "<< std::endl;
 		break;
