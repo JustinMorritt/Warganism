@@ -16,11 +16,21 @@
 
 
 //Fonts: ANUDRG__.ttf
+enum class GameState
+{
+	MAINMENU,
+	PAUSED,
+	P1WIN,
+	P2WIN,
+	CHARACTERSELECT,
+	GAMEON
+};
 
 
 class SDLHelper
 {
 private:
+	GameState* m_pGameState;
 	RandGen m_RG;
 	float m_dt;
 	bool m_done;
@@ -59,6 +69,7 @@ private:
 
 public:
 
+
 	MyWindow* m_pMyWindow = NULL;
 	//Starts up SDL and creates window
 	SDLHelper();
@@ -82,6 +93,15 @@ public:
 	void HandleEvents();
 	void KeyBoardHandler(SDL_Event &e);
 	void MouseHandler(SDL_Event &e);
+
+	//GAME FUNCTIONS (SHOW)
+	void ShowMainMenu();
+	void ShowPaused();
+	void ShowP1Win();
+	void ShowP2Win();
+	void ShowCharSelection();
+	void ShowGameOn();
+
 
 	//GEOMETRY FUNCTIONS
 	void SetRenderColor(std::string color);

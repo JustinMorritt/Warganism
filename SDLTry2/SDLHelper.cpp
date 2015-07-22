@@ -5,6 +5,13 @@
 
 SDLHelper::SDLHelper() : m_dt(0.0f), m_done(false)
 {
+	//SET INITIAL GAMESTATE
+	m_pGameState = new GameState;
+	*m_pGameState = GameState::GAMEON;
+	if (*m_pGameState == GameState::MAINMENU){ std::cout << "MAINMENU ON" << std::endl; }
+	if (*m_pGameState == GameState::GAMEON){ std::cout << "GAMESCREEN ON" << std::endl; }
+
+
 	//SDL INIT
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
 	{
@@ -182,79 +189,41 @@ bool SDLHelper::Done()
 	return m_done;
 }
 
+
+void SDLHelper::SetDT(float dt)
+{
+	m_dt = dt;
+}
+
+
+
+//UPDATE *************************************************************
 void SDLHelper::Update()
 {
 	HandleEvents();
-	m_RPickUpSpawnTimeElapsed += m_dt;
-	m_LPickUpSpawnTimeElapsed += m_dt;
-	//std::cout << m_LPickUpSpawnTime << std::endl;
-	//std::cout << m_RPickUpSpawnTime << std::endl;
+
 	//Clear screen
 	SDL_RenderClear(m_pRenderer);
 
-	//DrawRect(m_pScreenSurface->clip_rect.w / 2 - 100, m_pScreenSurface->clip_rect.h / 2 - 100, 200, 200, "red");
-	//DrawRectOL(m_pScreenSurface->clip_rect.w / 2 - 100, m_pScreenSurface->clip_rect.h / 2 - 100, 200, 200, "black");
-
-
-	//BACKGROUND DRAWING
-	SetRenderColor("white");
-	SDL_Rect rec = { 0, 0, MyWindow::m_Width, MyWindow::m_Height };
-	SDL_SetTextureColorMod(m_pP1BG, m_pPlayer1->getColor().r, m_pPlayer1->getColor().g, m_pPlayer1->getColor().b);
-	SDL_SetTextureColorMod(m_pP2BG, m_pPlayer2->getColor().r, m_pPlayer2->getColor().g, m_pPlayer2->getColor().b);
-	SDL_RenderCopy(m_pRenderer, m_pP1BG, NULL, &rec);
-	SDL_RenderCopy(m_pRenderer, m_pP2BG, NULL, &rec);
-	SDL_RenderCopy(m_pRenderer, m_pbackground, NULL, &rec);
-
-
-
-	// 	SDL_Rect rec2 = { 0, 0, 1000, 100 };
-	// 	SDL_RenderCopy(m_pRenderer, m_pfontTest, NULL, &rec2); //ALWAYS USE  DSTRect on Render.. Otherwise wont render ... wierd
-
-
-	if (m_RPickUpSpawnTimeElapsed > m_RPickUpSpawnTime)
-	{
-	
-		SpawnRPickUp();
-		m_RPickUpSpawnTimeElapsed = 0;
-		m_RPickUpSpawnTime = m_RG(15 - 7) + 7;
-	}
-	if (m_LPickUpSpawnTimeElapsed > m_LPickUpSpawnTime)
-	{
-
-		SpawnLPickUp();
-		m_LPickUpSpawnTimeElapsed = 0;
-		m_LPickUpSpawnTime = m_RG(15 - 7) + 7;
-	}
-
-
-	UpdateProjectiles();
-	UpdatePickUp();
-	//PLAYER 1
-	m_pPlayer1->Update(m_dt);
-	//m_pTexture2->SetScale(200, 200);
-	m_pPlayer1->Render();
-
-
-	//PLAYER 2
-	//m_pTexture->SetScale(-100, -100);
-	m_pPlayer2->Update(m_dt);
-	m_pPlayer2->Render();
-
-
-	m_pTextTest->setPos((MyWindow::m_Width / 2) - (m_pTextTest->getWidth() / 2), 0);
-	m_pTextTest->Render(); //RENDER THE TEST TEXT
-
-	
+	if (*m_pGameState == GameState::MAINMENU){			ShowMainMenu(); }
+	if (*m_pGameState == GameState::CHARACTERSELECT){	ShowCharSelection(); }
+	if (*m_pGameState == GameState::GAMEON){			ShowGameOn(); }
+	if (*m_pGameState == GameState::PAUSED){			ShowPaused(); }
+	if (*m_pGameState == GameState::P1WIN){				ShowP1Win(); }
+	if (*m_pGameState == GameState::P2WIN){				ShowP2Win(); }
 
 	//Update screen
 	SDL_RenderPresent(m_pRenderer);
 }
 
 
-void SDLHelper::SetDT(float dt)
-{
-	m_dt = dt;
-}
+
+
+
+
+
+
+//GAME FUNCTIONS**************************************************
 
 void SDLHelper::SpawnProjectile(bool p1, bool p2)
 {
@@ -383,6 +352,13 @@ void SDLHelper::UpdateProjectiles()
 	}
 	
 }
+
+
+
+
+
+
+//HANDLING FUNCTIONS**************************************************
 
 void SDLHelper::HandleEvents() //Returns true if Quit is Clicked
 {
@@ -531,7 +507,9 @@ void SDLHelper::MouseHandler(SDL_Event &e)
 
 
 
-//RENDERING FUNCTIONS
+
+
+//RENDERING FUNCTIONS**************************************************
 void SDLHelper::SetRenderColor(std::string color)
 {
 	if (color == "pink"){				SDL_SetRenderDrawColor(m_pRenderer, 0xFF, 0x99, 0xFF, 0xFF); }
@@ -600,6 +578,94 @@ void SDLHelper::DrawPoint(int x, int y, std::string color)
 	SDL_RenderDrawPoint(m_pRenderer, x, y);
 }
 
+
+
+
+
+
+
+
+//SCREENS**************************************************
+
+void SDLHelper::ShowMainMenu()
+{
+
+}
+
+void SDLHelper::ShowPaused()
+{
+
+}
+
+
+void SDLHelper::ShowP1Win()
+{
+
+}
+
+
+void SDLHelper::ShowP2Win()
+{
+
+}
+
+
+void SDLHelper::ShowCharSelection()
+{
+
+}
+
+
+void SDLHelper::ShowGameOn()
+{
+	m_RPickUpSpawnTimeElapsed += m_dt;
+	m_LPickUpSpawnTimeElapsed += m_dt;
+
+	//BACKGROUND DRAWING
+	SetRenderColor("white");
+	SDL_Rect rec = { 0, 0, MyWindow::m_Width, MyWindow::m_Height };
+	SDL_SetTextureColorMod(m_pP1BG, m_pPlayer1->getColor().r, m_pPlayer1->getColor().g, m_pPlayer1->getColor().b);
+	SDL_SetTextureColorMod(m_pP2BG, m_pPlayer2->getColor().r, m_pPlayer2->getColor().g, m_pPlayer2->getColor().b);
+	SDL_RenderCopy(m_pRenderer, m_pP1BG, NULL, &rec);
+	SDL_RenderCopy(m_pRenderer, m_pP2BG, NULL, &rec);
+	SDL_RenderCopy(m_pRenderer, m_pbackground, NULL, &rec);
+
+
+	// 	SDL_Rect rec2 = { 0, 0, 1000, 100 };
+	// 	SDL_RenderCopy(m_pRenderer, m_pfontTest, NULL, &rec2); //ALWAYS USE  DSTRect on Render.. Otherwise wont render ... wierd
+
+
+	if (m_RPickUpSpawnTimeElapsed > m_RPickUpSpawnTime)
+	{
+		SpawnRPickUp();
+		m_RPickUpSpawnTimeElapsed = 0;
+		m_RPickUpSpawnTime = m_RG(15 - 7) + 7;
+	}
+	if (m_LPickUpSpawnTimeElapsed > m_LPickUpSpawnTime)
+	{
+		SpawnLPickUp();
+		m_LPickUpSpawnTimeElapsed = 0;
+		m_LPickUpSpawnTime = m_RG(15 - 7) + 7;
+	}
+
+	UpdateProjectiles();
+	UpdatePickUp();
+	//PLAYER 1
+	m_pPlayer1->Update(m_dt);
+	//m_pTexture2->SetScale(200, 200);
+	m_pPlayer1->Render();
+
+	//PLAYER 2
+	//m_pTexture->SetScale(-100, -100);
+	m_pPlayer2->Update(m_dt);
+	m_pPlayer2->Render();
+
+
+	m_pTextTest->setPos((MyWindow::m_Width / 2) - (m_pTextTest->getWidth() / 2), 0);
+	m_pTextTest->Render(); //RENDER THE TEST TEXT
+
+
+}
 
 
 
