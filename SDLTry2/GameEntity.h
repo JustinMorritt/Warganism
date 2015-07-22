@@ -9,6 +9,7 @@
 #include <cmath>
 #include "MyWindow.h"
 
+
 struct AnimationConfig
 {
 	int frames, frameRate;
@@ -72,7 +73,8 @@ public:
 	void GetSmaller();
 	void increaseCurrAmmo();
 	void decreaseCurrAmmo();
-	
+	void UseMouseEffects(bool on);
+	void ApplyMouseEffects(int mouseX, int mouseY);
 	
 	
 	std::string m_name;
@@ -92,6 +94,7 @@ private:
 	float m_accel;
 	SDL_Texture* m_pTexture;
 	SDL_Rect m_pRect;
+	int m_OW, m_OH; //ORIGINAL WIDTH AND HEIGHT ..USED IN BULGE AND MOUSE OVER EFFECTS 
 	
 	SDL_RendererFlip m_RenderFlip;
 	int m_MouseX;
@@ -128,6 +131,7 @@ private:
 	bool m_RotateToDir;
 	bool m_UseCircleCollider;
 	bool m_UseSquareCollider;
+	bool m_UseMouseOverEffects;
 	bool m_UseGoToPoint;
 	bool m_UseKeyForces;
 	bool m_UseGoOneDirForever;

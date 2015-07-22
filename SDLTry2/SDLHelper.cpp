@@ -47,7 +47,6 @@ SDLHelper::SDLHelper() : m_dt(0.0f), m_done(false)
 			std::cout << "Reason: " << IMG_GetError() << std::endl;
 		}
 
-
 		//Initialize SDL_ttf
 		if (TTF_Init() == -1)
 		{
@@ -735,7 +734,7 @@ void SDLHelper::LoadGameOn()
 	m_pPlayer1->RotateToDir(true);			  // Turn on Rotation
 	m_pPlayer1->UseKeyForces(true);
 	m_pPlayer1->SetColorMod(GameEntity::m_P1color); //COLOUR FOR PLAYER AND BACKDROP BLOB
-
+	
 
 	//PLAYER 2
 	GameEntity::m_P2color = "purple";

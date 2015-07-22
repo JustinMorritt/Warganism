@@ -12,6 +12,7 @@
 #include "Projectile.h"
 #include "PickUp.h"
 #include "randgen.h"
+#include "Button.h"
 
 
 
@@ -83,7 +84,7 @@ private:
 	std::vector<Projectile*> m_P2Projectiles;
 	std::vector<PickUp*> m_P1PickUps;
 	std::vector<PickUp*> m_P2PickUps;
-
+	std::vector<Button*> m_Buttons;
 
 public:
 

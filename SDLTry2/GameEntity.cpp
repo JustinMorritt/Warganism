@@ -28,6 +28,8 @@ GameEntity::GameEntity(int x, int y, int w, int h, int maxSpeed, int accel, std:
 	m_pPos->y			= y;
 	m_pRect.w			= w;
 	m_pRect.h			= h;
+	m_OW				= w;
+	m_OH				= h;
 	m_name				= name;
 	m_pRect				= { x, y, w, h };
 	m_numFrames			= 1;
@@ -46,6 +48,7 @@ GameEntity::GameEntity(int x, int y, int w, int h, int maxSpeed, int accel, std:
 	m_SlowLeft			= false;
 	m_SlowRight			= false;
 	m_RotateToDir		= false;
+	m_UseMouseOverEffects = false;
 	m_Roation			= 0.0;
 	m_RenderFlip		= SDL_FLIP_NONE;
 	m_pCenter			= new SDL_Point;
@@ -141,6 +144,10 @@ void GameEntity::Update(float dt)
 	
 	if (m_timePassed > 0.016) //60times time a second
 	{
+		if (m_UseMouseOverEffects)
+		{
+			ApplyMouseEffects(m_MouseX, m_MouseY);
+		}
 		if (m_name == "player1" || m_name == "player2")
 		{
 			if (m_UseGoToPoint){ GoToPoint(m_MouseX,m_MouseY); }
@@ -488,6 +495,11 @@ void GameEntity::UseGoOneDir(bool on)
 	m_UseGoOneDirForever = on;
 }
 
+void GameEntity::UseMouseEffects(bool on)
+{
+	m_UseMouseOverEffects = on;
+}
+
 void GameEntity::RotateToDir(bool on)
 {
 	m_RotateToDir = on;
@@ -656,12 +668,33 @@ void GameEntity::GetSmaller()
 }
 void GameEntity::increaseCurrAmmo()
 {
-	m_CurrAmmo++;
+	m_CurrAmmo+= 3;
 }
 void GameEntity::decreaseCurrAmmo()
 {
 	m_CurrAmmo--;
 }
+
+void GameEntity::ApplyMouseEffects(int mouseX, int mouseY)
+{
+	SDL_Point mousePoint = { mouseX, mouseY };
+
+	bool inRect = false;
+	if (mouseX < m_pRect.x + m_pRect.w && mouseX > m_pRect.x && mouseY > m_pRect.y && mouseY < m_pRect.y + m_pRect.h)
+	{
+		inRect = true;
+	}
+	if (inRect)
+	{
+		SetScale(m_OW + 10, m_OH + 10);
+	}
+	else
+	{
+		SetScale(m_OW, m_OH);
+	}
+}
+
+
 
 //STATIC STUFF
 std::string GameEntity::m_P1color = "";

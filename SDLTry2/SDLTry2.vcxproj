@@ -73,6 +73,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Button.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MathUtils.cpp" />
     <ClCompile Include="MyWindow.cpp" />
@@ -83,6 +84,7 @@
     <ClCompile Include="GameEntity.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Button.h" />
     <ClInclude Include="MathUtils.h" />
     <ClInclude Include="MyWindow.h" />
     <ClInclude Include="PickUp.h" />
