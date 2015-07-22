@@ -51,7 +51,8 @@ GameEntity::GameEntity(int x, int y, int w, int h, int maxSpeed, int accel, std:
 	m_pCenter			= new SDL_Point;
 	m_pCenter->x		= m_pPos->x + (m_pRect.w/2);
 	m_pCenter->y		= m_pPos->y + (m_pRect.h / 2);
-
+	m_StartAmmo = 10;
+	m_CurrAmmo = m_StartAmmo;
 }
 
 GameEntity::~GameEntity()
@@ -203,7 +204,10 @@ void GameEntity::setPos(float x, float y)
 	m_pRect.y = y;
 
 }
-
+int GameEntity::getCurrAmmo()
+{
+	return m_CurrAmmo;
+}
 std::string GameEntity::getName()
 {
 	return m_name;
@@ -649,6 +653,14 @@ void GameEntity::GetSmaller()
 {
 	m_GetSmall = true;
 	m_AccumulatedGrowth -= 10;
+}
+void GameEntity::increaseCurrAmmo()
+{
+	m_CurrAmmo++;
+}
+void GameEntity::decreaseCurrAmmo()
+{
+	m_CurrAmmo--;
 }
 
 //STATIC STUFF

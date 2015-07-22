@@ -31,11 +31,11 @@ public:
 	void SetScale(int w, int h);
 
 	void setPos(float x, float y);
-
+	int getCurrAmmo();
 	std::string getName(); const
-	SDL_Rect* getRect(); const
-	int getWidth(); const
-	int getHeight(); const
+		SDL_Rect* getRect(); const
+		int getWidth(); const
+		int getHeight(); const
 	
 	Vec2* getPos(); 
 	void SetAnimation(int x, int y, int numFrames, int frameW, int frameH, float delay, bool loop);
@@ -70,12 +70,16 @@ public:
 	bool IsProjectileDone();
 	void GetBigger();
 	void GetSmaller();
+	void increaseCurrAmmo();
+	void decreaseCurrAmmo();
+	
 	
 	
 	std::string m_name;
 	double m_Roation;
 	static std::string m_P1color;
 	static std::string m_P2color;
+
 private:
 	SDL_Renderer* m_pTheRenderer;
 	Vec2* m_pPos;
@@ -92,6 +96,8 @@ private:
 	SDL_RendererFlip m_RenderFlip;
 	int m_MouseX;
 	int m_MouseY;
+	int m_StartAmmo;
+	int m_CurrAmmo;
 
 	//FONT RENDERING 
 	TTF_Font *m_pFont = NULL;

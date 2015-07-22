@@ -205,11 +205,21 @@ void SDLHelper::Update()
 	//Clear screen
 	SDL_RenderClear(m_pRenderer);
 
+
+	if (m_pPlayer1->getWidth() <= 0)
+	{
+		*m_pGameState = GameState::P2WIN;
+	}
+	else if (m_pPlayer2->getWidth() <= 0)
+	{
+		*m_pGameState = GameState::P1WIN;
+	}
+
 	if (*m_pGameState == GameState::MAINMENU){			ShowMainMenu(); }
 	if (*m_pGameState == GameState::CHARACTERSELECT){	ShowCharSelection(); }
 	if (*m_pGameState == GameState::GAMEON){			ShowGameOn(); }
 	if (*m_pGameState == GameState::PAUSED){			ShowPaused(); }
-	if (*m_pGameState == GameState::P1WIN){				ShowP1Win(); }
+	if (*m_pGameState == GameState::P1WIN ){				ShowP1Win(); }
 	if (*m_pGameState == GameState::P2WIN){				ShowP2Win(); }
 
 	//Update screen
@@ -289,6 +299,7 @@ void SDLHelper::UpdatePickUp()
 			{
 				m_P1PickUps.erase(m_P1PickUps.begin() + i);
 				m_pPlayer1->GetBigger();
+				m_pPlayer1->increaseCurrAmmo();
 				break;
 			}
 		}
@@ -304,6 +315,7 @@ void SDLHelper::UpdatePickUp()
 			{
 				m_P2PickUps.erase(m_P2PickUps.begin() + i);
 				m_pPlayer2->GetBigger();
+				m_pPlayer2->increaseCurrAmmo();
 				break;
 			}
 		}
@@ -412,7 +424,11 @@ void SDLHelper::KeyBoardHandler(SDL_Event &e)
 			break;
 
 		case SDLK_SPACE:
-			SpawnProjectile(true, false);
+			if (m_pPlayer1->getCurrAmmo() > 0)
+			{
+				SpawnProjectile(true, false);
+				m_pPlayer1->decreaseCurrAmmo();
+			}
 			break;
 
 		//PLAYER 2
@@ -499,7 +515,11 @@ void SDLHelper::MouseHandler(SDL_Event &e)
 		break;
 
 	case SDL_MOUSEBUTTONDOWN:
-		SpawnProjectile(false, true);
+		if (m_pPlayer2->getCurrAmmo() > 0)
+		{
+			SpawnProjectile(false, true);
+			m_pPlayer2->decreaseCurrAmmo();
+		}
 		//std::cout << "Mouse CLICK DOWN "<< std::endl;
 		break;
 
