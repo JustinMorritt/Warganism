@@ -314,15 +314,7 @@ void SDLHelper::UpdatePickUp()
 			{
 				m_P1PickUps.erase(m_P1PickUps.begin() + i);
 				m_pPlayer1->GetBigger();
-// 				if (m_pPlayer1->getPos()->y < SCREEN_HEIGHT / 2)
-// 				{
-// 					m_pPlayer1->setPos(m_pPlayer1->getPos()->x + 50, m_pPlayer1->getPos()->y + 50);
-// 				}
-// 				else
-// 				{
-// 					m_pPlayer1->setPos(m_pPlayer1->getPos()->x - 50, m_pPlayer1->getPos()->y - 50);
-// 				}
-					break;
+				break;
 			}
 		}
 	}
@@ -338,15 +330,6 @@ void SDLHelper::UpdatePickUp()
 			{
 				m_P2PickUps.erase(m_P2PickUps.begin() + i);
 				m_pPlayer2->GetBigger();
-// 				if (m_pPlayer2->getPos()->y < SCREEN_HEIGHT / 2)
-// 				{
-// 				
-// 					m_pPlayer2->setPos(m_pPlayer2->getPos()->x + 50, m_pPlayer2->getPos()->y + 50);
-// 				}
-// 				else
-// 				{
-// 					m_pPlayer2->setPos(m_pPlayer2->getPos()->x - 50, m_pPlayer2->getPos()->y - 50);
-// 				}
 				break;
 			}
 		}
@@ -366,6 +349,7 @@ void SDLHelper::UpdateProjectiles()
 			if (Collision::CircleVsCircle(m_P1Projectiles[i]->m_pProjTex->GetCircleCollider(), m_pPlayer2->GetCircleCollider()))
 			{
 				std::cout << "Erased a P1 Projectile -- COLLISION" << std::endl;
+				m_pPlayer2->GetSmaller();
 				m_P1Projectiles.erase(m_P1Projectiles.begin() + i);
 				break;
 			}
@@ -387,6 +371,7 @@ void SDLHelper::UpdateProjectiles()
 			if (Collision::CircleVsCircle(m_P2Projectiles[i]->m_pProjTex->GetCircleCollider(), m_pPlayer1->GetCircleCollider()))
 			{
 				std::cout << "Erased a P2 Projectile --COLLISION" << std::endl;
+				m_pPlayer1->GetSmaller();
 				m_P2Projectiles.erase(m_P2Projectiles.begin() + i);
 				break;
 			}
