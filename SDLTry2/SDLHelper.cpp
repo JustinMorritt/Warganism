@@ -211,9 +211,9 @@ void SDLHelper::Update()
 // 	SDL_RenderCopy(m_pRenderer, m_pfontTest, NULL, &rec2); //ALWAYS USE  DSTRect on Render.. Otherwise wont render ... wierd
 
 	
-// 	if (pickUpCounter < 10){
-// 		SpawnPickUp();
-// 	}
+	
+ 		//SpawnPickUp();
+	
 	UpdateProjectiles();
 	UpdatePickUp();
 	//PLAYER 1
@@ -287,6 +287,13 @@ void SDLHelper::UpdatePickUp()
 		{
 			m_P1PickUps[i]->m_pPickUpTex->Update(m_dt);
 			m_P1PickUps[i]->m_pPickUpTex->Render();
+
+			if (Collision::CircleVsCircle(m_P1PickUps[i]->m_pPickUpTex->GetCircleCollider(), m_pPlayer1->GetCircleCollider()))
+			{
+				m_P1PickUps.erase(m_P1PickUps.begin() + i);
+				//m_pPlayer1->SetScale()
+				break;
+			}
 		}
 	}
 
