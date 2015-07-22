@@ -248,7 +248,7 @@ void SDLHelper::SpawnProjectile(bool p1, bool p2)
 	}
 	else if (p2)
 	{
-		std::cout << "Made a Projectile" << std::endl;
+		//std::cout << "Made a Projectile" << std::endl;
 		Projectile* proj = new Projectile(m_pPlayer2->getCenter().x, m_pPlayer2->getCenter().y, m_pPlayer2->getWidth() / 2, m_pPlayer2->getHeight() / 2, m_pPlayer2->m_Roation, GameEntity::m_P2color, m_pRenderer, "P2projectile");
 		m_P2Projectiles.push_back(proj);
 	}
