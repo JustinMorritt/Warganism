@@ -11,6 +11,10 @@ SDLHelper::SDLHelper() : m_dt(0.0f), m_done(false)
 	if (*m_pGameState == GameState::MAINMENU){ std::cout << "MAINMENU ON" << std::endl; }
 	if (*m_pGameState == GameState::GAMEON){ std::cout << "GAMESCREEN ON" << std::endl; }
 
+	//SET LOADED STATE
+	m_pLoadedState = new LoadedState;
+	*m_pLoadedState = LoadedState::NONE; //ININTIALLY NONE
+
 
 	//SDL INIT
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
@@ -75,63 +79,6 @@ void SDLHelper::loadMedia()
 	if (m_pFont3 == NULL){ std::cout << "ERROR FONT NOT LOADED ... NULL" << std::endl; }
 
 
-
-	SDL_Color  color = {0x5D,0x00,0x00,0xFF};
-	m_pfontTest = loadText("Justin's Test Font WOOO!", color, 1);
-
-
-// 	//SET UP CHARACTER       x   y    w    h  maxS Accel					
-// 	m_pTexture = new Texture(30, 30, 128, 128, 350, 20, "Guy", m_pRenderer, true);
-// 	m_pTexture->LoadFile("Pics/walkGuy.png");				   // Load Up The Full Sprite Sheet
-// 	m_pTexture->SetAnimation(0, 0, 4, 128, 128, 200, true);    // Walk Left		[0]
-// 	m_pTexture->SetAnimation(0, 128, 4, 128, 128, 200, true);  // Walk Right	[1]
-// 	m_pTexture->SetAnimation(0, 256, 4, 128, 128, 200, true);  // Walk ForWard	[2]
-// 	m_pTexture->SetAnimation(0, 384, 4, 128, 128, 200, true);  // Walk Backward	[3]
-// 	m_pTexture->SetAnimation(0, 512, 19, 128, 128, 50, false); // EXPLOSION	[4]
-
-	//COLORS .. SO FAR ****************USE LOWERCASE*****************
-	//Pink			//White		//Black			//Red		//Green	
-	//DarkGreen		//Blue		//RoyalBlue		//BabyBlue	//MintGreen	
-	//Orange		//Yellow	//Gold			//Fuchsia	//Purple
-	//Brown			//DarkGray	//LightGray
-	//**************************************************************
-
-	//PLAYER 1
-	GameEntity::m_P1color = "green";
-	//SET UP CHARACTER       x   y    w    h   maxS Accel					
-	m_pPlayer1 = new GameEntity((SCREEN_WIDTH / 2) - (SCREEN_WIDTH / 4)-64 , (SCREEN_HEIGHT / 2) - (SCREEN_HEIGHT / 4)+64, 128, 128, 350, 20, "player1", m_pRenderer, false);
-	m_pPlayer1->LoadFile("Pics/blobee.png"); // Load Up The Full Sprite Sheet
-	m_pPlayer1->TurnOnCollider(false, true); // Turn on colliders
-	m_pPlayer1->RotateToDir(true);			  // Turn on Rotation
-	m_pPlayer1->UseKeyForces(true);
-	m_pPlayer1->SetColorMod(GameEntity::m_P1color); //COLOUR FOR PLAYER AND BACKDROP BLOB
-	
-
-
-	//PLAYER 2
-	GameEntity::m_P2color = "purple";
-	//SET UP CHARACTER       x   y    w    h   maxS Accel					
-	m_pPlayer2 = new GameEntity((SCREEN_WIDTH / 2) + (SCREEN_WIDTH / 4)-64, (SCREEN_HEIGHT / 2) - (SCREEN_HEIGHT / 4)+64, 128, 128, 350, 20, "player2", m_pRenderer, false);
-	m_pPlayer2->LoadFile("Pics/blobee.png");  // Load Up The Full Sprite Sheet
-	m_pPlayer2->TurnOnCollider(false, true);  // Turn on colliders
-	m_pPlayer2->RotateToDir(true);			  // Turn on Rotation
-	m_pPlayer2->UseGoToPoint(true);
-	m_pPlayer2->SetColorMod(GameEntity::m_P2color); //COLOUR FOR PLAYER AND BACKDROP BLOB
-	
-
-
-
-	//TITLE
-	m_pTextTest = new GameEntity(0, 0, 300, 80,100,5, "Title", m_pRenderer, false);
-	m_pTextTest->LoadTextFile(m_pFont2, "Warganism", "royalblue");
-
-
-	//PLAYER BG 
-	m_pP1BG = loadTexture("Pics/p1BG.png");
-	m_pP2BG = loadTexture("Pics/p2BG.png");
-
-
-	m_pbackground = loadTexture("Pics/background.png");
 }
 
 
@@ -379,7 +326,8 @@ void SDLHelper::HandleEvents() //Returns true if Quit is Clicked
 		}
 		else if (e.type == SDL_KEYDOWN || e.type == SDL_KEYUP) //KEYBOARD EVENTS
 		{
-			KeyBoardHandler(e);
+			if (*m_pGameState == GameState::GAMEON && *m_pLoadedState == LoadedState::GAMEON)
+			{KeyBoardHandler(e);}
 		}
 		else if (e.type == SDL_MOUSEMOTION || e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP || e.type == SDL_MOUSEWHEEL) //MOUSE EVENTS
 		{
@@ -486,7 +434,9 @@ void SDLHelper::MouseHandler(SDL_Event &e)
 {
 	int x, y;
 	SDL_GetMouseState(&x, &y);
-	m_pPlayer2->SetMousePos(x, y);
+
+	if (*m_pGameState == GameState::GAMEON && *m_pLoadedState == LoadedState::GAMEON)
+	{ m_pPlayer2->SetMousePos(x, y); }
 	
 	//std::cout << "Mouse X: " << x << " Mouse Y: " << y << std::endl;
 	//CHECK BOUNDS OF WHAT MOUSE IS IN ...
@@ -499,7 +449,8 @@ void SDLHelper::MouseHandler(SDL_Event &e)
 		break;
 
 	case SDL_MOUSEBUTTONDOWN:
-		SpawnProjectile(false, true);
+		if (*m_pGameState == GameState::GAMEON && *m_pLoadedState == LoadedState::GAMEON)
+		{SpawnProjectile(false, true);}
 		//std::cout << "Mouse CLICK DOWN "<< std::endl;
 		break;
 
@@ -595,7 +546,8 @@ void SDLHelper::DrawPoint(int x, int y, std::string color)
 
 void SDLHelper::ShowMainMenu()
 {
-
+	m_pInGameTitle->setPos((MyWindow::m_Width / 2) - (m_pInGameTitle->getWidth() / 2), 0);
+	m_pInGameTitle->Render(); //RENDER THE TEST TEXT
 }
 
 void SDLHelper::ShowPaused()
@@ -603,27 +555,27 @@ void SDLHelper::ShowPaused()
 
 }
 
-
 void SDLHelper::ShowP1Win()
 {
 
 }
-
 
 void SDLHelper::ShowP2Win()
 {
 
 }
 
-
 void SDLHelper::ShowCharSelection()
 {
-
+	//CHECK IF LOADED
+	if (*m_pLoadedState != LoadedState::CHARACTERSELECT){ LoadCharSelection(); }
 }
-
 
 void SDLHelper::ShowGameOn()
 {
+	//CHECK IF LOADED
+	if (*m_pLoadedState != LoadedState::GAMEON){ LoadGameOn();}
+
 	m_RPickUpSpawnTimeElapsed += m_dt;
 	m_LPickUpSpawnTimeElapsed += m_dt;
 
@@ -667,16 +619,89 @@ void SDLHelper::ShowGameOn()
 	m_pPlayer2->Render();
 
 
-	m_pTextTest->setPos((MyWindow::m_Width / 2) - (m_pTextTest->getWidth() / 2), 0);
-	m_pTextTest->Render(); //RENDER THE TEST TEXT
+	m_pInGameTitle->setPos((MyWindow::m_Width / 2) - (m_pInGameTitle->getWidth() / 2), 0);
+	m_pInGameTitle->Render(); //RENDER THE TEST TEXT
 
 
 }
 
+//LOAD SCREENS**********************************************
+void SDLHelper::LoadMainMenu()
+{
+
+}
+
+void SDLHelper::LoadPaused()
+{
+
+}
+
+void SDLHelper::LoadP1Win()
+{
+
+}
+
+void SDLHelper::LoadP2Win()
+{
+
+}
+
+void SDLHelper::LoadCharSelection()
+{
+
+}
+
+void SDLHelper::LoadGameOn()
+{
+	// 	//SET UP CHARACTER       x   y    w    h  maxS Accel					
+	// 	m_pTexture = new Texture(30, 30, 128, 128, 350, 20, "Guy", m_pRenderer, true);
+	// 	m_pTexture->LoadFile("Pics/walkGuy.png");				   // Load Up The Full Sprite Sheet
+	// 	m_pTexture->SetAnimation(0, 0, 4, 128, 128, 200, true);    // Walk Left		[0]
+	// 	m_pTexture->SetAnimation(0, 128, 4, 128, 128, 200, true);  // Walk Right	[1]
+	// 	m_pTexture->SetAnimation(0, 256, 4, 128, 128, 200, true);  // Walk ForWard	[2]
+	// 	m_pTexture->SetAnimation(0, 384, 4, 128, 128, 200, true);  // Walk Backward	[3]
+	// 	m_pTexture->SetAnimation(0, 512, 19, 128, 128, 50, false); // EXPLOSION	[4]
+
+	//COLORS .. SO FAR ****************USE LOWERCASE*****************
+	//Pink			//White		//Black			//Red		//Green	
+	//DarkGreen		//Blue		//RoyalBlue		//BabyBlue	//MintGreen	
+	//Orange		//Yellow	//Gold			//Fuchsia	//Purple
+	//Brown			//DarkGray	//LightGray
+	//**************************************************************
+
+	//PLAYER 1
+	GameEntity::m_P1color = "green";
+	//SET UP CHARACTER       x   y    w    h   maxS Accel					
+	m_pPlayer1 = new GameEntity((SCREEN_WIDTH / 2) - (SCREEN_WIDTH / 4) - 64, (SCREEN_HEIGHT / 2) - (SCREEN_HEIGHT / 4) + 64, 128, 128, 350, 20, "player1", m_pRenderer, false);
+	m_pPlayer1->LoadFile("Pics/blobee.png"); // Load Up The Full Sprite Sheet
+	m_pPlayer1->TurnOnCollider(false, true); // Turn on colliders
+	m_pPlayer1->RotateToDir(true);			  // Turn on Rotation
+	m_pPlayer1->UseKeyForces(true);
+	m_pPlayer1->SetColorMod(GameEntity::m_P1color); //COLOUR FOR PLAYER AND BACKDROP BLOB
 
 
+	//PLAYER 2
+	GameEntity::m_P2color = "purple";
+	//SET UP CHARACTER       x   y    w    h   maxS Accel					
+	m_pPlayer2 = new GameEntity((SCREEN_WIDTH / 2) + (SCREEN_WIDTH / 4) - 64, (SCREEN_HEIGHT / 2) - (SCREEN_HEIGHT / 4) + 64, 128, 128, 350, 20, "player2", m_pRenderer, false);
+	m_pPlayer2->LoadFile("Pics/blobee.png");  // Load Up The Full Sprite Sheet
+	m_pPlayer2->TurnOnCollider(false, true);  // Turn on colliders
+	m_pPlayer2->RotateToDir(true);			  // Turn on Rotation
+	m_pPlayer2->UseGoToPoint(true);
+	m_pPlayer2->SetColorMod(GameEntity::m_P2color); //COLOUR FOR PLAYER AND BACKDROP BLOB
 
+	//TITLE
+	m_pInGameTitle = new GameEntity(0, 0, 300, 80, 100, 5, "Title", m_pRenderer, false);
+	m_pInGameTitle->LoadTextFile(m_pFont2, "Warganism", "royalblue");
 
+	//PLAYER BG 
+	m_pP1BG = loadTexture("Pics/p1BG.png");
+	m_pP2BG = loadTexture("Pics/p2BG.png");
+
+	m_pbackground = loadTexture("Pics/background.png");
+	
+	*m_pLoadedState = LoadedState::GAMEON;
+}
 
 void SDLHelper::close()
 {

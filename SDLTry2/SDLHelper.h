@@ -26,11 +26,24 @@ enum class GameState
 	GAMEON
 };
 
+enum class LoadedState
+{
+	MAINMENU,
+	PAUSED,
+	P1WIN,
+	P2WIN,
+	CHARACTERSELECT,
+	GAMEON,
+	NONE
+};
+
 
 class SDLHelper
 {
 private:
 	GameState* m_pGameState;
+	LoadedState* m_pLoadedState;
+
 	RandGen m_RG;
 	float m_dt;
 	bool m_done;
@@ -52,7 +65,7 @@ private:
 	SDL_Texture* m_pP1BG			= NULL;
 	SDL_Texture* m_pP2BG			= NULL;
 
-	GameEntity* m_pTextTest			= NULL;
+	GameEntity* m_pInGameTitle		= NULL;
 	
 	//FONTS
 	TTF_Font *m_pFont1 = NULL;		//font "newsPaper Clipping One"		BlackCasper.ttf
@@ -66,6 +79,7 @@ private:
 	std::vector<Projectile*> m_P2Projectiles;
 	std::vector<PickUp*> m_P1PickUps;
 	std::vector<PickUp*> m_P2PickUps;
+
 
 public:
 
@@ -101,6 +115,13 @@ public:
 	void ShowP2Win();
 	void ShowCharSelection();
 	void ShowGameOn();
+	//GAME FUNCTIONS (LOAD)
+	void LoadMainMenu();
+	void LoadPaused();
+	void LoadP1Win();
+	void LoadP2Win();
+	void LoadCharSelection();
+	void LoadGameOn();
 
 
 	//GEOMETRY FUNCTIONS
