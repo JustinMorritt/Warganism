@@ -154,15 +154,6 @@ void SDLHelper::Update()
 	SDL_RenderClear(m_pRenderer);
 
 
-	if (m_pPlayer1->getWidth() <= 0)
-	{
-		*m_pGameState = GameState::P2WIN;
-	}
-	else if (m_pPlayer2->getWidth() <= 0)
-	{
-		*m_pGameState = GameState::P1WIN;
-	}
-
 	if (*m_pGameState == GameState::MAINMENU){			ShowMainMenu(); }
 	if (*m_pGameState == GameState::CHARACTERSELECT){	ShowCharSelection(); }
 	if (*m_pGameState == GameState::GAMEON){			ShowGameOn(); }
@@ -652,7 +643,14 @@ void SDLHelper::ShowGameOn()
 	m_pInGameTitle->setPos((MyWindow::m_Width / 2) - (m_pInGameTitle->getWidth() / 2), 0);
 	m_pInGameTitle->Render(); //RENDER THE TITLE TEXT
 
-
+	if (m_pPlayer1->getWidth() <= 0)
+	{
+		*m_pGameState = GameState::P2WIN;
+	}
+	else if (m_pPlayer2->getWidth() <= 0)
+	{
+		*m_pGameState = GameState::P1WIN;
+	}
 }
 
 //LOAD SCREENS**********************************************
