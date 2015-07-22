@@ -549,6 +549,21 @@ void GameEntity::CheckPlayerBounds()
 		if (m_GetBig)
 		{
 			SetScale(getWidth() + 1, getHeight()+1);
+			UpdateColliders();
+			if ((m_pCenter->y - m_pCircleCollider->r < 0) || (m_pCenter->y + m_pCircleCollider->r > MyWindow::m_Height))
+			{
+				m_AccumulatedGrowth += 1;
+				SetScale(getWidth() - 1, getHeight() - 1);
+				UpdateColliders();
+			}
+			if (m_name == "player2")		//CHECK COLLISION ON X
+			{
+				if (m_pCenter->x - m_pCircleCollider->r < MyWindow::m_Width / 2 || m_pCenter->x + m_pCircleCollider->r > MyWindow::m_Width)
+				{
+					m_AccumulatedGrowth += 1;
+					SetScale(getWidth() - 1, getHeight() - 1);
+				}
+			}
 			m_AccumulatedGrowth -= 1;
 			if (m_AccumulatedGrowth <= 0){ m_GetBig = false; }
 		}
