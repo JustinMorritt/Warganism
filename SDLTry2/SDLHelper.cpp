@@ -1,4 +1,5 @@
 #include "SDLHelper.h"
+#include <time.h>
 
 
 
@@ -48,7 +49,7 @@ SDLHelper::SDLHelper() : m_dt(0.0f), m_done(false)
 	
 
 
-	
+	srand(time(NULL));
 	loadMedia();
 }
 
@@ -210,8 +211,10 @@ void SDLHelper::Update()
 // 	SDL_RenderCopy(m_pRenderer, m_pfontTest, NULL, &rec2); //ALWAYS USE  DSTRect on Render.. Otherwise wont render ... wierd
 
 	
+		SpawnPickUp();
+	
 	UpdateProjectiles();
-
+	UpdatePickUp();
 	//PLAYER 1
 	m_pPlayer1->Update(m_dt);
 	//m_pTexture2->SetScale(200, 200);
@@ -253,6 +256,47 @@ void SDLHelper::SpawnProjectile(bool p1, bool p2)
 		m_P2Projectiles.push_back(proj);
 	}
 	
+}
+
+void SDLHelper::SpawnPickUp()
+{
+	
+	int randomx = rand() % MyWindow::getWidth() + 1;
+	int randomy = rand() % MyWindow::getHeight() + 1;
+
+	if (randomx > MyWindow::getWidth() / 2)
+	{
+		PickUp* pickUp = new PickUp(randomx, randomy, m_pPlayer2->getWidth() / 2, m_pPlayer2->getHeight() / 2, m_pRenderer, "PickUp", GameEntity::m_P2color);
+		m_P2PickUps.push_back(pickUp);
+	}
+	else if (randomx < MyWindow::getWidth() / 2)
+	{
+		PickUp* pickUp = new PickUp(randomx, randomy, m_pPlayer1->getWidth() / 2, m_pPlayer1->getHeight() / 2, m_pRenderer, "PickUp", GameEntity::m_P1color);
+		m_P1PickUps.push_back(pickUp);
+	}
+
+	pickUpCounter++; 
+}
+
+void SDLHelper::UpdatePickUp()
+{
+	if (m_P1PickUps.size() > 0)
+	{
+		for (int i = 0; i < m_P1PickUps.size(); ++i)
+		{
+			m_P1PickUps[i]->m_pPickUpTex->Update(m_dt);
+			m_P1PickUps[i]->m_pPickUpTex->Render();
+		}
+	}
+
+	if (m_P2PickUps.size() > 0)
+	{
+		for (int i = 0; i < m_P2PickUps.size(); ++i)
+		{
+			m_P2PickUps[i]->m_pPickUpTex->Update(m_dt);
+			m_P2PickUps[i]->m_pPickUpTex->Render();
+		}
+	}
 }
 
 void SDLHelper::UpdateProjectiles()

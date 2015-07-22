@@ -10,6 +10,7 @@
 #include "GameEntity.h"
 #include "MyWindow.h"
 #include "Projectile.h"
+#include "PickUp.h"
 
 
 
@@ -22,7 +23,7 @@ private:
 
 	float m_dt;
 	bool m_done;
-	
+	int pickUpCounter;
 	SDL_Renderer* m_pRenderer		= NULL;				//The window renderer 
 	SDL_Surface* m_pScreenSurface	= NULL;				//The surface contained by the window
 
@@ -48,6 +49,8 @@ private:
 
 	std::vector<Projectile*> m_P1Projectiles;
 	std::vector<Projectile*> m_P2Projectiles;
+	std::vector<PickUp*> m_P1PickUps;
+	std::vector<PickUp*> m_P2PickUps;
 
 public:
 
@@ -67,7 +70,9 @@ public:
 	void SetDT(float dt);
 
 	void SpawnProjectile(bool p1,bool p2);
+	void SpawnPickUp();
 	void UpdateProjectiles();
+	void UpdatePickUp();
 	void HandleEvents();
 	void KeyBoardHandler(SDL_Event &e);
 	void MouseHandler(SDL_Event &e);

@@ -39,7 +39,10 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>C:\Users\mathe_000\Desktop\Warganism\SDLTry2\SDL2_image-2.0.0\include;C:\Users\mathe_000\Desktop\Warganism\SDLTry2\SDL2_ttf-2.0.12\include;C:\Users\mathe_000\Desktop\Warganism\SDLTry2\SDL2-2.0.3\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\mathe_000\Desktop\Warganism\SDLTry2\SDL2-2.0.3\lib\x86;C:\Users\mathe_000\Desktop\Warganism\SDLTry2\SDL2_ttf-2.0.12\lib\x86;C:\Users\mathe_000\Desktop\Warganism\SDLTry2\SDL2_image-2.0.0\lib\x86;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -73,6 +76,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MathUtils.cpp" />
     <ClCompile Include="MyWindow.cpp" />
+    <ClCompile Include="PickUp.cpp" />
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="SDLHelper.cpp" />
     <ClCompile Include="GameEntity.cpp" />
@@ -80,6 +84,7 @@
   <ItemGroup>
     <ClInclude Include="MathUtils.h" />
     <ClInclude Include="MyWindow.h" />
+    <ClInclude Include="PickUp.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="SDLHelper.h" />
     <ClInclude Include="GameEntity.h" />
