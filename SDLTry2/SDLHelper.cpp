@@ -92,7 +92,7 @@ void SDLHelper::loadMedia()
 	//**************************************************************
 
 	//PLAYER 1
-	GameEntity::m_P1color = "royalblue";
+	GameEntity::m_P1color = "babyblue";
 	//SET UP CHARACTER       x   y    w    h   maxS Accel					
 	m_pPlayer1 = new GameEntity((SCREEN_WIDTH / 2) - (SCREEN_WIDTH / 4)-64 , (SCREEN_HEIGHT / 2) - (SCREEN_HEIGHT / 4)+64, 128, 128, 350, 20, "player1", m_pRenderer, false);
 	m_pPlayer1->LoadFile("Pics/blobee.png"); // Load Up The Full Sprite Sheet
@@ -104,7 +104,7 @@ void SDLHelper::loadMedia()
 
 
 	//PLAYER 2
-	GameEntity::m_P2color = "fuchsia";
+	GameEntity::m_P2color = "gold";
 	//SET UP CHARACTER       x   y    w    h   maxS Accel					
 	m_pPlayer2 = new GameEntity((SCREEN_WIDTH / 2) + (SCREEN_WIDTH / 4)-64, (SCREEN_HEIGHT / 2) - (SCREEN_HEIGHT / 4)+64, 128, 128, 350, 20, "player2", m_pRenderer, false);
 	m_pPlayer2->LoadFile("Pics/blobee.png");  // Load Up The Full Sprite Sheet
@@ -251,7 +251,7 @@ void SDLHelper::SpawnProjectile(bool p1, bool p2)
 	}
 	else if (p2)
 	{
-		std::cout << "Made a Projectile" << std::endl;
+		//std::cout << "Made a Projectile" << std::endl;
 		Projectile* proj = new Projectile(m_pPlayer2->getCenter().x, m_pPlayer2->getCenter().y, m_pPlayer2->getWidth() / 2, m_pPlayer2->getHeight() / 2, m_pPlayer2->m_Roation, GameEntity::m_P2color, m_pRenderer, "P2projectile");
 		m_P2Projectiles.push_back(proj);
 	}
@@ -308,9 +308,17 @@ void SDLHelper::UpdateProjectiles()
 		{
 			m_P1Projectiles[i]->m_pProjTex->Update(m_dt);
 			m_P1Projectiles[i]->m_pProjTex->Render();
+
+			if (Collision::CircleVsCircle(m_P1Projectiles[i]->m_pProjTex->GetCircleCollider(), m_pPlayer2->GetCircleCollider()))
+			{
+				std::cout << "Erased a P1 Projectile -- COLLISION" << std::endl;
+				m_P1Projectiles.erase(m_P1Projectiles.begin() + i);
+				break;
+			}
+
 			if (m_P1Projectiles[i]->m_pProjTex->IsProjectileDone())
 			{
-				std::cout << "Erased a P1 Projectile" << std::endl;
+				std::cout << "Erased a P1 Projectile -- OFF SCREEN" << std::endl;
 				m_P1Projectiles.erase(m_P1Projectiles.begin()+i);
 			}
 		}
@@ -322,9 +330,15 @@ void SDLHelper::UpdateProjectiles()
 		{
 			m_P2Projectiles[i]->m_pProjTex->Update(m_dt);
 			m_P2Projectiles[i]->m_pProjTex->Render();
+			if (Collision::CircleVsCircle(m_P2Projectiles[i]->m_pProjTex->GetCircleCollider(), m_pPlayer1->GetCircleCollider()))
+			{
+				std::cout << "Erased a P2 Projectile --COLLISION" << std::endl;
+				m_P2Projectiles.erase(m_P2Projectiles.begin() + i);
+				break;
+			}
 			if (m_P2Projectiles[i]->m_pProjTex->IsProjectileDone())
 			{
-				std::cout << "Erased a P1 Projectile" << std::endl;
+				std::cout << "Erased a P2 Projectile  -- OFF SCREEN" << std::endl;
 				m_P2Projectiles.erase(m_P2Projectiles.begin() + i);
 			}
 		}

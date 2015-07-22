@@ -47,6 +47,7 @@ public:
 	void SetCurrentAnimation(int num);
 	int GetCurrentAnimation();
 	SDL_Rect GetCurrentFrame();
+	Circle GetCircleCollider();
 
 	void SetColor(std::string color); //USED FOR FONTS
 	void SetColorMod(std::string color);
