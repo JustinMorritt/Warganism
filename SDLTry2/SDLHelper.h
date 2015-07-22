@@ -11,6 +11,7 @@
 #include "MyWindow.h"
 #include "Projectile.h"
 #include "PickUp.h"
+#include "randgen.h"
 
 
 
@@ -20,7 +21,7 @@
 class SDLHelper
 {
 private:
-
+	RandGen m_RG;
 	float m_dt;
 	bool m_done;
 	int pickUpCounter;

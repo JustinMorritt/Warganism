@@ -1,5 +1,5 @@
 #include "SDLHelper.h"
-#include <time.h>
+
 
 
 
@@ -211,8 +211,9 @@ void SDLHelper::Update()
 // 	SDL_RenderCopy(m_pRenderer, m_pfontTest, NULL, &rec2); //ALWAYS USE  DSTRect on Render.. Otherwise wont render ... wierd
 
 	
-	//SpawnPickUp();
-	
+// 	if (pickUpCounter < 10){
+// 		SpawnPickUp();
+// 	}
 	UpdateProjectiles();
 	UpdatePickUp();
 	//PLAYER 1
@@ -261,17 +262,17 @@ void SDLHelper::SpawnProjectile(bool p1, bool p2)
 void SDLHelper::SpawnPickUp()
 {
 	
-	int randomx = rand() % MyWindow::getWidth() + 1;
-	int randomy = rand() % MyWindow::getHeight() + 1;
+	int randomX = m_RG(MyWindow::getWidth()) + 1;
+	int randomY = m_RG(MyWindow::getHeight()) + 1;
 
-	if (randomx > MyWindow::getWidth() / 2)
+	if (randomX > MyWindow::getWidth() / 2)
 	{
-		PickUp* pickUp = new PickUp(randomx, randomy, m_pPlayer2->getWidth() / 2, m_pPlayer2->getHeight() / 2, m_pRenderer, "PickUp", GameEntity::m_P2color);
+		PickUp* pickUp = new PickUp(randomX, randomY, m_pPlayer2->getWidth() / 2, m_pPlayer2->getHeight() / 2, m_pRenderer, "PickUp", GameEntity::m_P2color);
 		m_P2PickUps.push_back(pickUp);
 	}
-	else if (randomx < MyWindow::getWidth() / 2)
+	else if (randomX < MyWindow::getWidth() / 2)
 	{
-		PickUp* pickUp = new PickUp(randomx, randomy, m_pPlayer1->getWidth() / 2, m_pPlayer1->getHeight() / 2, m_pRenderer, "PickUp", GameEntity::m_P1color);
+		PickUp* pickUp = new PickUp(randomX, randomY, m_pPlayer1->getWidth() / 2, m_pPlayer1->getHeight() / 2, m_pRenderer, "PickUp", GameEntity::m_P1color);
 		m_P1PickUps.push_back(pickUp);
 	}
 

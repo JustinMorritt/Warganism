@@ -78,6 +78,7 @@
     <ClCompile Include="MyWindow.cpp" />
     <ClCompile Include="PickUp.cpp" />
     <ClCompile Include="Projectile.cpp" />
+    <ClCompile Include="randgen.cpp" />
     <ClCompile Include="SDLHelper.cpp" />
     <ClCompile Include="GameEntity.cpp" />
   </ItemGroup>
@@ -86,6 +87,7 @@
     <ClInclude Include="MyWindow.h" />
     <ClInclude Include="PickUp.h" />
     <ClInclude Include="Projectile.h" />
+    <ClInclude Include="randgen.h" />
     <ClInclude Include="SDLHelper.h" />
     <ClInclude Include="GameEntity.h" />
   </ItemGroup>
