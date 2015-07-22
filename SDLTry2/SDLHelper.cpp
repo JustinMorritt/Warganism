@@ -84,6 +84,7 @@ void SDLHelper::loadMedia()
 	m_pInGameSizeP2 = new GameEntity(0, 0, 150, 80, 0, 0, "P2Size", m_pRenderer, false);
 	m_pInGameAmmoP1 = new GameEntity(0, 0, 150, 80, 0, 0, "P1Ammo", m_pRenderer, false);
 	m_pInGameAmmoP2 = new GameEntity(0, 0, 150, 80, 0, 0, "P2Ammo", m_pRenderer, false);
+	m_pPaused = new GameEntity(0, 0, 300, 80, 0, 0, "Paused", m_pRenderer, false);
 }
 
 
@@ -596,7 +597,12 @@ void SDLHelper::ShowMainMenu()
 void SDLHelper::ShowPaused()
 {
 	if (*m_pLoadedState != LoadedState::PAUSED){ LoadPaused(); }
+	
+	DrawRect(0,0, MyWindow::getWidth(), MyWindow::getHeight(), "lightgray");
 	ShowGameOn();
+	m_pPaused->setPos(MyWindow::getWidth() / 2 - 150, MyWindow::getHeight() / 2 - 50);
+	m_pPaused->Render();
+	
 	
 
 }
@@ -712,6 +718,7 @@ void SDLHelper::LoadMainMenu()
 
 void SDLHelper::LoadPaused()
 {
+	m_pPaused->LoadTextFile(m_pFont2, "PAUSED ", "royalblue");
 	*m_pLoadedState = LoadedState::PAUSED;
 }
 
