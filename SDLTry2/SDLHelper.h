@@ -71,6 +71,7 @@ private:
 	GameEntity* m_pInGameAmmoP2	    = NULL;
 	GameEntity* m_pInGameSizeP1		= NULL;
 	GameEntity* m_pInGameSizeP2		= NULL;
+	GameEntity* m_pPaused			= NULL;
 
 	//FONTS
 	TTF_Font *m_pFont1 = NULL;		//font "newsPaper Clipping One"		BlackCasper.ttf
