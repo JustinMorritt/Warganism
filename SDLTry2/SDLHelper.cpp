@@ -211,7 +211,7 @@ void SDLHelper::Update()
 // 	SDL_RenderCopy(m_pRenderer, m_pfontTest, NULL, &rec2); //ALWAYS USE  DSTRect on Render.. Otherwise wont render ... wierd
 
 	
-		SpawnPickUp();
+	//SpawnPickUp();
 	
 	UpdateProjectiles();
 	UpdatePickUp();
