@@ -80,6 +80,11 @@ void SDLHelper::loadMedia()
 
 	//TITLE
 	m_pInGameTitle = new GameEntity(0, 0, 300, 80, 100, 5, "Title", m_pRenderer, false);
+
+	m_pInGameSizeP1 = new GameEntity(0, 0, 150, 80, 0, 0, "P1Size", m_pRenderer, false);
+	m_pInGameSizeP2 = new GameEntity(0, 0, 150, 80, 0, 0, "P2Size", m_pRenderer, false);
+	m_pInGameAmmoP1 = new GameEntity(0, 0, 150, 80, 0, 0, "P1Ammo", m_pRenderer, false);
+	m_pInGameAmmoP2 = new GameEntity(0, 0, 150, 80, 0, 0, "P2Ammo", m_pRenderer, false);
 }
 
 
@@ -148,6 +153,8 @@ void SDLHelper::SetDT(float dt)
 //UPDATE *************************************************************
 void SDLHelper::Update()
 {
+
+
 	HandleEvents();
 
 	//Clear screen
@@ -638,16 +645,35 @@ void SDLHelper::ShowGameOn()
 	m_pPlayer2->Update(m_dt);
 	m_pPlayer2->Render();
 
+	m_pInGameSizeP1->LoadTextFile(m_pFont2, "Size: " + std::to_string(m_pPlayer1->getWidth()), "darkgreen");
+	m_pInGameSizeP2->LoadTextFile(m_pFont2, "Size: " + std::to_string(m_pPlayer2->getWidth()), "fuchsia");
+	m_pInGameAmmoP1->LoadTextFile(m_pFont2, "Ammo: " + std::to_string(m_pPlayer1->getCurrAmmo()), "darkgreen");
+	m_pInGameAmmoP2->LoadTextFile(m_pFont2, "Ammo: " + std::to_string(m_pPlayer2->getCurrAmmo()), "fuchsia");
 
 	m_pInGameTitle->setPos((MyWindow::m_Width / 2) - (m_pInGameTitle->getWidth() / 2), 0);
 	m_pInGameTitle->Render(); //RENDER THE TITLE TEXT
 
+	m_pInGameSizeP1->setPos(m_pInGameTitle->getPos()->x - 250 , m_pInGameTitle->getPos()->y);
+	m_pInGameSizeP1->Render();
+
+	m_pInGameSizeP2->setPos(m_pInGameTitle->getPos()->x + 300, m_pInGameTitle->getPos()->y);
+	m_pInGameSizeP2->Render();
+
+	m_pInGameAmmoP1->setPos(m_pInGameTitle->getPos()->x - 250, m_pInGameTitle->getPos()->y + 50);
+	m_pInGameAmmoP1->Render();
+
+	m_pInGameAmmoP2->setPos(m_pInGameTitle->getPos()->x + 300, m_pInGameTitle->getPos()->y + 50);
+	m_pInGameAmmoP2->Render();
+
+
 	if (m_pPlayer1->getWidth() <= 0)
 	{
+		m_pPlayer1->SetScale(0, 0);
 		*m_pGameState = GameState::P2WIN;
 	}
 	else if (m_pPlayer2->getWidth() <= 0)
 	{
+		m_pPlayer2->SetScale(0, 0);
 		*m_pGameState = GameState::P1WIN;
 	}
 }
@@ -720,9 +746,10 @@ void SDLHelper::LoadGameOn()
 	m_pPlayer2->RotateToDir(true);			  // Turn on Rotation
 	m_pPlayer2->UseGoToPoint(true);
 	m_pPlayer2->SetColorMod(GameEntity::m_P2color); //COLOUR FOR PLAYER AND BACKDROP BLOB
-
+	
 	//TITLE
 	m_pInGameTitle->LoadTextFile(m_pFont2, "Fight !", "royalblue");
+
 
 	//PLAYER BG 
 	m_pP1BG = loadTexture("Pics/p1BG.png");

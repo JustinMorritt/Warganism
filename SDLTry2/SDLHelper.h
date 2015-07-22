@@ -66,7 +66,11 @@ private:
 	SDL_Texture* m_pP2BG			= NULL;
 
 	GameEntity* m_pInGameTitle		= NULL;
-	
+	GameEntity* m_pInGameAmmoP1		= NULL;
+	GameEntity* m_pInGameAmmoP2	    = NULL;
+	GameEntity* m_pInGameSizeP1		= NULL;
+	GameEntity* m_pInGameSizeP2		= NULL;
+
 	//FONTS
 	TTF_Font *m_pFont1 = NULL;		//font "newsPaper Clipping One"		BlackCasper.ttf
 	TTF_Font *m_pFont2 = NULL;		//font "Black Rose"					BLACKR.ttf
