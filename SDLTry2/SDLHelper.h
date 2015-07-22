@@ -103,7 +103,6 @@ public:
 	bool Done();
 	void Update();
 	void SetDT(float dt);
-
 	void SpawnProjectile(bool p1,bool p2);
 	void SpawnRPickUp();
 	void SpawnLPickUp();
@@ -127,6 +126,7 @@ public:
 	void LoadP2Win();
 	void LoadCharSelection();
 	void LoadGameOn();
+
 
 
 	//GEOMETRY FUNCTIONS
