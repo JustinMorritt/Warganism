@@ -9,12 +9,8 @@ PickUp::PickUp(int x, int y, int w, int h, SDL_Renderer* theRenderer, std::strin
 	
 
 	Vec2 goVec;
-	goVec.x = -sin(DIR*pi / 180);
-	goVec.y = cos(DIR*pi / 180);
 
-	//SET VELOCITYS FOR DIR
-	m_pPickUpTex->GoOneDirForever(goVec.x, goVec.y);
-	m_pPickUpTex->CalculateRotation(); //Rotate it to the current direction 
+	m_pPickUpTex->m_Roation = DIR;
 	m_pPickUpTex->UpdateColliders();
 }
 

@@ -7,7 +7,7 @@ SDLHelper::SDLHelper() : m_dt(0.0f), m_done(false)
 {
 	//SET INITIAL GAMESTATE
 	m_pGameState = new GameState;
-	*m_pGameState = GameState::GAMEON;
+	*m_pGameState = GameState::MAINMENU;
 	if (*m_pGameState == GameState::MAINMENU){ std::cout << "MAINMENU ON" << std::endl; }
 	if (*m_pGameState == GameState::GAMEON){ std::cout << "GAMESCREEN ON" << std::endl; }
 
@@ -78,7 +78,8 @@ void SDLHelper::loadMedia()
 	m_pFont3 = TTF_OpenFont("Fonts/ANUDRG__.ttf", 300);
 	if (m_pFont3 == NULL){ std::cout << "ERROR FONT NOT LOADED ... NULL" << std::endl; }
 
-
+	//TITLE
+	m_pInGameTitle = new GameEntity(0, 0, 300, 80, 100, 5, "Title", m_pRenderer, false);
 }
 
 
@@ -546,8 +547,14 @@ void SDLHelper::DrawPoint(int x, int y, std::string color)
 
 void SDLHelper::ShowMainMenu()
 {
+	if (*m_pLoadedState != LoadedState::MAINMENU){ LoadMainMenu(); }
+
 	m_pInGameTitle->setPos((MyWindow::m_Width / 2) - (m_pInGameTitle->getWidth() / 2), 0);
 	m_pInGameTitle->Render(); //RENDER THE TEST TEXT
+
+
+	m_pInGameTitle->setPos((MyWindow::m_Width / 2) - (m_pInGameTitle->getWidth() / 2), 0);
+	m_pInGameTitle->Render(); //RENDER THE TITLE TEXT
 }
 
 void SDLHelper::ShowPaused()
@@ -608,19 +615,18 @@ void SDLHelper::ShowGameOn()
 
 	UpdateProjectiles();
 	UpdatePickUp();
+
 	//PLAYER 1
 	m_pPlayer1->Update(m_dt);
-	//m_pTexture2->SetScale(200, 200);
 	m_pPlayer1->Render();
 
 	//PLAYER 2
-	//m_pTexture->SetScale(-100, -100);
 	m_pPlayer2->Update(m_dt);
 	m_pPlayer2->Render();
 
 
 	m_pInGameTitle->setPos((MyWindow::m_Width / 2) - (m_pInGameTitle->getWidth() / 2), 0);
-	m_pInGameTitle->Render(); //RENDER THE TEST TEXT
+	m_pInGameTitle->Render(); //RENDER THE TITLE TEXT
 
 
 }
@@ -628,7 +634,11 @@ void SDLHelper::ShowGameOn()
 //LOAD SCREENS**********************************************
 void SDLHelper::LoadMainMenu()
 {
+	//TITLE
+	m_pInGameTitle->LoadTextFile(m_pFont2, "Warganism", "royalblue");
+	m_pbackground = loadTexture("Pics/background.png");
 
+	*m_pLoadedState = LoadedState::MAINMENU;
 }
 
 void SDLHelper::LoadPaused()
@@ -648,7 +658,7 @@ void SDLHelper::LoadP2Win()
 
 void SDLHelper::LoadCharSelection()
 {
-
+	m_pbackground = loadTexture("Pics/background.png");
 }
 
 void SDLHelper::LoadGameOn()
@@ -691,8 +701,7 @@ void SDLHelper::LoadGameOn()
 	m_pPlayer2->SetColorMod(GameEntity::m_P2color); //COLOUR FOR PLAYER AND BACKDROP BLOB
 
 	//TITLE
-	m_pInGameTitle = new GameEntity(0, 0, 300, 80, 100, 5, "Title", m_pRenderer, false);
-	m_pInGameTitle->LoadTextFile(m_pFont2, "Warganism", "royalblue");
+	m_pInGameTitle->LoadTextFile(m_pFont2, "Fight !", "royalblue");
 
 	//PLAYER BG 
 	m_pP1BG = loadTexture("Pics/p1BG.png");
@@ -702,6 +711,17 @@ void SDLHelper::LoadGameOn()
 	
 	*m_pLoadedState = LoadedState::GAMEON;
 }
+
+
+
+
+
+
+
+
+
+
+
 
 void SDLHelper::close()
 {
