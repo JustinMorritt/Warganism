@@ -73,8 +73,10 @@ public:
 	void GetSmaller();
 	void increaseCurrAmmo();
 	void decreaseCurrAmmo();
-	void UseMouseEffects(bool on);
+	void UseMouseEffects(bool on, int BulgeOffset);
 	void ApplyMouseEffects(int mouseX, int mouseY);
+	bool m_ClickDown;
+	bool m_Clicked;
 	
 	
 	std::string m_name;
@@ -94,7 +96,9 @@ private:
 	float m_accel;
 	SDL_Texture* m_pTexture;
 	SDL_Rect m_pRect;
-	int m_OW, m_OH; //ORIGINAL WIDTH AND HEIGHT ..USED IN BULGE AND MOUSE OVER EFFECTS 
+	int m_OW, m_OH, m_OX, m_OY; //ORIGINAL WIDTH AND HEIGHT ..USED IN BULGE AND MOUSE OVER EFFECTS 
+	int  m_ButtOffset; //Used in Buttons 
+
 	
 	SDL_RendererFlip m_RenderFlip;
 	int m_MouseX;
@@ -139,6 +143,6 @@ private:
 	int  m_AccumulatedGrowth;
 	bool m_GetBig;
 	bool m_GetSmall;
-	
+	bool m_PosOffset; // Used in Buttons
 };
 

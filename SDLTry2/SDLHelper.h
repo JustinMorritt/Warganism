@@ -42,6 +42,8 @@ enum class LoadedState
 class SDLHelper
 {
 private:
+	int m_MouseX;
+	int m_MouseY;
 	GameState* m_pGameState;
 	LoadedState* m_pLoadedState;
 

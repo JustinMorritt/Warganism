@@ -26,6 +26,8 @@ GameEntity::GameEntity(int x, int y, int w, int h, int maxSpeed, int accel, std:
 	m_pVel->y			= 0;
 	m_pPos->x			= x;
 	m_pPos->y			= y;
+	m_OX				= x;
+	m_OY				= y;
 	m_pRect.w			= w;
 	m_pRect.h			= h;
 	m_OW				= w;
@@ -495,9 +497,10 @@ void GameEntity::UseGoOneDir(bool on)
 	m_UseGoOneDirForever = on;
 }
 
-void GameEntity::UseMouseEffects(bool on)
+void GameEntity::UseMouseEffects(bool on, int Bulge)
 {
 	m_UseMouseOverEffects = on;
+	m_ButtOffset = Bulge;
 }
 
 void GameEntity::RotateToDir(bool on)
@@ -686,10 +689,22 @@ void GameEntity::ApplyMouseEffects(int mouseX, int mouseY)
 	}
 	if (inRect)
 	{
-		SetScale(m_OW + 10, m_OH + 10);
+		if (m_ClickDown)
+		{
+			if (m_PosOffset){ setPos(m_OX, m_OY); m_PosOffset = false; }
+			SetScale(m_OW, m_OH);
+			m_Clicked = true;
+		}
+		else
+		{
+			if (m_ClickDown){}
+			SetScale(m_OW + m_ButtOffset, m_OH + m_ButtOffset);
+			if (!m_PosOffset){ setPos(m_OX - m_ButtOffset / 2, m_OY - m_ButtOffset / 2); m_PosOffset = true; }
+		}
 	}
 	else
 	{
+		if (m_PosOffset){ setPos(m_OX, m_OY); m_PosOffset = false; }
 		SetScale(m_OW, m_OH);
 	}
 }

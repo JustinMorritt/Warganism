@@ -7,14 +7,14 @@ SDLHelper::SDLHelper() : m_dt(0.0f), m_done(false)
 {
 	//SET INITIAL GAMESTATE
 	m_pGameState = new GameState;
-	*m_pGameState = GameState::GAMEON;
+	*m_pGameState = GameState::MAINMENU;
 	if (*m_pGameState == GameState::MAINMENU){ std::cout << "MAINMENU ON" << std::endl; }
 	if (*m_pGameState == GameState::GAMEON){ std::cout << "GAMESCREEN ON" << std::endl; }
 
 	//SET LOADED STATE
 	m_pLoadedState = new LoadedState;
 	*m_pLoadedState = LoadedState::NONE; //ININTIALLY NONE
-	
+
 
 	//SDL INIT
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
@@ -23,41 +23,41 @@ SDLHelper::SDLHelper() : m_dt(0.0f), m_done(false)
 	}
 	m_pMyWindow = new MyWindow();
 	m_pMyWindow->init();
-	
+
 	//CREATE THE WINDOW APPLICATION
 	//m_pWindow = SDL_CreateWindow("SDL HELPER BY JUSTIN !", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN | SDL_RENDERER_PRESENTVSYNC | SDL_WINDOW_RESIZABLE);
 
-		//Create renderer for window
-		m_pRenderer = m_pMyWindow->createRenderer();
-		if (m_pRenderer == NULL)
-		{
-			std::cout << "Renderer could not be created! SDL Error: \n" << SDL_GetError() << std::endl;
-		}
+	//Create renderer for window
+	m_pRenderer = m_pMyWindow->createRenderer();
+	if (m_pRenderer == NULL)
+	{
+		std::cout << "Renderer could not be created! SDL Error: \n" << SDL_GetError() << std::endl;
+	}
 
-		//Initialize renderer color
-		SDL_SetRenderDrawBlendMode(m_pRenderer, SDL_BLENDMODE_BLEND);
-		SDL_SetRenderDrawColor(m_pRenderer, 0x00, 0xFF, 0x9A, 0xFF);
+	//Initialize renderer color
+	SDL_SetRenderDrawBlendMode(m_pRenderer, SDL_BLENDMODE_BLEND);
+	SDL_SetRenderDrawColor(m_pRenderer, 0x00, 0xFF, 0x9A, 0xFF);
 
-		//Initialize PNG loading
-		int flags = IMG_INIT_JPG | IMG_INIT_PNG;
-		int initted = IMG_Init(flags);
-		if (initted & flags != flags) 
-		{
-			std::cout << "could not init SDL_Image" << std::endl;
-			std::cout << "Reason: " << IMG_GetError() << std::endl;
-		}
+	//Initialize PNG loading
+	int flags = IMG_INIT_JPG | IMG_INIT_PNG;
+	int initted = IMG_Init(flags);
+	if (initted & flags != flags)
+	{
+		std::cout << "could not init SDL_Image" << std::endl;
+		std::cout << "Reason: " << IMG_GetError() << std::endl;
+	}
 
-		//Initialize SDL_ttf
-		if (TTF_Init() == -1)
-		{
-			printf("SDL_ttf could not initialize! SDL_ttf Error:\n", TTF_GetError());
-		}
+	//Initialize SDL_ttf
+	if (TTF_Init() == -1)
+	{
+		printf("SDL_ttf could not initialize! SDL_ttf Error:\n", TTF_GetError());
+	}
 
-		//Get window surface
-		m_pScreenSurface = SDL_GetWindowSurface(m_pMyWindow->m_pWindow);
+	//Get window surface
+	m_pScreenSurface = SDL_GetWindowSurface(m_pMyWindow->m_pWindow);
 
-		m_RPickUpSpawnTime = m_RG(15 - 7) + 7;
-		m_LPickUpSpawnTime = m_RG(15 - 7) + 7;
+	m_RPickUpSpawnTime = m_RG(15 - 7) + 7;
+	m_LPickUpSpawnTime = m_RG(15 - 7) + 7;
 	loadMedia();
 }
 
@@ -69,7 +69,7 @@ SDLHelper::~SDLHelper()
 void SDLHelper::loadMedia()
 {
 	m_pFont1 = TTF_OpenFont("Fonts/BlackCasper.ttf", 300);
-	if (m_pFont1 == NULL){std::cout << "ERROR FONT NOT LOADED ... NULL" << std::endl;}
+	if (m_pFont1 == NULL){ std::cout << "ERROR FONT NOT LOADED ... NULL" << std::endl; }
 
 	m_pFont2 = TTF_OpenFont("Fonts/BLACKR.ttf", 300);
 	if (m_pFont2 == NULL){ std::cout << "ERROR FONT NOT LOADED ... NULL" << std::endl; }
@@ -84,7 +84,6 @@ void SDLHelper::loadMedia()
 	m_pInGameSizeP2 = new GameEntity(0, 0, 150, 80, 0, 0, "P2Size", m_pRenderer, false);
 	m_pInGameAmmoP1 = new GameEntity(0, 0, 150, 80, 0, 0, "P1Ammo", m_pRenderer, false);
 	m_pInGameAmmoP2 = new GameEntity(0, 0, 150, 80, 0, 0, "P2Ammo", m_pRenderer, false);
-	m_pPaused = new GameEntity(0, 0, 300, 80, 0, 0, "Paused", m_pRenderer, false);
 }
 
 
@@ -154,19 +153,19 @@ void SDLHelper::SetDT(float dt)
 void SDLHelper::Update()
 {
 
+
 	HandleEvents();
-	std::cout << (int)*m_pLoadedState <<  std::endl;
-	
+
 	//Clear screen
 	SDL_RenderClear(m_pRenderer);
 
 
-	if (*m_pGameState == GameState::MAINMENU){			ShowMainMenu(); }
-	if (*m_pGameState == GameState::CHARACTERSELECT){	ShowCharSelection(); }
-	if (*m_pGameState == GameState::GAMEON){			ShowGameOn(); }
-	if (*m_pGameState == GameState::PAUSED ){			ShowPaused(); }
-	if (*m_pGameState == GameState::P1WIN ){				ShowP1Win(); }
-	if (*m_pGameState == GameState::P2WIN){				ShowP2Win(); }
+	if (*m_pGameState == GameState::MAINMENU){ ShowMainMenu(); }
+	if (*m_pGameState == GameState::CHARACTERSELECT){ ShowCharSelection(); }
+	if (*m_pGameState == GameState::GAMEON){ ShowGameOn(); }
+	if (*m_pGameState == GameState::PAUSED){ ShowPaused(); }
+	if (*m_pGameState == GameState::P1WIN){ ShowP1Win(); }
+	if (*m_pGameState == GameState::P2WIN){ ShowP2Win(); }
 
 	//Update screen
 	SDL_RenderPresent(m_pRenderer);
@@ -194,23 +193,23 @@ void SDLHelper::SpawnProjectile(bool p1, bool p2)
 		Projectile* proj = new Projectile(m_pPlayer2->getCenter().x, m_pPlayer2->getCenter().y, m_pPlayer2->getWidth() / 2, m_pPlayer2->getHeight() / 2, m_pPlayer2->m_Roation, GameEntity::m_P2color, m_pRenderer, "P2projectile");
 		m_P2Projectiles.push_back(proj);
 	}
-	
+
 }
 
 void SDLHelper::SpawnRPickUp()
 {
-	
-	int randomX = m_RG(MyWindow::getWidth() - MyWindow::getWidth()/2) + MyWindow::getWidth()/2;
+
+	int randomX = m_RG(MyWindow::getWidth() - MyWindow::getWidth() / 2) + MyWindow::getWidth() / 2;
 	int randomY = m_RG(MyWindow::getHeight()) + 1;
 	int randomDir = m_RG(360);
 	int randomSize = m_RG(70 - 35) + 35;
 	if (randomX > MyWindow::getWidth() / 2)
 	{
-		PickUp* pickUp = new PickUp(randomX, randomY, randomSize, randomSize, m_pRenderer, "PickUp", GameEntity::m_P1color,randomDir);
+		PickUp* pickUp = new PickUp(randomX, randomY, randomSize, randomSize, m_pRenderer, "PickUp", GameEntity::m_P1color, randomDir);
 		m_P2PickUps.push_back(pickUp);
 	}
 
-	 
+
 }
 
 void SDLHelper::SpawnLPickUp()
@@ -219,7 +218,7 @@ void SDLHelper::SpawnLPickUp()
 	int randomX = m_RG(MyWindow::getWidth() / 2) + 1;
 	int randomY = m_RG(MyWindow::getHeight()) + 1;
 	int randomDir = m_RG(360);
-	
+
 	int randomSize = m_RG(70 - 35) + 35;
 
 	std::cout << randomSize << std::endl;
@@ -275,10 +274,7 @@ void SDLHelper::UpdateProjectiles()
 	{
 		for (int i = 0; i < m_P1Projectiles.size(); i++)
 		{
-			if (*m_pGameState != GameState::PAUSED)
-			{
-				m_P1Projectiles[i]->m_pProjTex->Update(m_dt);
-			}
+			m_P1Projectiles[i]->m_pProjTex->Update(m_dt);
 			m_P1Projectiles[i]->m_pProjTex->Render();
 
 			if (Collision::CircleVsCircle(m_P1Projectiles[i]->m_pProjTex->GetCircleCollider(), m_pPlayer2->GetCircleCollider()))
@@ -292,7 +288,7 @@ void SDLHelper::UpdateProjectiles()
 			if (m_P1Projectiles[i]->m_pProjTex->IsProjectileDone())
 			{
 				//std::cout << "Erased a P1 Projectile -- OFF SCREEN" << std::endl;
-				m_P1Projectiles.erase(m_P1Projectiles.begin()+i);
+				m_P1Projectiles.erase(m_P1Projectiles.begin() + i);
 			}
 		}
 	}
@@ -301,10 +297,7 @@ void SDLHelper::UpdateProjectiles()
 	{
 		for (int i = 0; i < m_P2Projectiles.size(); i++)
 		{
-			if (*m_pGameState != GameState::PAUSED)
-			{
-				m_P2Projectiles[i]->m_pProjTex->Update(m_dt);
-			}
+			m_P2Projectiles[i]->m_pProjTex->Update(m_dt);
 			m_P2Projectiles[i]->m_pProjTex->Render();
 			if (Collision::CircleVsCircle(m_P2Projectiles[i]->m_pProjTex->GetCircleCollider(), m_pPlayer1->GetCircleCollider()))
 			{
@@ -320,7 +313,7 @@ void SDLHelper::UpdateProjectiles()
 			}
 		}
 	}
-	
+
 }
 
 
@@ -343,8 +336,10 @@ void SDLHelper::HandleEvents() //Returns true if Quit is Clicked
 		}
 		else if (e.type == SDL_KEYDOWN || e.type == SDL_KEYUP) //KEYBOARD EVENTS
 		{
-			if (*m_pGameState == GameState::GAMEON && *m_pLoadedState == LoadedState::GAMEON || *m_pGameState == GameState::PAUSED && *m_pLoadedState == LoadedState::PAUSED)
-			{KeyBoardHandler(e);}
+			if (*m_pGameState == GameState::GAMEON && *m_pLoadedState == LoadedState::GAMEON)
+			{
+				KeyBoardHandler(e);
+			}
 		}
 		else if (e.type == SDL_MOUSEMOTION || e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP || e.type == SDL_MOUSEWHEEL) //MOUSE EVENTS
 		{
@@ -359,7 +354,7 @@ void SDLHelper::KeyBoardHandler(SDL_Event &e)
 	{
 		switch (e.key.keysym.sym)
 		{
-		//PLAYER 1
+			//PLAYER 1
 		case SDLK_UP:
 			m_pPlayer1->addForce("up");
 			break;
@@ -377,14 +372,17 @@ void SDLHelper::KeyBoardHandler(SDL_Event &e)
 			break;
 
 		case SDLK_SPACE:
-			if (m_pPlayer1->getCurrAmmo() > 0 & *m_pGameState != GameState::PAUSED)
+			if (*m_pGameState == GameState::GAMEON && *m_pLoadedState == LoadedState::GAMEON)
 			{
-				SpawnProjectile(true, false);
-				m_pPlayer1->decreaseCurrAmmo();
+				if (m_pPlayer1->getCurrAmmo() > 0)
+				{
+					SpawnProjectile(true, false);
+					m_pPlayer1->decreaseCurrAmmo();
+				}
 			}
 			break;
 
-		//PLAYER 2
+			//PLAYER 2
 		case SDLK_w:
 			//m_pPlayer1->addForce("up");
 			break;
@@ -429,17 +427,7 @@ void SDLHelper::KeyBoardHandler(SDL_Event &e)
 
 		case SDLK_SPACE:
 			break;
-		case SDLK_p:
-			if (*m_pGameState != GameState::PAUSED)
-			{
-				*m_pGameState = GameState::PAUSED;
-			}
-			else
-			{
-				*m_pGameState = GameState::GAMEON;
-				*m_pLoadedState = LoadedState::GAMEON;
-			}
-			break;
+
 		case SDLK_w:
 			//m_pPlayer1->removeForce("up");
 			break;
@@ -463,36 +451,73 @@ void SDLHelper::KeyBoardHandler(SDL_Event &e)
 
 void SDLHelper::MouseHandler(SDL_Event &e)
 {
-	int x, y;
-	SDL_GetMouseState(&x, &y);
+	SDL_GetMouseState(&m_MouseX, &m_MouseY);
 
 	if (*m_pGameState == GameState::GAMEON && *m_pLoadedState == LoadedState::GAMEON)
-	{ m_pPlayer2->SetMousePos(x, y); }
-	
+	{
+		m_pPlayer2->SetMousePos(m_MouseX, m_MouseY);
+	}
+
+	if (m_Buttons.size() > 0)
+	{
+		for (int i = 0; i < m_Buttons.size(); i++)
+		{
+			m_Buttons[i]->m_pButtonTex->SetMousePos(m_MouseX, m_MouseY);
+		}
+	}
+
 	//std::cout << "Mouse X: " << x << " Mouse Y: " << y << std::endl;
 	//CHECK BOUNDS OF WHAT MOUSE IS IN ...
 	//m_pTexture->setPos((float)x, (float)y);
-	
+
 	switch (e.type)
 	{
 	case SDL_MOUSEMOTION:
-		
+
 		break;
 
 	case SDL_MOUSEBUTTONDOWN:
-
-		if (m_pPlayer2->getCurrAmmo() > 0 && *m_pGameState != GameState::PAUSED)
+		if (*m_pGameState == GameState::GAMEON && *m_pLoadedState == LoadedState::GAMEON)
 		{
-			SpawnProjectile(false, true);
-			m_pPlayer2->decreaseCurrAmmo();
+			if (m_pPlayer2->getCurrAmmo() > 0)
+			{
+				SpawnProjectile(false, true);
+				m_pPlayer2->decreaseCurrAmmo();
+			}
 		}
 
-		
+		if (*m_pGameState == GameState::MAINMENU && *m_pLoadedState == LoadedState::MAINMENU)
+		{
+			if (m_Buttons.size() > 0)
+			{
+				for (int i = 0; i < m_Buttons.size(); i++)
+				{
+					m_Buttons[i]->m_pButtonTex->m_ClickDown = true;
+				}
+			}
+		}
+
+
 
 		//std::cout << "Mouse CLICK DOWN "<< std::endl;
 		break;
 
 	case SDL_MOUSEBUTTONUP:
+
+		if (*m_pGameState == GameState::MAINMENU && *m_pLoadedState == LoadedState::MAINMENU)
+		{
+			if (m_Buttons.size() > 0)
+			{
+				for (int i = 0; i < m_Buttons.size(); i++)
+				{
+					m_Buttons[i]->m_pButtonTex->m_ClickDown = false;
+					if (m_Buttons[i]->m_pButtonTex->m_Clicked && m_Buttons[i]->m_pButtonTex->m_name == "playButt")
+					{
+						*m_pGameState = GameState::GAMEON;
+					}
+				}
+			}
+		}
 		//std::cout << "Mouse CLICK UP " << std::endl;
 		break;
 	}
@@ -507,25 +532,25 @@ void SDLHelper::MouseHandler(SDL_Event &e)
 //RENDERING FUNCTIONS**************************************************
 void SDLHelper::SetRenderColor(std::string color)
 {
-	if (color == "pink"){				SDL_SetRenderDrawColor(m_pRenderer, 0xFF, 0x99, 0xFF, 0xFF); }
-	else if (color == "white"){			SDL_SetRenderDrawColor(m_pRenderer, 0xFF, 0xFF, 0xFF, 0xFF); }
-	else if (color == "black"){			SDL_SetRenderDrawColor(m_pRenderer, 0x00, 0x00, 0x00, 0xFF); }
-	else if (color == "red"){			SDL_SetRenderDrawColor(m_pRenderer, 0xFF, 0x00, 0x00, 0xFF); }
-	else if (color == "green"){			SDL_SetRenderDrawColor(m_pRenderer, 0x00, 0xFF, 0x00, 0xFF); }
-	else if (color == "mintgreen"){		SDL_SetRenderDrawColor(m_pRenderer, 0x00, 0xFF, 0x9A, 0xFF); }
-	else if (color == "darkgreen"){		SDL_SetRenderDrawColor(m_pRenderer, 0x00, 0x66, 0x00, 0xFF); }
-	else if (color == "blue"){			SDL_SetRenderDrawColor(m_pRenderer, 0x00, 0x00, 0xFF, 0xFF); }
-	else if (color == "royalblue"){		SDL_SetRenderDrawColor(m_pRenderer, 0x00, 0x00, 0x66, 0xFF); }
-	else if (color == "babyblue"){		SDL_SetRenderDrawColor(m_pRenderer, 0x00, 0xFF, 0xFF, 0xFF); }
-	else if (color == "orange"){		SDL_SetRenderDrawColor(m_pRenderer, 0xFF, 0x77, 0x00, 0xFF); }
-	else if (color == "yellow"){		SDL_SetRenderDrawColor(m_pRenderer, 0xFF, 0xFF, 0x00, 0xFF); }
-	else if (color == "gold"){			SDL_SetRenderDrawColor(m_pRenderer, 0xFF, 0xBB, 0x00, 0xFF); }
-	else if (color == "fuchsia"){		SDL_SetRenderDrawColor(m_pRenderer, 0x66, 0x00, 0x66, 0xFF); }
-	else if (color == "purple"){		SDL_SetRenderDrawColor(m_pRenderer, 0x66, 0x00, 0x66, 0xFF); }
-	else if (color == "brown"){			SDL_SetRenderDrawColor(m_pRenderer, 0x66, 0x33, 0x00, 0xFF); }
-	else if (color == "darkgray"){		SDL_SetRenderDrawColor(m_pRenderer, 0x66, 0x66, 0x66, 0xFF); }
-	else if (color == "lightgray"){		SDL_SetRenderDrawColor(m_pRenderer, 0x99, 0x99, 0x99, 0xFF); }
-	else if (color == "halfblack"){		SDL_SetRenderDrawColor(m_pRenderer, 0x00, 0x00, 0x00, 0x99); }
+	if (color == "pink"){ SDL_SetRenderDrawColor(m_pRenderer, 0xFF, 0x99, 0xFF, 0xFF); }
+	else if (color == "white"){ SDL_SetRenderDrawColor(m_pRenderer, 0xFF, 0xFF, 0xFF, 0xFF); }
+	else if (color == "black"){ SDL_SetRenderDrawColor(m_pRenderer, 0x00, 0x00, 0x00, 0xFF); }
+	else if (color == "red"){ SDL_SetRenderDrawColor(m_pRenderer, 0xFF, 0x00, 0x00, 0xFF); }
+	else if (color == "green"){ SDL_SetRenderDrawColor(m_pRenderer, 0x00, 0xFF, 0x00, 0xFF); }
+	else if (color == "mintgreen"){ SDL_SetRenderDrawColor(m_pRenderer, 0x00, 0xFF, 0x9A, 0xFF); }
+	else if (color == "darkgreen"){ SDL_SetRenderDrawColor(m_pRenderer, 0x00, 0x66, 0x00, 0xFF); }
+	else if (color == "blue"){ SDL_SetRenderDrawColor(m_pRenderer, 0x00, 0x00, 0xFF, 0xFF); }
+	else if (color == "royalblue"){ SDL_SetRenderDrawColor(m_pRenderer, 0x00, 0x00, 0x66, 0xFF); }
+	else if (color == "babyblue"){ SDL_SetRenderDrawColor(m_pRenderer, 0x00, 0xFF, 0xFF, 0xFF); }
+	else if (color == "orange"){ SDL_SetRenderDrawColor(m_pRenderer, 0xFF, 0x77, 0x00, 0xFF); }
+	else if (color == "yellow"){ SDL_SetRenderDrawColor(m_pRenderer, 0xFF, 0xFF, 0x00, 0xFF); }
+	else if (color == "gold"){ SDL_SetRenderDrawColor(m_pRenderer, 0xFF, 0xBB, 0x00, 0xFF); }
+	else if (color == "fuchsia"){ SDL_SetRenderDrawColor(m_pRenderer, 0x66, 0x00, 0x66, 0xFF); }
+	else if (color == "purple"){ SDL_SetRenderDrawColor(m_pRenderer, 0x66, 0x00, 0x66, 0xFF); }
+	else if (color == "brown"){ SDL_SetRenderDrawColor(m_pRenderer, 0x66, 0x33, 0x00, 0xFF); }
+	else if (color == "darkgray"){ SDL_SetRenderDrawColor(m_pRenderer, 0x66, 0x66, 0x66, 0xFF); }
+	else if (color == "lightgray"){ SDL_SetRenderDrawColor(m_pRenderer, 0x99, 0x99, 0x99, 0xFF); }
+	else if (color == "halfblack"){ SDL_SetRenderDrawColor(m_pRenderer, 0x00, 0x00, 0x00, 0x99); }
 
 	/*0xFF, 0x99, 0xFF, 0xFF*///Pink
 	/*0xFF, 0xFF, 0xFF, 0xFF*///White
@@ -549,7 +574,7 @@ void SDLHelper::SetRenderColor(std::string color)
 
 void SDLHelper::DrawRect(int x, int y, int w, int h, std::string color)
 {
-	SDL_Rect rect = {x,y,w,h};
+	SDL_Rect rect = { x, y, w, h };
 	SetRenderColor(color);
 	SDL_RenderFillRect(m_pRenderer, &rect);
 }
@@ -564,7 +589,7 @@ void SDLHelper::DrawRectOL(int x, int y, int w, int h, std::string color)
 void SDLHelper::DrawLine(int X1, int Y1, int X2, int Y2, std::string color)
 {
 	SetRenderColor(color);
-	SDL_RenderDrawLine(m_pRenderer,X1, Y1, X2, Y2);
+	SDL_RenderDrawLine(m_pRenderer, X1, Y1, X2, Y2);
 }
 
 void SDLHelper::DrawPoint(int x, int y, std::string color)
@@ -589,6 +614,15 @@ void SDLHelper::ShowMainMenu()
 	m_pInGameTitle->setPos((MyWindow::m_Width / 2) - (m_pInGameTitle->getWidth() / 2), 0);
 	m_pInGameTitle->Render(); //RENDER THE TEST TEXT
 
+	if (m_Buttons.size() > 0)
+	{
+		for (int i = 0; i < m_Buttons.size(); i++)
+		{
+			m_Buttons[i]->m_pButtonTex->SetMousePos(m_MouseX, m_MouseY);
+			m_Buttons[i]->m_pButtonTex->Update(m_dt);
+			m_Buttons[i]->m_pButtonTex->Render();
+		}
+	}
 
 	m_pInGameTitle->setPos((MyWindow::m_Width / 2) - (m_pInGameTitle->getWidth() / 2), 0);
 	m_pInGameTitle->Render(); //RENDER THE TITLE TEXT
@@ -596,14 +630,6 @@ void SDLHelper::ShowMainMenu()
 
 void SDLHelper::ShowPaused()
 {
-	if (*m_pLoadedState != LoadedState::PAUSED){ LoadPaused(); }
-	
-	DrawRect(0,0, MyWindow::getWidth(), MyWindow::getHeight(), "lightgray");
-	ShowGameOn();
-	m_pPaused->setPos(MyWindow::getWidth() / 2 - 150, MyWindow::getHeight() / 2 - 50);
-	m_pPaused->Render();
-	
-	
 
 }
 
@@ -626,9 +652,10 @@ void SDLHelper::ShowCharSelection()
 void SDLHelper::ShowGameOn()
 {
 	//CHECK IF LOADED
-	if (*m_pLoadedState != LoadedState::GAMEON && *m_pLoadedState != LoadedState::PAUSED ){ LoadGameOn();}
+	if (*m_pLoadedState != LoadedState::GAMEON){ LoadGameOn(); }
 
-
+	m_RPickUpSpawnTimeElapsed += m_dt;
+	m_LPickUpSpawnTimeElapsed += m_dt;
 
 	//BACKGROUND DRAWING
 	SetRenderColor("white");
@@ -640,57 +667,40 @@ void SDLHelper::ShowGameOn()
 	SDL_RenderCopy(m_pRenderer, m_pbackground, NULL, &rec);
 
 
-	// 	SDL_Rect rec2 = { 0, 0, 1000, 100 };
-	// 	SDL_RenderCopy(m_pRenderer, m_pfontTest, NULL, &rec2); //ALWAYS USE  DSTRect on Render.. Otherwise wont render ... wierd
-	if (*m_pGameState != GameState::PAUSED)
+	if (m_RPickUpSpawnTimeElapsed > m_RPickUpSpawnTime)
 	{
-		m_RPickUpSpawnTimeElapsed += m_dt;
-		m_LPickUpSpawnTimeElapsed += m_dt;
-		if (m_RPickUpSpawnTimeElapsed > m_RPickUpSpawnTime)
-		{
-			SpawnRPickUp();
-			m_RPickUpSpawnTimeElapsed = 0;
-			m_RPickUpSpawnTime = m_RG(15 - 7) + 7;
-		}
-		if (m_LPickUpSpawnTimeElapsed > m_LPickUpSpawnTime)
-		{
-			SpawnLPickUp();
-			m_LPickUpSpawnTimeElapsed = 0;
-			m_LPickUpSpawnTime = m_RG(15 - 7) + 7;
-		}
-
-
-	m_pPlayer1->Update(m_dt);
-	m_pPlayer2->Update(m_dt);
+		SpawnRPickUp();
+		m_RPickUpSpawnTimeElapsed = 0;
+		m_RPickUpSpawnTime = m_RG(15 - 7) + 7;
 	}
+	if (m_LPickUpSpawnTimeElapsed > m_LPickUpSpawnTime)
+	{
+		SpawnLPickUp();
+		m_LPickUpSpawnTimeElapsed = 0;
+		m_LPickUpSpawnTime = m_RG(15 - 7) + 7;
+	}
+
 	UpdateProjectiles();
 	UpdatePickUp();
-		//PLAYER 1
-		
-		m_pPlayer1->Render();
 
-		//PLAYER 2
-		
-		m_pPlayer2->Render();
-	
-	m_pInGameSizeP1->LoadTextFile(m_pFont2, "Size: " + std::to_string(m_pPlayer1->getWidth()), "darkgreen");
-	m_pInGameSizeP2->LoadTextFile(m_pFont2, "Size: " + std::to_string(m_pPlayer2->getWidth()), "fuchsia");
-	m_pInGameAmmoP1->LoadTextFile(m_pFont2, "Ammo: " + std::to_string(m_pPlayer1->getCurrAmmo()), "darkgreen");
-	m_pInGameAmmoP2->LoadTextFile(m_pFont2, "Ammo: " + std::to_string(m_pPlayer2->getCurrAmmo()), "fuchsia");
+	//PLAYER 1
+	m_pPlayer1->Update(m_dt);
+	m_pPlayer1->Render();
 
-	m_pInGameTitle->setPos((MyWindow::m_Width / 2) - (m_pInGameTitle->getWidth() / 2), 0);
+	//PLAYER 2
+	m_pPlayer2->Update(m_dt);
+	m_pPlayer2->Render();
+
+	//UI STUFF 
+	m_pInGameSizeP1->LoadTextFile(m_pFont2, "Size: " + std::to_string(m_pPlayer1->getWidth()), GameEntity::m_P1color);
+	m_pInGameSizeP2->LoadTextFile(m_pFont2, "Size: " + std::to_string(m_pPlayer2->getWidth()), GameEntity::m_P2color);
+	m_pInGameAmmoP1->LoadTextFile(m_pFont2, "Ammo: " + std::to_string(m_pPlayer1->getCurrAmmo()), GameEntity::m_P1color);
+	m_pInGameAmmoP2->LoadTextFile(m_pFont2, "Ammo: " + std::to_string(m_pPlayer2->getCurrAmmo()), GameEntity::m_P2color);
+
 	m_pInGameTitle->Render(); //RENDER THE TITLE TEXT
-
-	m_pInGameSizeP1->setPos(m_pInGameTitle->getPos()->x - 250 , m_pInGameTitle->getPos()->y);
 	m_pInGameSizeP1->Render();
-
-	m_pInGameSizeP2->setPos(m_pInGameTitle->getPos()->x + 300, m_pInGameTitle->getPos()->y);
 	m_pInGameSizeP2->Render();
-
-	m_pInGameAmmoP1->setPos(m_pInGameTitle->getPos()->x - 250, m_pInGameTitle->getPos()->y + 50);
 	m_pInGameAmmoP1->Render();
-
-	m_pInGameAmmoP2->setPos(m_pInGameTitle->getPos()->x + 300, m_pInGameTitle->getPos()->y + 50);
 	m_pInGameAmmoP2->Render();
 
 
@@ -713,13 +723,20 @@ void SDLHelper::LoadMainMenu()
 	m_pInGameTitle->LoadTextFile(m_pFont2, "Warganism", "royalblue");
 	m_pbackground = loadTexture("Pics/background.png");
 
+	m_Buttons.empty(); // EMPTY OUT BUTTONS
+
+	//ADD BUTTONS
+	Button* playBut = new Button(MyWindow::m_Width / 2, MyWindow::m_Height / 2, 150, 60, 0, m_pRenderer, "playButt", 20);
+	playBut->m_pButtonTex->LoadFile("Pics/playButton.png");
+	m_Buttons.push_back(playBut);
+
+
 	*m_pLoadedState = LoadedState::MAINMENU;
 }
 
 void SDLHelper::LoadPaused()
 {
-	m_pPaused->LoadTextFile(m_pFont2, "PAUSED ", "royalblue");
-	*m_pLoadedState = LoadedState::PAUSED;
+
 }
 
 void SDLHelper::LoadP1Win()
@@ -764,7 +781,7 @@ void SDLHelper::LoadGameOn()
 	m_pPlayer1->RotateToDir(true);			  // Turn on Rotation
 	m_pPlayer1->UseKeyForces(true);
 	m_pPlayer1->SetColorMod(GameEntity::m_P1color); //COLOUR FOR PLAYER AND BACKDROP BLOB
-	
+
 
 	//PLAYER 2
 	GameEntity::m_P2color = "purple";
@@ -775,7 +792,7 @@ void SDLHelper::LoadGameOn()
 	m_pPlayer2->RotateToDir(true);			  // Turn on Rotation
 	m_pPlayer2->UseGoToPoint(true);
 	m_pPlayer2->SetColorMod(GameEntity::m_P2color); //COLOUR FOR PLAYER AND BACKDROP BLOB
-	
+
 	//TITLE
 	m_pInGameTitle->LoadTextFile(m_pFont2, "Fight !", "royalblue");
 
@@ -785,7 +802,17 @@ void SDLHelper::LoadGameOn()
 	m_pP2BG = loadTexture("Pics/p2BG.png");
 
 	m_pbackground = loadTexture("Pics/background.png");
+
+
 	
+
+	m_pInGameTitle->setPos((MyWindow::m_Width / 2) - (m_pInGameTitle->getWidth() / 2), 0);
+	m_pInGameSizeP1->setPos(m_pInGameTitle->getPos()->x - 250, m_pInGameTitle->getPos()->y);
+	m_pInGameSizeP2->setPos(m_pInGameTitle->getPos()->x + 300, m_pInGameTitle->getPos()->y);
+	m_pInGameAmmoP1->setPos(m_pInGameTitle->getPos()->x - 250, m_pInGameTitle->getPos()->y + 50);
+	m_pInGameAmmoP2->setPos(m_pInGameTitle->getPos()->x + 300, m_pInGameTitle->getPos()->y + 50);
+
+
 	*m_pLoadedState = LoadedState::GAMEON;
 }
 
