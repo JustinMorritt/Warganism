@@ -671,13 +671,13 @@ void SDLHelper::ShowGameOn()
 	{
 		SpawnRPickUp();
 		m_RPickUpSpawnTimeElapsed = 0;
-		m_RPickUpSpawnTime = m_RG(15 - 7) + 7;
+		m_RPickUpSpawnTime = m_RG(6) + 1;
 	}
 	if (m_LPickUpSpawnTimeElapsed > m_LPickUpSpawnTime)
 	{
 		SpawnLPickUp();
 		m_LPickUpSpawnTimeElapsed = 0;
-		m_LPickUpSpawnTime = m_RG(15 - 7) + 7;
+		m_LPickUpSpawnTime = m_RG(6) + 1;
 	}
 
 	UpdateProjectiles();

@@ -58,6 +58,7 @@ GameEntity::GameEntity(int x, int y, int w, int h, int maxSpeed, int accel, std:
 	m_pCenter->y		= m_pPos->y + (m_pRect.h / 2);
 	m_StartAmmo = 10;
 	m_CurrAmmo = m_StartAmmo;
+	CenterPlayers();
 }
 
 GameEntity::~GameEntity()
@@ -643,6 +644,13 @@ void GameEntity::CenterPlayers()
 	if (getName() == "player2")
 	{
 		setPos((MyWindow::m_Width / 2 + MyWindow::m_Width / 4) - (m_pRect.w / 2), MyWindow::m_Height / 2 - (m_pRect.h / 2));
+		MyWindow::resetP2Pos = false;
+	}
+	if (getName() == "playButt")
+	{
+		setPos(MyWindow::m_Width / 2 - (m_pRect.w/2), MyWindow::m_Height / 2 - (m_pRect.h/2));
+		m_OX = MyWindow::m_Width / 2 - (m_pRect.w / 2);
+		m_OY = MyWindow::m_Height / 2 - (m_pRect.h / 2);
 		MyWindow::resetP2Pos = false;
 	}
 }
