@@ -356,6 +356,11 @@ SDL_Rect GameEntity::GetCurrentFrame()
 	return m_Animations.at(m_currentAnimation).first.at(m_currentFrame); // Returns the Rect of the Current Frame .. 
 }
 
+Circle GameEntity::GetCircleCollider()
+{
+	return *m_pCircleCollider;
+}
+
 void GameEntity::SetColor(std::string color)
 {
 	if (color == "pink"){				m_pColour = {0xFF, 0x99, 0xFF, 0xFF} ;	 }

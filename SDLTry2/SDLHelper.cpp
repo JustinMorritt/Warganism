@@ -264,9 +264,17 @@ void SDLHelper::UpdateProjectiles()
 		{
 			m_P1Projectiles[i]->m_pProjTex->Update(m_dt);
 			m_P1Projectiles[i]->m_pProjTex->Render();
+
+			if (Collision::CircleVsCircle(m_P1Projectiles[i]->m_pProjTex->GetCircleCollider(), m_pPlayer2->GetCircleCollider()))
+			{
+				std::cout << "Erased a P1 Projectile -- COLLISION" << std::endl;
+				m_P1Projectiles.erase(m_P1Projectiles.begin() + i);
+				break;
+			}
+
 			if (m_P1Projectiles[i]->m_pProjTex->IsProjectileDone())
 			{
-				std::cout << "Erased a P1 Projectile" << std::endl;
+				std::cout << "Erased a P1 Projectile -- OFF SCREEN" << std::endl;
 				m_P1Projectiles.erase(m_P1Projectiles.begin()+i);
 			}
 		}
@@ -278,9 +286,15 @@ void SDLHelper::UpdateProjectiles()
 		{
 			m_P2Projectiles[i]->m_pProjTex->Update(m_dt);
 			m_P2Projectiles[i]->m_pProjTex->Render();
+			if (Collision::CircleVsCircle(m_P2Projectiles[i]->m_pProjTex->GetCircleCollider(), m_pPlayer1->GetCircleCollider()))
+			{
+				std::cout << "Erased a P2 Projectile --COLLISION" << std::endl;
+				m_P2Projectiles.erase(m_P2Projectiles.begin() + i);
+				break;
+			}
 			if (m_P2Projectiles[i]->m_pProjTex->IsProjectileDone())
 			{
-				std::cout << "Erased a P1 Projectile" << std::endl;
+				std::cout << "Erased a P2 Projectile  -- OFF SCREEN" << std::endl;
 				m_P2Projectiles.erase(m_P2Projectiles.begin() + i);
 			}
 		}
