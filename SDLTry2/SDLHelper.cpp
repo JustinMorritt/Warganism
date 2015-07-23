@@ -651,6 +651,8 @@ void SDLHelper::ShowMainMenu()
 	SDL_Rect rec = { 0, 0, MyWindow::m_Width, MyWindow::m_Height };
 	SDL_RenderCopy(m_pRenderer, m_pbackground, NULL, &rec);
 
+
+
 	if (m_Buttons.size() > 0)
 	{
 		for (int i = 0; i < m_Buttons.size(); i++)
@@ -848,8 +850,16 @@ void SDLHelper::LoadMainMenu()
 
 	//ADD BUTTONS
 	Button* playBut = new Button(MyWindow::m_Width / 2, MyWindow::m_Height / 2, 250, 180, 0, m_pRenderer, "playButt", 20);
+	Button* soundBut = new Button(160, MyWindow::m_Height / 2,     250, 100, 0, m_pRenderer, "soundButt", 20);
+	Button* musicBut = new Button(160, MyWindow::m_Height / 2 + 100, 250, 100, 0, m_pRenderer, "musicButt", 20);
+
 	playBut->m_pButtonTex->LoadFile("Pics/playButt.png");
+	soundBut->m_pButtonTex->LoadFile("Pics/soundOnButt.png");
+	musicBut->m_pButtonTex->LoadFile("Pics/musicOnButt.png");
+
 	m_Buttons.push_back(playBut);
+	m_Buttons.push_back(soundBut);
+	m_Buttons.push_back(musicBut);
 	
 	*m_pLoadedState = LoadedState::MAINMENU;
 }

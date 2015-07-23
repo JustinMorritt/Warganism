@@ -655,11 +655,12 @@ void GameEntity::CenterPlayers()
 	}
 	if (getName() == "playButt")
 	{
-		setPos(MyWindow::m_Width / 2 - (m_pRect.w/2), MyWindow::m_Height / 2 - (m_pRect.h/2));
-		m_OX = MyWindow::m_Width / 2 - (m_pRect.w / 2);
-		m_OY = MyWindow::m_Height / 2 - (m_pRect.h / 2);
+		setPos(MyWindow::m_Width / 2	- (m_pRect.w/2),   MyWindow::m_Height / 2 - (m_pRect.h/2));
+		m_OX = MyWindow::m_Width / 2	- (m_pRect.w / 2);
+		m_OY = MyWindow::m_Height / 2	- (m_pRect.h / 2);
 		MyWindow::resetP2Pos = false;
 	}
+
 }
 
 void GameEntity::SetMousePos(int x, int y)
