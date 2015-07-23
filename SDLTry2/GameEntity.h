@@ -33,10 +33,11 @@ public:
 
 	void setPos(float x, float y);
 	int getCurrAmmo();
-	std::string getName(); const
-		SDL_Rect* getRect(); const
-		int getWidth(); const
-		int getHeight(); const
+	std::string getName();
+	void SetName(std::string name);
+	SDL_Rect* getRect();
+	int getWidth();
+	int getHeight(); 
 	
 	Vec2* getPos(); 
 	void SetAnimation(int x, int y, int numFrames, int frameW, int frameH, float delay, bool loop);
@@ -80,6 +81,7 @@ public:
 	
 	
 	std::string m_name;
+	std::string m_color;
 	double m_Roation;
 	static std::string m_P1color;
 	static std::string m_P2color;

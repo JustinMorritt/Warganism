@@ -223,25 +223,31 @@ std::string GameEntity::getName()
 	return m_name;
 }
 
-const
+
+void GameEntity::SetName(std::string name)
+{
+	m_name = name;
+}
+
+
 int GameEntity::getWidth()
 {
 	return m_pRect.w;
 }
 
-const
+
 SDL_Rect* GameEntity::getRect()
 {
 	return &m_pRect;
 }
 
-const
+
 int GameEntity::getHeight()
 {
 	return m_pRect.h;
 }
 
-const
+
 Vec2* GameEntity::getPos()
 {
 	return m_pPos;
@@ -377,25 +383,26 @@ Circle GameEntity::GetCircleCollider()
 
 void GameEntity::SetColor(std::string color)
 {
-	if (color == "pink"){				m_pColour = {0xFF, 0x99, 0xFF, 0xFF} ;	 }
-	else if (color == "white"){			m_pColour = {0xFF, 0xFF, 0xFF, 0xFF} ;	 }
-	else if (color == "black"){			m_pColour = {0x00, 0x00, 0x00, 0xFF} ;	 }
-	else if (color == "red"){			m_pColour = {0xFF, 0x00, 0x00, 0xFF} ;	 }
-	else if (color == "green"){			m_pColour = {0x00, 0xFF, 0x00, 0xFF} ;	 }
-	else if (color == "mintgreen"){		m_pColour = {0x00, 0xFF, 0x9A, 0xFF} ;	 }
-	else if (color == "darkgreen"){		m_pColour = {0x00, 0x66, 0x00, 0xFF} ;	 }
-	else if (color == "blue"){			m_pColour = {0x00, 0x00, 0xFF, 0xFF} ;	 }
-	else if (color == "royalblue"){		m_pColour = {0x00, 0x00, 0x66, 0xFF} ;	 }
-	else if (color == "babyblue"){		m_pColour = {0x00, 0xFF, 0xFF, 0xFF} ;	 }
-	else if (color == "orange"){		m_pColour = {0xFF, 0x77, 0x00, 0xFF} ;	 }
-	else if (color == "yellow"){		m_pColour = {0xFF, 0xFF, 0x00, 0xFF} ;	 }
-	else if (color == "gold"){			m_pColour = {0xFF, 0xBB, 0x00, 0xFF} ;	 }
-	else if (color == "fuchsia"){		m_pColour = {0x66, 0x00, 0x66, 0xFF} ;	 }
-	else if (color == "purple"){		m_pColour = {0x66, 0x00, 0x66, 0xFF} ;	 }
-	else if (color == "brown"){			m_pColour = {0x66, 0x33, 0x00, 0xFF} ;	 }
-	else if (color == "darkgray"){		m_pColour = {0x66, 0x66, 0x66, 0xFF} ;	 }
-	else if (color == "lightgray"){		m_pColour = {0x99, 0x99, 0x99, 0xFF} ;	 }
-	else if (color == "halfblack"){		m_pColour = {0x00, 0x00, 0x00, 0x99} ;	 }
+	//std::string m_color;
+	if (color ==      "pink"){			m_pColour = {0xFF, 0x99, 0xFF, 0xFF} ;	m_color = "pink";	   }
+	else if (color == "white"){			m_pColour = {0xFF, 0xFF, 0xFF, 0xFF} ;	m_color = "white"     ;         }
+	else if (color == "black"){			m_pColour = {0x00, 0x00, 0x00, 0xFF} ;	m_color = "black"     ;        }
+	else if (color == "red"){			m_pColour = {0xFF, 0x00, 0x00, 0xFF} ;	m_color = "red"	      ;        }
+	else if (color == "green"){			m_pColour = {0x00, 0xFF, 0x00, 0xFF} ;	m_color = "green"	  ;            }
+	else if (color == "mintgreen"){		m_pColour = {0x00, 0xFF, 0x9A, 0xFF} ;	m_color = "mintgreen" ;             }
+	else if (color == "darkgreen"){		m_pColour = {0x00, 0x66, 0x00, 0xFF} ;	m_color = "darkgreen" ;             }
+	else if (color == "blue"){			m_pColour = {0x00, 0x00, 0xFF, 0xFF} ;	m_color = "blue"	  ;            }
+	else if (color == "royalblue"){		m_pColour = {0x00, 0x00, 0x66, 0xFF} ;	m_color = "royalblue" ;             }
+	else if (color == "babyblue"){		m_pColour = {0x00, 0xFF, 0xFF, 0xFF} ;	m_color = "babyblue"  ;            }
+	else if (color == "orange"){		m_pColour = {0xFF, 0x77, 0x00, 0xFF} ;	m_color = "orange"    ;         }
+	else if (color == "yellow"){		m_pColour = {0xFF, 0xFF, 0x00, 0xFF} ;	m_color = "yellow"    ;          }
+	else if (color == "gold"){			m_pColour = {0xFF, 0xBB, 0x00, 0xFF} ;	m_color = "gold"      ;        }
+	else if (color == "fuchsia"){		m_pColour = {0x66, 0x00, 0x66, 0xFF} ;	m_color = "fuchsia"   ;          }
+	else if (color == "purple"){		m_pColour = {0x66, 0x00, 0x66, 0xFF} ;	m_color = "purple"    ;         }
+	else if (color == "brown"){			m_pColour = {0x66, 0x33, 0x00, 0xFF} ;	m_color = "brown"     ;         }
+	else if (color == "darkgray"){		m_pColour = {0x66, 0x66, 0x66, 0xFF} ;	m_color = "darkgray"  ;            }
+	else if (color == "lightgray"){		m_pColour = {0x99, 0x99, 0x99, 0xFF} ;	m_color = "lightgray" ;             }
+	else if (color == "halfblack"){		m_pColour = {0x00, 0x00, 0x00, 0x99} ;	m_color = "halfblack" ;             }
 }
 
 void GameEntity::SetColorMod(std::string color)

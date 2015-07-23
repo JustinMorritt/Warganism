@@ -154,8 +154,8 @@ void SDLHelper::SetDT(float dt)
 void SDLHelper::Update()
 {
 
-	std::cout << "GameState = " + std::to_string((int)*m_pGameState) << std::endl;
-	std::cout << "GameState = " + std::to_string((int)*m_pLoadedState) << std::endl;
+	//std::cout << "GameState = " + std::to_string((int)*m_pGameState) << std::endl;
+	//std::cout << "GameState = " + std::to_string((int)*m_pLoadedState) << std::endl;
 	HandleEvents();
 
 	//Clear screen
@@ -475,17 +475,7 @@ void SDLHelper::MouseHandler(SDL_Event &e)
 		m_pPlayer2->SetMousePos(m_MouseX, m_MouseY);
 	}
 
-	if (m_Buttons.size() > 0)
-	{
-		for (int i = 0; i < m_Buttons.size(); i++)
-		{
-			m_Buttons[i]->m_pButtonTex->SetMousePos(m_MouseX, m_MouseY);
-		}
-	}
-
-	//std::cout << "Mouse X: " << x << " Mouse Y: " << y << std::endl;
-	//CHECK BOUNDS OF WHAT MOUSE IS IN ...
-	//m_pTexture->setPos((float)x, (float)y);
+	//std::cout << "Mouse X: " << x << " Mouse Y: " << y << std::endl;	//CHECK BOUNDS OF WHAT MOUSE IS IN ...
 
 	switch (e.type)
 	{
@@ -503,7 +493,10 @@ void SDLHelper::MouseHandler(SDL_Event &e)
 			}
 		}
 
-	   if (*m_pGameState == GameState::MAINMENU && *m_pLoadedState == LoadedState::MAINMENU || *m_pGameState == GameState::P2WIN && *m_pLoadedState == LoadedState::P2WIN || *m_pGameState == GameState::P1WIN && *m_pLoadedState == LoadedState::P1WIN)
+	   if (*m_pGameState == GameState::MAINMENU && *m_pLoadedState == LoadedState::MAINMENU || 
+		   *m_pGameState == GameState::P2WIN && *m_pLoadedState == LoadedState::P2WIN || 
+		   *m_pGameState == GameState::P1WIN && *m_pLoadedState == LoadedState::P1WIN ||
+		   *m_pGameState == GameState::CHARACTERSELECT && *m_pLoadedState == LoadedState::CHARACTERSELECT)
 		{
 			if (m_Buttons.size() > 0)
 			{
@@ -513,15 +506,15 @@ void SDLHelper::MouseHandler(SDL_Event &e)
 				}
 			}
 		}
-
-
-
 		//std::cout << "Mouse CLICK DOWN "<< std::endl;
 		break;
 
 	case SDL_MOUSEBUTTONUP:
 
-		if (*m_pGameState == GameState::MAINMENU && *m_pLoadedState == LoadedState::MAINMENU || *m_pGameState == GameState::P2WIN && *m_pLoadedState == LoadedState::P2WIN || *m_pGameState == GameState::P1WIN && *m_pLoadedState == LoadedState::P1WIN  )
+		if (*m_pGameState == GameState::MAINMENU && *m_pLoadedState == LoadedState::MAINMENU || 
+			*m_pGameState == GameState::P2WIN && *m_pLoadedState == LoadedState::P2WIN || 
+			*m_pGameState == GameState::P1WIN && *m_pLoadedState == LoadedState::P1WIN ||
+			*m_pGameState == GameState::CHARACTERSELECT && *m_pLoadedState == LoadedState::CHARACTERSELECT)
 		{
 			if (m_Buttons.size() > 0)
 			{
@@ -530,23 +523,36 @@ void SDLHelper::MouseHandler(SDL_Event &e)
 					m_Buttons[i]->m_pButtonTex->m_ClickDown = false;
 					if (m_Buttons[i]->m_pButtonTex->m_Clicked && m_Buttons[i]->m_pButtonTex->m_name == "playButt")
 					{
-						*m_pGameState = GameState::GAMEON;
+						*m_pGameState = GameState::CHARACTERSELECT;
 					}
-
 					else if (m_Buttons[i]->m_pButtonTex->m_Clicked && m_Buttons[i]->m_pButtonTex->m_name == "retryButt")
 					{
 						ShowGameOn();
 						LoadGameOn();
 						*m_pGameState = GameState::GAMEON;
 						*m_pLoadedState = LoadedState::GAMEON;
-					
-						
 					}
 					else if (m_Buttons[i]->m_pButtonTex->m_Clicked && m_Buttons[i]->m_pButtonTex->m_name == "quitButt")
 					{
 						*m_pGameState = GameState::MAINMENU;
 						
 					}
+					else if (m_Buttons[i]->m_pButtonTex->m_Clicked && m_Buttons[i]->m_pButtonTex->m_name == "colourButt")
+					{
+						if (GameEntity::m_P1color == "")
+						{
+							GameEntity::m_P1color = m_Buttons[i]->m_pButtonTex->m_color;
+							m_Buttons.erase(m_Buttons.begin() + i);
+							continue;
+						}
+						if (GameEntity::m_P2color == "")
+						{
+							GameEntity::m_P2color = m_Buttons[i]->m_pButtonTex->m_color;
+							m_Buttons.erase(m_Buttons.begin() + i);
+						}
+						
+					}
+		
 				}
 			}
 		}
@@ -707,6 +713,8 @@ void SDLHelper::ShowP2Win()
 
 void SDLHelper::ShowCharSelection()
 {
+
+	std::cout << GameEntity::m_P1color;
 	//CHECK IF LOADED
 	if (*m_pLoadedState != LoadedState::CHARACTERSELECT){ LoadCharSelection(); }
 
@@ -717,6 +725,17 @@ void SDLHelper::ShowCharSelection()
 	{
 		for (int i = 0; i < m_Buttons.size(); i++)
 		{
+			if (m_Buttons[i]->m_pButtonTex->m_name == "Player1" && GameEntity::m_P1color != "")
+			{
+				m_Buttons[i]->m_pButtonTex->SetName("Player2");
+				m_Buttons[i]->m_pButtonTex->LoadFile("Pics/player2.png");
+				
+			}
+			if (m_Buttons[i]->m_pButtonTex->m_name == "Player2" && GameEntity::m_P2color != "")
+			{
+				*m_pGameState = GameState::GAMEON;
+			}
+
 			m_Buttons[i]->m_pButtonTex->SetMousePos(m_MouseX, m_MouseY);
 			m_Buttons[i]->m_pButtonTex->Update(m_dt);
 			m_Buttons[i]->m_pButtonTex->Render();
@@ -862,12 +881,103 @@ void SDLHelper::LoadCharSelection()
 {
 	if (!m_Buttons.empty())	{ m_Buttons.clear(); }
 
+	Button* playBut0 = new Button(MyWindow::m_Width / 2, MyWindow::m_Height / 2 - 100, 250, 180, 0, m_pRenderer, "Player1", 20);
+	playBut0->m_pButtonTex->LoadFile("Pics/player1.png");
+	playBut0->m_pButtonTex->UseMouseEffects(false, 10);
+
+
 
 	//ADD BUTTONS
-	Button* playBut = new Button(MyWindow::m_Width / 2, MyWindow::m_Height / 2, 250, 180, 0, m_pRenderer, "whiteButt", 20);
+	Button* playBut = new Button(100, MyWindow::m_Height / 2,  170, 100, 0, m_pRenderer, "colourButt", 20);
 	playBut->m_pButtonTex->LoadFile("Pics/whiteButt.png");
+	playBut->m_pButtonTex->SetColor("white");
 	m_Buttons.push_back(playBut);
 
+	Button* playBut2 = new Button(250, MyWindow::m_Height / 2, 170, 100, 0, m_pRenderer, "colourButt", 20);
+	playBut2->m_pButtonTex->LoadFile("Pics/yellowButt.png");
+	playBut2->m_pButtonTex->SetColor("yellow");
+	m_Buttons.push_back(playBut2);
+
+	Button* playBut3 = new Button(400, MyWindow::m_Height / 2, 170, 100, 0, m_pRenderer, "colourButt", 20);
+	playBut3->m_pButtonTex->LoadFile("Pics/redButt.png");
+	playBut3->m_pButtonTex->SetColor("red");
+	m_Buttons.push_back(playBut3);
+
+	Button* playBut4 = new Button(550, MyWindow::m_Height / 2, 170, 100, 0, m_pRenderer, "colourButt", 20);
+	playBut4->m_pButtonTex->LoadFile("Pics/rblueButt.png");
+	playBut4->m_pButtonTex->SetColor("royalblue");
+	m_Buttons.push_back(playBut4);
+
+	Button* playBut5 = new Button(700, MyWindow::m_Height / 2, 170, 100, 0, m_pRenderer, "colourButt", 20);
+	playBut5->m_pButtonTex->LoadFile("Pics/purpleButt.png");
+	playBut5->m_pButtonTex->SetColor("purple");
+	m_Buttons.push_back(playBut5);
+
+	Button* playBut6 = new Button(850, MyWindow::m_Height / 2, 170, 100, 0, m_pRenderer, "colourButt", 20);
+	playBut6->m_pButtonTex->LoadFile("Pics/pinkButt.png");
+	playBut6->m_pButtonTex->SetColor("pink");
+	m_Buttons.push_back(playBut6);
+
+	//NEXT ROW=========================================================================================
+
+	Button* playBut7 = new Button(100, MyWindow::m_Height / 2 + 100, 170, 100, 0, m_pRenderer, "colourButt", 20);
+	playBut7->m_pButtonTex->LoadFile("Pics/orangeButt.png");
+	playBut7->m_pButtonTex->SetColor("orange");
+	m_Buttons.push_back(playBut7);
+
+	Button* playBut8 = new Button(250, MyWindow::m_Height / 2 + 100, 170, 100, 0, m_pRenderer, "colourButt", 20);
+	playBut8->m_pButtonTex->LoadFile("Pics/mintButt.png");
+	playBut8->m_pButtonTex->SetColor("mintgreen");
+	m_Buttons.push_back(playBut8);
+
+	Button* playBut9 = new Button(400, MyWindow::m_Height / 2 + 100, 170, 100, 0, m_pRenderer, "colourButt", 20);
+	playBut9->m_pButtonTex->LoadFile("Pics/greenButt.png");
+	playBut9->m_pButtonTex->SetColor("green");
+	m_Buttons.push_back(playBut9);
+
+	Button* playBut10 = new Button(550, MyWindow::m_Height / 2 + 100, 170, 100, 0, m_pRenderer, "colourButt", 20);
+	playBut10->m_pButtonTex->LoadFile("Pics/grayButt.png");
+	playBut10->m_pButtonTex->SetColor("darkgray");
+	m_Buttons.push_back(playBut10);
+
+	Button* playBut11 = new Button(700, MyWindow::m_Height / 2 + 100, 170, 100, 0, m_pRenderer, "colourButt", 20);
+	playBut11->m_pButtonTex->LoadFile("Pics/goldButt.png");
+	playBut11->m_pButtonTex->SetColor("gold");
+	m_Buttons.push_back(playBut11);
+
+	Button* playBut12 = new Button(850, MyWindow::m_Height / 2 + 100, 170, 100, 0, m_pRenderer, "colourButt", 20);
+	playBut12->m_pButtonTex->LoadFile("Pics/fuchsiaButt.png");
+	playBut12->m_pButtonTex->SetColor("fuchsia");
+	m_Buttons.push_back(playBut12);
+
+	//NEXT ROW=========================================================================================
+	Button* playBut13 = new Button(100, MyWindow::m_Height / 2 + 200, 170, 100, 0, m_pRenderer, "colourButt", 20);
+	playBut13->m_pButtonTex->LoadFile("Pics/dgreenButt.png");
+	playBut13->m_pButtonTex->SetColor("darkgreen");
+	m_Buttons.push_back(playBut13);
+
+	Button* playBut14 = new Button(250, MyWindow::m_Height / 2 + 200, 170, 100, 0, m_pRenderer, "colourButt", 20);
+	playBut14->m_pButtonTex->LoadFile("Pics/brownButt.png");
+	playBut14->m_pButtonTex->SetColor("brown");
+	m_Buttons.push_back(playBut14);
+
+	Button* playBut15 = new Button(400, MyWindow::m_Height / 2 + 200, 170, 100, 0, m_pRenderer, "colourButt", 20);
+	playBut15->m_pButtonTex->LoadFile("Pics/blueButt.png");
+	playBut15->m_pButtonTex->SetColor("blue");
+	m_Buttons.push_back(playBut15);
+
+	Button* playBut16 = new Button(550, MyWindow::m_Height / 2 + 200, 170, 100, 0, m_pRenderer, "colourButt", 20);
+	playBut16->m_pButtonTex->LoadFile("Pics/blackButt.png");
+	playBut16->m_pButtonTex->SetColor("black");
+	m_Buttons.push_back(playBut16);
+
+	Button* playBut17 = new Button(700, MyWindow::m_Height / 2 + 200, 170, 100, 0, m_pRenderer, "colourButt", 20);
+	playBut17->m_pButtonTex->LoadFile("Pics/babyButt.png");
+	playBut17->m_pButtonTex->SetColor("babyblue");
+	m_Buttons.push_back(playBut17);
+
+
+	m_Buttons.push_back(playBut0); //pushed back last for efficiency .. if in loop ..ya
 
 	m_pbackground = loadTexture("Pics/charmenu.png");
 
@@ -893,7 +1003,7 @@ void SDLHelper::LoadGameOn()
 	//**************************************************************
 
 	//PLAYER 1
-	GameEntity::m_P1color = "green";
+	//GameEntity::m_P1color = "green";
 	//SET UP CHARACTER       x   y    w    h   maxS Accel					
 	m_pPlayer1 = new GameEntity((SCREEN_WIDTH / 2) - (SCREEN_WIDTH / 4) - 64, (SCREEN_HEIGHT / 2) - (SCREEN_HEIGHT / 4) + 64, 128, 128, 350, 20, "player1", m_pRenderer, false);
 	m_pPlayer1->LoadFile("Pics/blobee.png"); // Load Up The Full Sprite Sheet
@@ -904,7 +1014,7 @@ void SDLHelper::LoadGameOn()
 
 
 	//PLAYER 2
-	GameEntity::m_P2color = "purple";
+	//GameEntity::m_P2color = "purple";
 	//SET UP CHARACTER       x   y    w    h   maxS Accel					
 	m_pPlayer2 = new GameEntity((SCREEN_WIDTH / 2) + (SCREEN_WIDTH / 4) - 64, (SCREEN_HEIGHT / 2) - (SCREEN_HEIGHT / 4) + 64, 128, 128, 350, 20, "player2", m_pRenderer, false);
 	m_pPlayer2->LoadFile("Pics/blobee.png");  // Load Up The Full Sprite Sheet
