@@ -627,8 +627,11 @@ void SDLHelper::ShowMainMenu()
 {
 	if (*m_pLoadedState != LoadedState::MAINMENU){ LoadMainMenu(); }
 
-	m_pInGameTitle->setPos((MyWindow::m_Width / 2) - (m_pInGameTitle->getWidth() / 2), 0);
-	m_pInGameTitle->Render(); //RENDER THE TEST TEXT
+	SDL_Rect rec = { 0, 0, MyWindow::m_Width, MyWindow::m_Height };
+	SDL_RenderCopy(m_pRenderer, m_pbackground, NULL, &rec);
+
+// 	m_pInGameTitle->setPos((MyWindow::m_Width / 2) - (m_pInGameTitle->getWidth() / 2), 0);
+// 	m_pInGameTitle->Render(); //RENDER THE TEST TEXT
 
 	if (m_Buttons.size() > 0)
 	{
@@ -640,8 +643,8 @@ void SDLHelper::ShowMainMenu()
 		}
 	}
 
-	m_pInGameTitle->setPos((MyWindow::m_Width / 2) - (m_pInGameTitle->getWidth() / 2), 0);
-	m_pInGameTitle->Render(); //RENDER THE TITLE TEXT
+// 	m_pInGameTitle->setPos((MyWindow::m_Width / 2) - (m_pInGameTitle->getWidth() / 2), 0);
+// 	m_pInGameTitle->Render(); //RENDER THE TITLE TEXT
 }
 
 void SDLHelper::ShowPaused()
@@ -716,6 +719,7 @@ void SDLHelper::ShowGameOn()
 	SDL_SetTextureColorMod(m_pP2BG, m_pPlayer2->getColor().r, m_pPlayer2->getColor().g, m_pPlayer2->getColor().b);
 	SDL_RenderCopy(m_pRenderer, m_pP1BG, NULL, &rec);
 	SDL_RenderCopy(m_pRenderer, m_pP2BG, NULL, &rec);
+
 	SDL_RenderCopy(m_pRenderer, m_pbackground, NULL, &rec);
 	
 	//PLAYER 1
@@ -754,7 +758,7 @@ void SDLHelper::LoadMainMenu()
 {
 	//TITLE
 	m_pInGameTitle->LoadTextFile(m_pFont2, "Warganism", "royalblue");
-	m_pbackground = loadTexture("Pics/background.png");
+	m_pbackground = loadTexture("Pics/mainmenu.png");
 
 	m_Buttons.empty(); // EMPTY OUT BUTTONS
 
@@ -763,7 +767,7 @@ void SDLHelper::LoadMainMenu()
 	playBut->m_pButtonTex->LoadFile("Pics/playButton.png");
 	m_Buttons.push_back(playBut);
 
-
+	
 	*m_pLoadedState = LoadedState::MAINMENU;
 }
 
