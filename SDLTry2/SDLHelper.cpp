@@ -535,10 +535,11 @@ void SDLHelper::MouseHandler(SDL_Event &e)
 
 					else if (m_Buttons[i]->m_pButtonTex->m_Clicked && m_Buttons[i]->m_pButtonTex->m_name == "retryButt")
 					{
-						*m_pGameState = GameState::GAMEON;
-						*m_pLoadedState = LoadedState::GAMEON;
 						ShowGameOn();
 						LoadGameOn();
+						*m_pGameState = GameState::GAMEON;
+						*m_pLoadedState = LoadedState::GAMEON;
+					
 						
 					}
 					else if (m_Buttons[i]->m_pButtonTex->m_Clicked && m_Buttons[i]->m_pButtonTex->m_name == "quitButt")
