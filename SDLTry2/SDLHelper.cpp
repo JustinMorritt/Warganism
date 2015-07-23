@@ -71,7 +71,7 @@ void SDLHelper::loadMedia()
 	m_pFont1 = TTF_OpenFont("Fonts/BlackCasper.ttf", 300);
 	if (m_pFont1 == NULL){ std::cout << "ERROR FONT NOT LOADED ... NULL" << std::endl; }
 
-	m_pFont2 = TTF_OpenFont("Fonts/BLACKR.ttf", 300);
+	m_pFont2 = TTF_OpenFont("Fonts/alpha_echo.ttf", 300);
 	if (m_pFont2 == NULL){ std::cout << "ERROR FONT NOT LOADED ... NULL" << std::endl; }
 
 	m_pFont3 = TTF_OpenFont("Fonts/ANUDRG__.ttf", 300);
@@ -223,7 +223,6 @@ void SDLHelper::SpawnLPickUp()
 
 	int randomSize = m_RG(70 - 35) + 35;
 
-	std::cout << randomSize << std::endl;
 
 	if (randomX < MyWindow::getWidth() / 2)
 	{
@@ -665,7 +664,7 @@ void SDLHelper::ShowPaused()
 {
 	if (*m_pLoadedState != LoadedState::PAUSED){ LoadPaused(); }
 
-	DrawRect(0, 0, MyWindow::getWidth(), MyWindow::getHeight(), "lightgray");
+	DrawRect(0, 0, MyWindow::getWidth(), MyWindow::getHeight(), "halfblack");
 	ShowGameOn();
 	m_pPaused->setPos(MyWindow::getWidth() / 2 - 150, MyWindow::getHeight() / 2 - 50);
 	m_pPaused->Render();
@@ -675,10 +674,8 @@ void SDLHelper::ShowPaused()
 void SDLHelper::ShowP1Win()
 {
 	if (*m_pLoadedState != LoadedState::P1WIN){ LoadP1Win(); }
-	DrawRect(0, 0, MyWindow::getWidth(), MyWindow::getHeight(), "lightgray");
+	DrawRect(0, 0, MyWindow::getWidth(), MyWindow::getHeight(), "halfblack");
 	ShowGameOn();
-	m_pPaused->setPos(MyWindow::getWidth() / 2 - 150, MyWindow::getHeight() / 2 - 50);
-	m_pPaused->Render();
 	if (m_Buttons.size() > 0)
 	{
 		for (int i = 0; i < m_Buttons.size(); i++)
@@ -693,10 +690,8 @@ void SDLHelper::ShowP1Win()
 void SDLHelper::ShowP2Win()
 {
 	if (*m_pLoadedState != LoadedState::P2WIN){ LoadP2Win(); }
-	DrawRect(0, 0, MyWindow::getWidth(), MyWindow::getHeight(), "lightgray");
+	DrawRect(0, 0, MyWindow::getWidth(), MyWindow::getHeight(), "halfblack");
 	ShowGameOn();
-	m_pPaused->setPos(MyWindow::getWidth() / 2 - 150, MyWindow::getHeight() / 2 - 50);
-	m_pPaused->Render();
 	if (m_Buttons.size() > 0)
 	{
 		for (int i = 0; i < m_Buttons.size(); i++)
@@ -712,7 +707,7 @@ void SDLHelper::ShowP2Win()
 void SDLHelper::ShowCharSelection()
 {
 
-	std::cout << GameEntity::m_P1color;
+
 	//CHECK IF LOADED
 	if (*m_pLoadedState != LoadedState::CHARACTERSELECT){ LoadCharSelection(); }
 
@@ -789,10 +784,10 @@ void SDLHelper::ShowGameOn()
 	UpdateProjectiles();
 	UpdatePickUp();
 	//UI STUFF 
-	m_pInGameSizeP1->LoadTextFile(m_pFont2, "Size: " + std::to_string(m_pPlayer1->getWidth()), GameEntity::m_P1color);
-	m_pInGameSizeP2->LoadTextFile(m_pFont2, "Size: " + std::to_string(m_pPlayer2->getWidth()), GameEntity::m_P2color);
-	m_pInGameAmmoP1->LoadTextFile(m_pFont2, "Ammo: " + std::to_string(m_pPlayer1->getCurrAmmo()), GameEntity::m_P1color);
-	m_pInGameAmmoP2->LoadTextFile(m_pFont2, "Ammo: " + std::to_string(m_pPlayer2->getCurrAmmo()), GameEntity::m_P2color);
+	m_pInGameSizeP1->LoadTextFile(m_pFont2, "Size: " + std::to_string(m_pPlayer1->getWidth()), "black");
+	m_pInGameSizeP2->LoadTextFile(m_pFont2, "Size: " + std::to_string(m_pPlayer2->getWidth()), "black");
+	m_pInGameAmmoP1->LoadTextFile(m_pFont2, "Ammo: " + std::to_string(m_pPlayer1->getCurrAmmo()), "black");
+	m_pInGameAmmoP2->LoadTextFile(m_pFont2, "Ammo: " + std::to_string(m_pPlayer2->getCurrAmmo()), "black");
 
 	m_pInGameTitle->Render(); //RENDER THE TITLE TEXT
 	m_pInGameSizeP1->Render();
@@ -841,18 +836,17 @@ void SDLHelper::LoadPaused()
 
 void SDLHelper::LoadP1Win()
 {
-	m_pPaused->LoadTextFile(m_pFont2, "P1Win ", "royalblue");
-	Button* quitBut = new Button(MyWindow::getWidth() / 2 - 100 , MyWindow::getHeight() / 2 + 100, 150, 60, 0, m_pRenderer, "quitButt", 20);
-	Button* retryBut = new Button(MyWindow::getWidth() / 2 + 100, MyWindow::getHeight() / 2 + 100, 150, 60, 0, m_pRenderer, "retryButt", 20);
+	Button* winBut = new Button(MyWindow::getWidth() / 2, MyWindow::getHeight() / 2 - 50, 600, 300, 0, m_pRenderer, "title", 20);
+	Button* quitBut = new Button(MyWindow::getWidth() / 2 - 200 , MyWindow::getHeight() / 2 + 150, 300, 150, 0, m_pRenderer, "quitButt", 20);
+	Button* retryBut = new Button(MyWindow::getWidth() / 2 + 200, MyWindow::getHeight() / 2 + 150, 300, 150, 0, m_pRenderer, "retryButt", 20);
 
-	if (!m_Buttons.empty())
-	{
-		m_Buttons.clear();
-		std::cout << m_Buttons.size() << std::endl;
-	}
+	if (!m_Buttons.empty()){m_Buttons.clear();}
 
-	quitBut->m_pButtonTex->LoadFile("Pics/playButton.png");
-	retryBut->m_pButtonTex->LoadFile("Pics/playButton.png");
+	winBut->m_pButtonTex->LoadFile("Pics/P2Wins.png");
+	winBut->m_pButtonTex->UseMouseEffects(false,0);
+	quitBut->m_pButtonTex->LoadFile("Pics/quitButt.png");
+	retryBut->m_pButtonTex->LoadFile("Pics/restartButt.png");
+	m_Buttons.push_back(winBut);
 	m_Buttons.push_back(quitBut);
 	m_Buttons.push_back(retryBut);
 	*m_pLoadedState = LoadedState::P1WIN;
@@ -860,18 +854,18 @@ void SDLHelper::LoadP1Win()
 
 void SDLHelper::LoadP2Win()
 {
-	m_pPaused->LoadTextFile(m_pFont2, "P2Win ", "royalblue");
-	Button* quitBut = new Button(MyWindow::getWidth() / 2 - 100, MyWindow::getHeight() / 2 + 100, 150, 60, 0, m_pRenderer, "quitButt", 20);
-	Button* retryBut = new Button(MyWindow::getWidth() / 2 + 100, MyWindow::getHeight() / 2 + 100, 150, 60, 0, m_pRenderer, "retryButt", 20);
-	
-	if (!m_Buttons.empty())
-	{
-		m_Buttons.clear();
-		std::cout << m_Buttons.size() << std::endl;
-	}
 
-	quitBut->m_pButtonTex->LoadFile("Pics/playButton.png");
-	retryBut->m_pButtonTex->LoadFile("Pics/playButton.png");
+	Button* winBut = new Button(MyWindow::getWidth() / 2 , MyWindow::getHeight() / 2 - 50, 600, 300, 0, m_pRenderer, "title", 20);
+	Button* quitBut = new Button(MyWindow::getWidth() / 2 - 200, MyWindow::getHeight() / 2 + 150, 300, 150, 0, m_pRenderer, "quitButt", 20);
+	Button* retryBut = new Button(MyWindow::getWidth() / 2 + 200, MyWindow::getHeight() / 2 + 150, 300, 150, 0, m_pRenderer, "retryButt", 20);
+	
+	if (!m_Buttons.empty())	{m_Buttons.clear();}
+	
+	winBut->m_pButtonTex->LoadFile("Pics/P2Wins.png");
+	winBut->m_pButtonTex->UseMouseEffects(false,0);
+	quitBut->m_pButtonTex->LoadFile("Pics/quitButt.png");
+	retryBut->m_pButtonTex->LoadFile("Pics/restartButt.png");
+	m_Buttons.push_back(winBut);
 	m_Buttons.push_back(quitBut);
 	m_Buttons.push_back(retryBut);
 	*m_pLoadedState = LoadedState::P2WIN;

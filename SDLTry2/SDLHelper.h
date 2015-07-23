@@ -38,6 +38,18 @@ enum class LoadedState
 	NONE
 };
 
+enum class SoundState
+{
+	SOUNDON,
+	SOUNDOFF
+};
+
+enum class MusicState
+{
+	MUSICON,
+	MUSICOFF
+};
+
 
 class SDLHelper
 {
