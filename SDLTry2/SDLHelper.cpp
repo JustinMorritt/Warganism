@@ -21,12 +21,15 @@ SDLHelper::SDLHelper() : m_dt(0.0f), m_done(false)
 	m_pSoundState = new SoundState;
 	*m_pSoundState = SoundState::SOUNDON;
 
-
 	//SDL INIT
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
 	{
 		printf("SDL_Init Error:", SDL_GetError());
 	}
+
+	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) { printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError()); }
+
+
 	m_pMyWindow = new MyWindow();
 	m_pMyWindow->init();
 
@@ -59,14 +62,16 @@ SDLHelper::SDLHelper() : m_dt(0.0f), m_done(false)
 		printf("SDL_ttf could not initialize! SDL_ttf Error:\n", TTF_GetError());
 	}
 
-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) { printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError()); }
+	
+	
 	//Get window surface
 	m_pScreenSurface = SDL_GetWindowSurface(m_pMyWindow->m_pWindow);
+
 
 	m_RPickUpSpawnTime = m_RG(15 - 7) + 7;
 	m_LPickUpSpawnTime = m_RG(15 - 7) + 7;
 	loadMedia();
-	loadMusic();
+	
 }
 
 
@@ -84,6 +89,20 @@ void SDLHelper::loadMedia()
 
 	m_pFont3 = TTF_OpenFont("Fonts/ANUDRG__.ttf", 300);
 	if (m_pFont3 == NULL){ std::cout << "ERROR FONT NOT LOADED ... NULL" << std::endl; }
+
+
+	m_pSong1 = Mix_LoadMUS("");
+	if (m_pSong1 == NULL){ std::cout << "ERROR MUSIC NOT LOADED ... NULL" << std::endl; }
+	m_pSong2 = Mix_LoadMUS("");
+	if (m_pSong2 == NULL){ std::cout << "ERROR MUSIC NOT LOADED ... NULL" << std::endl; }
+	m_pP1Fire = Mix_LoadWAV("");
+	if (m_pP1Fire == NULL){ std::cout << "ERROR SOUND NOT LOADED ... NULL" << std::endl; }
+	m_pP2Fire = Mix_LoadWAV("");
+	if (m_pP2Fire == NULL){ std::cout << "ERROR SOUND NOT LOADED ... NULL" << std::endl; }
+	m_pP1Hit = Mix_LoadWAV("");
+	if (m_pP1Hit == NULL){ std::cout << "ERROR SOUND NOT LOADED ... NULL" << std::endl; }
+	m_pP2Hit = Mix_LoadWAV("");
+	if (m_pP2Hit == NULL){ std::cout << "ERROR SOUND NOT LOADED ... NULL" << std::endl; }
 
 
 	m_pPaused = new GameEntity(0, 0, 300, 80, 0, 0, "Paused", m_pRenderer, false);
@@ -138,20 +157,6 @@ SDL_Texture* SDLHelper::loadText(std::string text, SDL_Color color, int font)
 	return retText;
 
 }
-
-void SDLHelper::loadMusic()
-{
-// 	m_pSong1 = Mix_LoadMUS("");
-// 	m_pSong1 = Mix_LoadMUS("");
-// 	
-// 	m_pP1Fire = Mix_LoadWAV("");
-// 	m_pP2Fire = Mix_LoadWAV("");
-// 	m_pP1Hit = Mix_LoadWAV("");
-// 	m_pP2Hit = Mix_LoadWAV("");
-
-
-}
-
 bool SDLHelper::Done()
 {
 	return m_done;
@@ -201,15 +206,21 @@ void SDLHelper::SpawnProjectile(bool p1, bool p2)
 {
 	if (p1)
 	{
-		if (m_pP1Fire != NULL)
-		{
 
+		if (m_pP2Fire != NULL && *m_pSoundState == SoundState::SOUNDON)
+		{
+			Mix_PlayChannel(-1, m_pP1Fire, 0);
 		}
+		
 		Projectile* proj = new Projectile(m_pPlayer1->getCenter().x, m_pPlayer1->getCenter().y, m_pPlayer1->getWidth() / 2, m_pPlayer1->getHeight() / 2, m_pPlayer1->m_Roation, GameEntity::m_P1color, m_pRenderer, "P1projectile");
 		m_P1Projectiles.push_back(proj);
 	}
 	else if (p2)
 	{
+		if (m_pP2Fire != NULL)
+		{
+			Mix_PlayChannel(-1, m_pP2Fire, 0 && *m_pSoundState == SoundState::SOUNDON);
+		}
 		//std::cout << "Made a Projectile" << std::endl;
 		Projectile* proj = new Projectile(m_pPlayer2->getCenter().x, m_pPlayer2->getCenter().y, m_pPlayer2->getWidth() / 2, m_pPlayer2->getHeight() / 2, m_pPlayer2->m_Roation, GameEntity::m_P2color, m_pRenderer, "P2projectile");
 		m_P2Projectiles.push_back(proj);
@@ -303,6 +314,12 @@ void SDLHelper::UpdateProjectiles()
 			if (Collision::CircleVsCircle(m_P1Projectiles[i]->m_pProjTex->GetCircleCollider(), m_pPlayer2->GetCircleCollider()))
 			{
 				//std::cout << "Erased a P1 Projectile -- COLLISION" << std::endl;
+				if (m_pP2Hit != NULL && *m_pSoundState == SoundState::SOUNDON)
+				{
+					m_pP2Hit;
+				}
+
+				
 				m_pPlayer2->GetSmaller();
 				m_P1Projectiles.erase(m_P1Projectiles.begin() + i);
 				break;
@@ -328,6 +345,11 @@ void SDLHelper::UpdateProjectiles()
 			if (Collision::CircleVsCircle(m_P2Projectiles[i]->m_pProjTex->GetCircleCollider(), m_pPlayer1->GetCircleCollider()))
 			{
 				//std::cout << "Erased a P2 Projectile --COLLISION" << std::endl;
+				if (m_pP1Hit != NULL && *m_pSoundState == SoundState::SOUNDON)
+				{
+					m_pP1Hit;
+				}
+
 				m_pPlayer1->GetSmaller();
 				m_P2Projectiles.erase(m_P2Projectiles.begin() + i);
 				break;
@@ -576,11 +598,13 @@ void SDLHelper::MouseHandler(SDL_Event &e)
 						{
 							*m_pSoundState = SoundState::SOUNDOFF;
 							*m_pLoadedState = LoadedState::NONE;
+							
 						}
 						else
 						{
 							*m_pSoundState = SoundState::SOUNDON;
 							*m_pLoadedState = LoadedState::NONE;
+							
 						}
 					}
 					else if (m_Buttons[i]->m_pButtonTex->m_Clicked && m_Buttons[i]->m_pButtonTex->m_name == "musicButt")
@@ -589,11 +613,13 @@ void SDLHelper::MouseHandler(SDL_Event &e)
 						{
 							*m_pMusicState = MusicState::MUSICOFF;
 							*m_pLoadedState = LoadedState::NONE;
+							Mix_PauseMusic();
 						}
 						else
 						{
 							*m_pMusicState = MusicState::MUSICON;
 							*m_pLoadedState = LoadedState::NONE;
+							Mix_ResumeMusic();
 						}
 					}
 				}

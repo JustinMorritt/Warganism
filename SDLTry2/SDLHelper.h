@@ -13,7 +13,8 @@
 #include "PickUp.h"
 #include "randgen.h"
 #include "Button.h"
-#include "SDL2-2.0.3/include/SDL_mixer.h"
+#include "SDL_mixer.h"
+#include <stdio.h>
 
 
 
@@ -110,7 +111,7 @@ private:
 	Mix_Music* m_pSong1               = NULL;
 	Mix_Music* m_pSong2               = NULL;
 
-	Mix_Chunk* m_pP1Fire			  = NULL;
+	Mix_Chunk *m_pP1Fire			  = NULL;
 	Mix_Chunk* m_pP2Fire			  = NULL;
 	Mix_Chunk* m_pP1Hit				  = NULL;
 	Mix_Chunk* m_pP2Hit				  = NULL;
@@ -125,7 +126,6 @@ public:
 
 	//Loads media
 	void loadMedia();
-	void loadMusic();
 	SDL_Texture* loadTexture(std::string path);
 	SDL_Texture* loadText(std::string text, SDL_Color color, int font);
 
