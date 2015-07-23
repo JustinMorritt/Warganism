@@ -495,7 +495,8 @@ void SDLHelper::MouseHandler(SDL_Event &e)
 	   if (*m_pGameState == GameState::MAINMENU && *m_pLoadedState == LoadedState::MAINMENU || 
 		   *m_pGameState == GameState::P2WIN && *m_pLoadedState == LoadedState::P2WIN || 
 		   *m_pGameState == GameState::P1WIN && *m_pLoadedState == LoadedState::P1WIN ||
-		   *m_pGameState == GameState::CHARACTERSELECT && *m_pLoadedState == LoadedState::CHARACTERSELECT)
+		   *m_pGameState == GameState::CHARACTERSELECT && *m_pLoadedState == LoadedState::CHARACTERSELECT ||
+		   *m_pGameState == GameState::PAUSED && *m_pLoadedState == LoadedState::PAUSED)
 		{
 			if (m_Buttons.size() > 0)
 			{
@@ -513,7 +514,8 @@ void SDLHelper::MouseHandler(SDL_Event &e)
 		if (*m_pGameState == GameState::MAINMENU && *m_pLoadedState == LoadedState::MAINMENU || 
 			*m_pGameState == GameState::P2WIN && *m_pLoadedState == LoadedState::P2WIN || 
 			*m_pGameState == GameState::P1WIN && *m_pLoadedState == LoadedState::P1WIN ||
-			*m_pGameState == GameState::CHARACTERSELECT && *m_pLoadedState == LoadedState::CHARACTERSELECT)
+			*m_pGameState == GameState::CHARACTERSELECT && *m_pLoadedState == LoadedState::CHARACTERSELECT || 
+			*m_pGameState == GameState::PAUSED && *m_pLoadedState == LoadedState::PAUSED)
 		{
 			if (m_Buttons.size() > 0)
 			{
@@ -666,6 +668,18 @@ void SDLHelper::ShowPaused()
 
 	DrawRect(0, 0, MyWindow::getWidth(), MyWindow::getHeight(), "halfblack");
 	ShowGameOn();
+
+		if (m_Buttons.size() > 0)
+	{
+		for (int i = 0; i < m_Buttons.size(); i++)
+		{
+			m_Buttons[i]->m_pButtonTex->SetMousePos(m_MouseX, m_MouseY);
+			m_Buttons[i]->m_pButtonTex->Update(m_dt);
+			m_Buttons[i]->m_pButtonTex->Render();
+		}
+	}
+
+
 	m_pPaused->setPos(MyWindow::getWidth() / 2 - 150, MyWindow::getHeight() / 2 - 50);
 	m_pPaused->Render();
 
@@ -843,6 +857,20 @@ void SDLHelper::LoadMainMenu()
 void SDLHelper::LoadPaused()
 {
 	m_pPaused->LoadTextFile(m_pFont2, "PAUSED ", "royalblue");
+
+	Button* quitBut = new Button(MyWindow::getWidth() / 2 - 200, MyWindow::getHeight() / 2 + 150, 300, 150, 0, m_pRenderer, "quitButt", 20);
+	Button* retryBut = new Button(MyWindow::getWidth() / 2 + 200, MyWindow::getHeight() / 2 + 150, 300, 150, 0, m_pRenderer, "retryButt", 20);
+
+	if (!m_Buttons.empty()){ m_Buttons.clear(); }
+
+
+	quitBut->m_pButtonTex->LoadFile("Pics/quitButt.png");
+	retryBut->m_pButtonTex->LoadFile("Pics/restartButt.png");
+
+	m_Buttons.push_back(quitBut);
+	m_Buttons.push_back(retryBut);
+
+
 	*m_pLoadedState = LoadedState::PAUSED;
 }
 
@@ -887,7 +915,7 @@ void SDLHelper::LoadCharSelection()
 {
 	if (!m_Buttons.empty())	{ m_Buttons.clear(); }
 
-	Button* playBut0 = new Button(MyWindow::m_Width / 2, MyWindow::m_Height / 2 - 100, 250, 180, 0, m_pRenderer, "Player1", 20);
+	Button* playBut0 = new Button(MyWindow::m_Width / 2, MyWindow::m_Height / 2 - 120, 450, 220, 0, m_pRenderer, "Player1", 20);
 	playBut0->m_pButtonTex->LoadFile("Pics/player1.png");
 	playBut0->m_pButtonTex->UseMouseEffects(false, 10);
 
