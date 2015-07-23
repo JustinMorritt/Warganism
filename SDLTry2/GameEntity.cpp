@@ -186,7 +186,8 @@ void GameEntity::Render()
 
 	if (m_Animation)
 	{
-		SDL_RenderCopy(m_pTheRenderer, m_pTexture, &GetCurrentFrame(), &full);
+		//SDL_RenderCopy(m_pTheRenderer, m_pTexture, &GetCurrentFrame(), &full);
+		SDL_RenderCopyEx(m_pTheRenderer, m_pTexture, &GetCurrentFrame(), &full, m_Roation, NULL, m_RenderFlip);
 	}
 	else
 	{
@@ -214,6 +215,13 @@ void GameEntity::setPos(float x, float y)
 	m_pRect.y = y;
 
 }
+
+void GameEntity::setVel(float x, float y)
+{
+	m_pVel->x = x;
+	m_pVel->y = y;
+}
+
 int GameEntity::getCurrAmmo()
 {
 	return m_CurrAmmo;
@@ -267,7 +275,6 @@ void GameEntity::SetAnimation(int x, int y, int numFrames, int frameW, int frame
 
 void GameEntity::UpdateAnimation()
 {
-	
 	// USE EPSILON to compare with .. for presision errors ... used to compare if Velocity.x  > EPSILON;
 	//TODO: Velocity based Animation Type Selecting 
 	m_frameTimer = SDL_GetTicks();
@@ -278,15 +285,21 @@ void GameEntity::UpdateAnimation()
 		m_currentFrame++;
 		if (m_currentFrame == m_Animations.at(m_currentAnimation).second.frames)
 		{
-			m_currentFrame = 0;
+			m_currentFrame = m_currentFrame - 1;
 			if (!m_Animations.at(m_currentAnimation).second.loop)
 			{
 				//m_currentFrame = m_Animations.at(m_currentAnimation).second.frames-2;
 				m_Animations.at(m_currentAnimation).second.done = true;
+				m_doneLoop = true;
 				SetAnimate(false);
 			}
 		}
 	}
+}
+
+bool GameEntity::GetAnimDone()
+{
+	return m_doneLoop;
 }
 
 void GameEntity::ApplyForces()
@@ -489,6 +502,7 @@ void GameEntity::GoOneDirForever(float x, float y)
 	m_pVel->x = x * m_maxSpeed;
 	m_pVel->y = y * m_maxSpeed;
 }
+
 
 void GameEntity::UseGoToPoint(bool on)
 {

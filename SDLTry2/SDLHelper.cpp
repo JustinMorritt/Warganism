@@ -300,15 +300,19 @@ void SDLHelper::UpdateProjectiles()
 			}
 			m_P1Projectiles[i]->m_pProjTex->Render();
 
-			if (Collision::CircleVsCircle(m_P1Projectiles[i]->m_pProjTex->GetCircleCollider(), m_pPlayer2->GetCircleCollider()))
+			if (Collision::CircleVsCircle(m_P1Projectiles[i]->m_pProjTex->GetCircleCollider(), m_pPlayer2->GetCircleCollider()) && !m_P1Projectiles[i]->m_pProjTex->Animating())
 			{
 				//std::cout << "Erased a P1 Projectile -- COLLISION" << std::endl;
 				m_pPlayer2->GetSmaller();
-				m_P1Projectiles.erase(m_P1Projectiles.begin() + i);
+				m_P1Projectiles[i]->m_pProjTex->SetCurrentAnimation(0);
+				m_P1Projectiles[i]->m_pProjTex->SetAnimate(true);
+				m_P1Projectiles[i]->m_pProjTex->setVel(0.0, 0.0);
+			
+				//m_P1Projectiles.erase(m_P1Projectiles.begin() + i);
 				break;
 			}
 
-			if (m_P1Projectiles[i]->m_pProjTex->IsProjectileDone())
+			if (m_P1Projectiles[i]->m_pProjTex->IsProjectileDone() || m_P1Projectiles[i]->m_pProjTex->GetAnimDone())
 			{
 				//std::cout << "Erased a P1 Projectile -- OFF SCREEN" << std::endl;
 				m_P1Projectiles.erase(m_P1Projectiles.begin() + i);
@@ -325,14 +329,18 @@ void SDLHelper::UpdateProjectiles()
 				m_P2Projectiles[i]->m_pProjTex->Update(m_dt);
 			}
 			m_P2Projectiles[i]->m_pProjTex->Render();
-			if (Collision::CircleVsCircle(m_P2Projectiles[i]->m_pProjTex->GetCircleCollider(), m_pPlayer1->GetCircleCollider()))
+			if (Collision::CircleVsCircle(m_P2Projectiles[i]->m_pProjTex->GetCircleCollider(), m_pPlayer1->GetCircleCollider()) && !m_P2Projectiles[i]->m_pProjTex->Animating())
 			{
 				//std::cout << "Erased a P2 Projectile --COLLISION" << std::endl;
 				m_pPlayer1->GetSmaller();
-				m_P2Projectiles.erase(m_P2Projectiles.begin() + i);
+				m_P2Projectiles[i]->m_pProjTex->SetCurrentAnimation(0);
+				m_P2Projectiles[i]->m_pProjTex->SetAnimate(true);
+				m_P2Projectiles[i]->m_pProjTex->setVel(0.0, 0.0);
+				
+				//m_P2Projectiles.erase(m_P2Projectiles.begin() + i);
 				break;
 			}
-			if (m_P2Projectiles[i]->m_pProjTex->IsProjectileDone())
+			if (m_P2Projectiles[i]->m_pProjTex->IsProjectileDone() || m_P2Projectiles[i]->m_pProjTex->GetAnimDone())
 			{
 				//std::cout << "Erased a P2 Projectile  -- OFF SCREEN" << std::endl;
 				m_P2Projectiles.erase(m_P2Projectiles.begin() + i);

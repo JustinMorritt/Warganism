@@ -32,6 +32,7 @@ public:
 	void SetScale(int w, int h);
 
 	void setPos(float x, float y);
+	void setVel(float x, float y);
 	int getCurrAmmo();
 	std::string getName();
 	void SetName(std::string name);
@@ -40,10 +41,15 @@ public:
 	int getHeight(); 
 	
 	Vec2* getPos(); 
+
+	//SPRITE ANIMATION
 	void SetAnimation(int x, int y, int numFrames, int frameW, int frameH, float delay, bool loop);
 	void UpdateAnimation();
-	void ApplyForces();
+	bool GetAnimDone();
 	void SetAnimate(bool on);
+
+	void ApplyForces();
+	
 	bool Animating();
 	SDL_Point getCenter();
 	void SetCurrentAnimation(int num);
