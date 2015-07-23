@@ -1205,6 +1205,26 @@ void SDLHelper::close()
 	SDL_DestroyRenderer(m_pRenderer);
 	m_pMyWindow->Free();
 
+	//free the sound effects
+	Mix_FreeChunk(m_pP1Fire);
+	Mix_FreeChunk(m_pP1Hit);
+
+	Mix_FreeChunk(m_pP2Fire);
+	Mix_FreeChunk(m_pP2Hit);
+
+	m_pP1Fire = NULL;
+	m_pP1Hit = NULL;
+
+	m_pP2Fire = NULL;
+	m_pP2Hit = NULL;
+
+	//free the music
+	Mix_FreeMusic(m_pSong1);
+	Mix_FreeMusic(m_pSong2);
+
+	m_pSong1 = NULL;
+	m_pSong2 = NULL;
+
 	//Free global font
 	TTF_CloseFont(m_pFont1);
 	m_pFont1 = NULL;
