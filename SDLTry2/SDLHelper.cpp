@@ -84,6 +84,7 @@ void SDLHelper::loadMedia()
 	m_pInGameSizeP2 = new GameEntity(0, 0, 150, 80, 0, 0, "P2Size", m_pRenderer, false);
 	m_pInGameAmmoP1 = new GameEntity(0, 0, 150, 80, 0, 0, "P1Ammo", m_pRenderer, false);
 	m_pInGameAmmoP2 = new GameEntity(0, 0, 150, 80, 0, 0, "P2Ammo", m_pRenderer, false);
+	m_pPaused = new GameEntity(0, 0, 300, 80, 0, 0, "Paused", m_pRenderer, false);
 }
 
 
@@ -274,7 +275,10 @@ void SDLHelper::UpdateProjectiles()
 	{
 		for (int i = 0; i < m_P1Projectiles.size(); i++)
 		{
-			m_P1Projectiles[i]->m_pProjTex->Update(m_dt);
+			if (*m_pGameState != GameState::PAUSED)
+			{
+				m_P1Projectiles[i]->m_pProjTex->Update(m_dt);
+			}
 			m_P1Projectiles[i]->m_pProjTex->Render();
 
 			if (Collision::CircleVsCircle(m_P1Projectiles[i]->m_pProjTex->GetCircleCollider(), m_pPlayer2->GetCircleCollider()))
@@ -297,7 +301,10 @@ void SDLHelper::UpdateProjectiles()
 	{
 		for (int i = 0; i < m_P2Projectiles.size(); i++)
 		{
-			m_P2Projectiles[i]->m_pProjTex->Update(m_dt);
+			if (*m_pGameState != GameState::PAUSED)
+			{
+				m_P2Projectiles[i]->m_pProjTex->Update(m_dt);
+			}
 			m_P2Projectiles[i]->m_pProjTex->Render();
 			if (Collision::CircleVsCircle(m_P2Projectiles[i]->m_pProjTex->GetCircleCollider(), m_pPlayer1->GetCircleCollider()))
 			{
@@ -336,7 +343,7 @@ void SDLHelper::HandleEvents() //Returns true if Quit is Clicked
 		}
 		else if (e.type == SDL_KEYDOWN || e.type == SDL_KEYUP) //KEYBOARD EVENTS
 		{
-			if (*m_pGameState == GameState::GAMEON && *m_pLoadedState == LoadedState::GAMEON)
+			if (*m_pGameState == GameState::GAMEON && *m_pLoadedState == LoadedState::GAMEON || *m_pGameState == GameState::PAUSED && *m_pLoadedState == LoadedState::PAUSED)
 			{
 				KeyBoardHandler(e);
 			}
@@ -374,7 +381,7 @@ void SDLHelper::KeyBoardHandler(SDL_Event &e)
 		case SDLK_SPACE:
 			if (*m_pGameState == GameState::GAMEON && *m_pLoadedState == LoadedState::GAMEON)
 			{
-				if (m_pPlayer1->getCurrAmmo() > 0)
+				if (m_pPlayer1->getCurrAmmo() > 0 && *m_pGameState != GameState::PAUSED)
 				{
 					SpawnProjectile(true, false);
 					m_pPlayer1->decreaseCurrAmmo();
@@ -424,7 +431,16 @@ void SDLHelper::KeyBoardHandler(SDL_Event &e)
 			//m_pPlayer1->SetAnimate(false);
 			m_pPlayer1->removeForce("right");
 			break;
-
+		case SDLK_p:
+			if (*m_pGameState != GameState::PAUSED)
+			{
+				*m_pGameState = GameState::PAUSED;
+			}
+			else
+			{
+				*m_pGameState = GameState::GAMEON;
+				*m_pLoadedState = LoadedState::GAMEON;
+			}
 		case SDLK_SPACE:
 			break;
 
@@ -479,7 +495,7 @@ void SDLHelper::MouseHandler(SDL_Event &e)
 	case SDL_MOUSEBUTTONDOWN:
 		if (*m_pGameState == GameState::GAMEON && *m_pLoadedState == LoadedState::GAMEON)
 		{
-			if (m_pPlayer2->getCurrAmmo() > 0)
+			if (m_pPlayer1->getCurrAmmo() > 0 && *m_pGameState != GameState::PAUSED)
 			{
 				SpawnProjectile(false, true);
 				m_pPlayer2->decreaseCurrAmmo();
@@ -630,6 +646,12 @@ void SDLHelper::ShowMainMenu()
 
 void SDLHelper::ShowPaused()
 {
+	if (*m_pLoadedState != LoadedState::PAUSED){ LoadPaused(); }
+
+	DrawRect(0, 0, MyWindow::getWidth(), MyWindow::getHeight(), "lightgray");
+	ShowGameOn();
+	m_pPaused->setPos(MyWindow::getWidth() / 2 - 150, MyWindow::getHeight() / 2 - 50);
+	m_pPaused->Render();
 
 }
 
@@ -652,11 +674,33 @@ void SDLHelper::ShowCharSelection()
 void SDLHelper::ShowGameOn()
 {
 	//CHECK IF LOADED
-	if (*m_pLoadedState != LoadedState::GAMEON){ LoadGameOn(); }
+	if (*m_pLoadedState != LoadedState::GAMEON && *m_pLoadedState != LoadedState::PAUSED){ LoadGameOn(); }
+	if (*m_pGameState != GameState::PAUSED)
+	{
+		m_RPickUpSpawnTimeElapsed += m_dt;
+		m_LPickUpSpawnTimeElapsed += m_dt;
 
-	m_RPickUpSpawnTimeElapsed += m_dt;
-	m_LPickUpSpawnTimeElapsed += m_dt;
 
+
+
+		if (m_RPickUpSpawnTimeElapsed > m_RPickUpSpawnTime)
+		{
+			SpawnRPickUp();
+			m_RPickUpSpawnTimeElapsed = 0;
+			m_RPickUpSpawnTime = m_RG(6) + 1;
+		}
+		if (m_LPickUpSpawnTimeElapsed > m_LPickUpSpawnTime)
+		{
+			SpawnLPickUp();
+			m_LPickUpSpawnTimeElapsed = 0;
+			m_LPickUpSpawnTime = m_RG(6) + 1;
+		}
+
+		m_pPlayer2->Update(m_dt);
+		m_pPlayer1->Update(m_dt);
+	}
+	
+	
 	//BACKGROUND DRAWING
 	SetRenderColor("white");
 	SDL_Rect rec = { 0, 0, MyWindow::m_Width, MyWindow::m_Height };
@@ -665,32 +709,13 @@ void SDLHelper::ShowGameOn()
 	SDL_RenderCopy(m_pRenderer, m_pP1BG, NULL, &rec);
 	SDL_RenderCopy(m_pRenderer, m_pP2BG, NULL, &rec);
 	SDL_RenderCopy(m_pRenderer, m_pbackground, NULL, &rec);
-
-
-	if (m_RPickUpSpawnTimeElapsed > m_RPickUpSpawnTime)
-	{
-		SpawnRPickUp();
-		m_RPickUpSpawnTimeElapsed = 0;
-		m_RPickUpSpawnTime = m_RG(6) + 1;
-	}
-	if (m_LPickUpSpawnTimeElapsed > m_LPickUpSpawnTime)
-	{
-		SpawnLPickUp();
-		m_LPickUpSpawnTimeElapsed = 0;
-		m_LPickUpSpawnTime = m_RG(6) + 1;
-	}
-
+	
+	//PLAYER 1
+	m_pPlayer1->Render();
+	//PLAYER 2	
+	m_pPlayer2->Render();
 	UpdateProjectiles();
 	UpdatePickUp();
-
-	//PLAYER 1
-	m_pPlayer1->Update(m_dt);
-	m_pPlayer1->Render();
-
-	//PLAYER 2
-	m_pPlayer2->Update(m_dt);
-	m_pPlayer2->Render();
-
 	//UI STUFF 
 	m_pInGameSizeP1->LoadTextFile(m_pFont2, "Size: " + std::to_string(m_pPlayer1->getWidth()), GameEntity::m_P1color);
 	m_pInGameSizeP2->LoadTextFile(m_pFont2, "Size: " + std::to_string(m_pPlayer2->getWidth()), GameEntity::m_P2color);
@@ -736,7 +761,8 @@ void SDLHelper::LoadMainMenu()
 
 void SDLHelper::LoadPaused()
 {
-
+	m_pPaused->LoadTextFile(m_pFont2, "PAUSED ", "royalblue");
+	*m_pLoadedState = LoadedState::PAUSED;
 }
 
 void SDLHelper::LoadP1Win()
