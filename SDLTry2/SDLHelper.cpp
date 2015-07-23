@@ -527,10 +527,8 @@ void SDLHelper::MouseHandler(SDL_Event &e)
 					}
 					else if (m_Buttons[i]->m_pButtonTex->m_Clicked && m_Buttons[i]->m_pButtonTex->m_name == "retryButt")
 					{
-						ShowGameOn();
-						LoadGameOn();
 						*m_pGameState = GameState::GAMEON;
-						*m_pLoadedState = LoadedState::GAMEON;
+						*m_pLoadedState = LoadedState::NONE;
 					}
 					else if (m_Buttons[i]->m_pButtonTex->m_Clicked && m_Buttons[i]->m_pButtonTex->m_name == "quitButt")
 					{
@@ -820,6 +818,8 @@ void SDLHelper::ShowGameOn()
 //LOAD SCREENS**********************************************
 void SDLHelper::LoadMainMenu()
 {
+	GameEntity::m_P1color = "";
+	GameEntity::m_P2color = "";
 	m_pbackground = loadTexture("Pics/mainmenu.png");
 
 	if (!m_Buttons.empty())	{m_Buttons.clear();}
