@@ -275,7 +275,7 @@ void SDLHelper::UpdateProjectiles()
 	{
 		for (int i = 0; i < m_P1Projectiles.size(); i++)
 		{
-			if (*m_pGameState != GameState::PAUSED)
+			if (*m_pGameState != GameState::PAUSED && *m_pGameState != GameState::P1WIN && *m_pGameState != GameState::P2WIN)
 			{
 				m_P1Projectiles[i]->m_pProjTex->Update(m_dt);
 			}
@@ -301,7 +301,7 @@ void SDLHelper::UpdateProjectiles()
 	{
 		for (int i = 0; i < m_P2Projectiles.size(); i++)
 		{
-			if (*m_pGameState != GameState::PAUSED)
+			if (*m_pGameState != GameState::PAUSED && *m_pGameState != GameState::P1WIN && *m_pGameState != GameState::P2WIN)
 			{
 				m_P2Projectiles[i]->m_pProjTex->Update(m_dt);
 			}
@@ -495,7 +495,7 @@ void SDLHelper::MouseHandler(SDL_Event &e)
 	case SDL_MOUSEBUTTONDOWN:
 		if (*m_pGameState == GameState::GAMEON && *m_pLoadedState == LoadedState::GAMEON)
 		{
-			if (m_pPlayer1->getCurrAmmo() > 0 && *m_pGameState != GameState::PAUSED)
+			if (m_pPlayer2->getCurrAmmo() > 0 && *m_pGameState != GameState::PAUSED)
 			{
 				SpawnProjectile(false, true);
 				m_pPlayer2->decreaseCurrAmmo();
@@ -657,12 +657,20 @@ void SDLHelper::ShowPaused()
 
 void SDLHelper::ShowP1Win()
 {
-
+	if (*m_pLoadedState != LoadedState::P1WIN){ LoadP1Win(); }
+	DrawRect(0, 0, MyWindow::getWidth(), MyWindow::getHeight(), "lightgray");
+	ShowGameOn();
+	m_pPaused->setPos(MyWindow::getWidth() / 2 - 150, MyWindow::getHeight() / 2 - 50);
+	m_pPaused->Render();
 }
 
 void SDLHelper::ShowP2Win()
 {
-
+	if (*m_pLoadedState != LoadedState::P2WIN){ LoadP2Win(); }
+	DrawRect(0, 0, MyWindow::getWidth(), MyWindow::getHeight(), "lightgray");
+	ShowGameOn();
+	m_pPaused->setPos(MyWindow::getWidth() / 2 - 150, MyWindow::getHeight() / 2 - 50);
+	m_pPaused->Render();
 }
 
 void SDLHelper::ShowCharSelection()
@@ -674,8 +682,8 @@ void SDLHelper::ShowCharSelection()
 void SDLHelper::ShowGameOn()
 {
 	//CHECK IF LOADED
-	if (*m_pLoadedState != LoadedState::GAMEON && *m_pLoadedState != LoadedState::PAUSED){ LoadGameOn(); }
-	if (*m_pGameState != GameState::PAUSED)
+	if (*m_pLoadedState != LoadedState::GAMEON && *m_pLoadedState != LoadedState::PAUSED && *m_pLoadedState != LoadedState::P1WIN && *m_pLoadedState != LoadedState::P2WIN){ LoadGameOn(); }
+	if (*m_pGameState != GameState::PAUSED && *m_pGameState != GameState::P1WIN && *m_pGameState != GameState::P2WIN)
 	{
 		m_RPickUpSpawnTimeElapsed += m_dt;
 		m_LPickUpSpawnTimeElapsed += m_dt;
@@ -767,12 +775,14 @@ void SDLHelper::LoadPaused()
 
 void SDLHelper::LoadP1Win()
 {
-
+	m_pPaused->LoadTextFile(m_pFont2, "P1Win ", "royalblue");
+	*m_pLoadedState = LoadedState::P1WIN;
 }
 
 void SDLHelper::LoadP2Win()
 {
-
+	m_pPaused->LoadTextFile(m_pFont2, "P2Win ", "royalblue");
+	*m_pLoadedState = LoadedState::P2WIN;
 }
 
 void SDLHelper::LoadCharSelection()
