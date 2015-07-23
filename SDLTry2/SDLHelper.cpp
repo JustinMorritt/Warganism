@@ -80,10 +80,10 @@ void SDLHelper::loadMedia()
 	//TITLE
 	m_pInGameTitle = new GameEntity(0, 0, 300, 80, 100, 5, "Title", m_pRenderer, false);
 
-	m_pInGameSizeP1 = new GameEntity(0, 0, 150, 80, 0, 0, "P1Size", m_pRenderer, false);
-	m_pInGameSizeP2 = new GameEntity(0, 0, 150, 80, 0, 0, "P2Size", m_pRenderer, false);
-	m_pInGameAmmoP1 = new GameEntity(0, 0, 150, 80, 0, 0, "P1Ammo", m_pRenderer, false);
-	m_pInGameAmmoP2 = new GameEntity(0, 0, 150, 80, 0, 0, "P2Ammo", m_pRenderer, false);
+	m_pInGameSizeP1 = new GameEntity(0, 0, 100, 40, 0, 0, "P1Size", m_pRenderer, false);
+	m_pInGameSizeP2 = new GameEntity(0, 0, 100, 40, 0, 0, "P2Size", m_pRenderer, false);
+	m_pInGameAmmoP1 = new GameEntity(0, 0, 100, 40, 0, 0, "P1Ammo", m_pRenderer, false);
+	m_pInGameAmmoP2 = new GameEntity(0, 0, 100, 40, 0, 0, "P2Ammo", m_pRenderer, false);
 	m_pPaused = new GameEntity(0, 0, 300, 80, 0, 0, "Paused", m_pRenderer, false);
 }
 
@@ -783,11 +783,23 @@ void SDLHelper::ShowGameOn()
 	m_pPlayer2->Render();
 	UpdateProjectiles();
 	UpdatePickUp();
+
+
 	//UI STUFF 
-	m_pInGameSizeP1->LoadTextFile(m_pFont2, "Size: " + std::to_string(m_pPlayer1->getWidth()), "black");
-	m_pInGameSizeP2->LoadTextFile(m_pFont2, "Size: " + std::to_string(m_pPlayer2->getWidth()), "black");
-	m_pInGameAmmoP1->LoadTextFile(m_pFont2, "Ammo: " + std::to_string(m_pPlayer1->getCurrAmmo()), "black");
-	m_pInGameAmmoP2->LoadTextFile(m_pFont2, "Ammo: " + std::to_string(m_pPlayer2->getCurrAmmo()), "black");
+
+	m_pInGameSizeP1->LoadTextFile(m_pFont2, "Size: " + std::to_string(m_pPlayer1->getWidth()) + "mm", "black");
+	m_pInGameSizeP2->LoadTextFile(m_pFont2, "Size: " + std::to_string(m_pPlayer2->getWidth()) + "mm", "black");
+
+	m_pInGameAmmoP1->LoadTextFile(m_pFont2, "Amoeba: " + std::to_string(m_pPlayer1->getCurrAmmo()), "black");
+	m_pInGameAmmoP2->LoadTextFile(m_pFont2, "Amoeba: " + std::to_string(m_pPlayer2->getCurrAmmo()), "black");
+
+	//RE-POSITION ... if window size changes
+	m_pInGameTitle->setPos((MyWindow::m_Width / 2) - (m_pInGameTitle->getWidth() / 2), 0);
+	m_pInGameSizeP1->setPos((MyWindow::m_Width / 2) - (MyWindow::m_Width / 4 + m_pInGameSizeP1->getWidth()), 10);
+	m_pInGameSizeP2->setPos((MyWindow::m_Width / 2) + (MyWindow::m_Width / 4), 10);
+	m_pInGameAmmoP1->setPos((MyWindow::m_Width / 2) - (MyWindow::m_Width / 4 + m_pInGameAmmoP1->getWidth()), MyWindow::m_Height - 50);
+	m_pInGameAmmoP2->setPos((MyWindow::m_Width / 2) + (MyWindow::m_Width / 4), MyWindow::m_Height - 50);
+
 
 	m_pInGameTitle->Render(); //RENDER THE TITLE TEXT
 	m_pInGameSizeP1->Render();
@@ -1039,10 +1051,10 @@ void SDLHelper::LoadGameOn()
 	
 
 	m_pInGameTitle->setPos((MyWindow::m_Width / 2) - (m_pInGameTitle->getWidth() / 2), 0);
-	m_pInGameSizeP1->setPos(m_pInGameTitle->getPos()->x - 250, m_pInGameTitle->getPos()->y);
-	m_pInGameSizeP2->setPos(m_pInGameTitle->getPos()->x + 300, m_pInGameTitle->getPos()->y);
-	m_pInGameAmmoP1->setPos(m_pInGameTitle->getPos()->x - 250, m_pInGameTitle->getPos()->y + 50);
-	m_pInGameAmmoP2->setPos(m_pInGameTitle->getPos()->x + 300, m_pInGameTitle->getPos()->y + 50);
+	m_pInGameSizeP1->setPos((MyWindow::m_Width / 2) - (MyWindow::m_Width / 4 + m_pInGameSizeP1->getWidth()), 10);
+	m_pInGameSizeP2->setPos((MyWindow::m_Width / 2) + (MyWindow::m_Width / 4), 10);
+	m_pInGameAmmoP1->setPos((MyWindow::m_Width / 2) - (MyWindow::m_Width / 4 + m_pInGameAmmoP1->getWidth()), MyWindow::m_Height - 50);
+	m_pInGameAmmoP2->setPos((MyWindow::m_Width / 2) + (MyWindow::m_Width / 4),  MyWindow::m_Height-50);
 
 
 	*m_pLoadedState = LoadedState::GAMEON;
