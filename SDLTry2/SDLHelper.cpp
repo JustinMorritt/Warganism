@@ -67,7 +67,7 @@ SDLHelper::SDLHelper() : m_dt(0.0f), m_done(false)
 	//Get window surface
 	m_pScreenSurface = SDL_GetWindowSurface(m_pMyWindow->m_pWindow);
 
-
+	
 	m_RPickUpSpawnTime = m_RG(15 - 7) + 7;
 	m_LPickUpSpawnTime = m_RG(15 - 7) + 7;
 	loadMedia();
@@ -1000,6 +1000,7 @@ void SDLHelper::LoadP2Win()
 	Button* retryBut = new Button(MyWindow::getWidth() / 2 + 200, MyWindow::getHeight() / 2 + 150, 300, 150, 0, m_pRenderer, "retryButt", 20);
 	
 	if (!m_Buttons.empty())	{m_Buttons.clear();}
+
 	
 	winBut->m_pButtonTex->LoadFile("Pics/P2Wins.png");
 	winBut->m_pButtonTex->UseMouseEffects(false,0);
@@ -1173,6 +1174,8 @@ void SDLHelper::LoadGameOn()
 	{
 		m_P2PickUps.clear();
 	}
+	if (!m_P1Projectiles.empty()) { m_P1Projectiles.clear(); }
+	if (!m_P2Projectiles.empty()) { m_P2Projectiles.clear(); }
 	//TITLE
 	m_pInGameTitle->LoadTextFile(m_pFont2, "Fight !", "royalblue");
 
@@ -1191,7 +1194,8 @@ void SDLHelper::LoadGameOn()
 	m_pInGameSizeP2->setPos((MyWindow::m_Width / 2) + (MyWindow::m_Width / 4), 10);
 	m_pInGameAmmoP1->setPos((MyWindow::m_Width / 2) - (MyWindow::m_Width / 4 + m_pInGameAmmoP1->getWidth()), MyWindow::m_Height - 50);
 	m_pInGameAmmoP2->setPos((MyWindow::m_Width / 2) + (MyWindow::m_Width / 4),  MyWindow::m_Height-50);
-
+	m_RPickUpSpawnTimeElapsed = 0;
+	m_LPickUpSpawnTimeElapsed = 0;
 
 	*m_pLoadedState = LoadedState::GAMEON;
 }
