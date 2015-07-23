@@ -475,17 +475,9 @@ void SDLHelper::MouseHandler(SDL_Event &e)
 		m_pPlayer2->SetMousePos(m_MouseX, m_MouseY);
 	}
 
-	if (m_Buttons.size() > 0)
-	{
-		for (int i = 0; i < m_Buttons.size(); i++)
-		{
-			m_Buttons[i]->m_pButtonTex->SetMousePos(m_MouseX, m_MouseY);
-		}
-	}
+	//std::cout << "Mouse X: " << x << " Mouse Y: " << y << std::endl;	//CHECK BOUNDS OF WHAT MOUSE IS IN ...
 
-	//std::cout << "Mouse X: " << x << " Mouse Y: " << y << std::endl;
-	//CHECK BOUNDS OF WHAT MOUSE IS IN ...
-	//m_pTexture->setPos((float)x, (float)y);
+
 
 	switch (e.type)
 	{
@@ -504,6 +496,16 @@ void SDLHelper::MouseHandler(SDL_Event &e)
 		}
 
 	   if (*m_pGameState == GameState::MAINMENU && *m_pLoadedState == LoadedState::MAINMENU || *m_pGameState == GameState::P2WIN && *m_pLoadedState == LoadedState::P2WIN || *m_pGameState == GameState::P1WIN && *m_pLoadedState == LoadedState::P1WIN)
+		{
+			if (m_Buttons.size() > 0)
+			{
+				for (int i = 0; i < m_Buttons.size(); i++)
+				{
+					m_Buttons[i]->m_pButtonTex->m_ClickDown = true;
+				}
+			}
+		}
+		else if (*m_pGameState == GameState::CHARACTERSELECT && *m_pLoadedState == LoadedState::CHARACTERSELECT)
 		{
 			if (m_Buttons.size() > 0)
 			{
@@ -549,6 +551,23 @@ void SDLHelper::MouseHandler(SDL_Event &e)
 				}
 			}
 		}
+		else if (*m_pGameState == GameState::CHARACTERSELECT && *m_pLoadedState == LoadedState::CHARACTERSELECT)
+		{
+			if (m_Buttons.size() > 0)
+			{
+				for (int i = 0; i < m_Buttons.size(); i++)
+				{
+					m_Buttons[i]->m_pButtonTex->m_ClickDown = false;
+					if (m_Buttons[i]->m_pButtonTex->m_Clicked && m_Buttons[i]->m_pButtonTex->m_name == "playButt")
+					{
+						*m_pGameState = GameState::GAMEON;
+					}
+				}
+			}
+		}
+
+
+
 		//std::cout << "Mouse CLICK UP " << std::endl;
 		break;
 	}
