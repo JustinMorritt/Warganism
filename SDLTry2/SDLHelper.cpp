@@ -59,12 +59,15 @@ SDLHelper::SDLHelper() : m_dt(0.0f), m_done(false)
 		printf("SDL_ttf could not initialize! SDL_ttf Error:\n", TTF_GetError());
 	}
 
+	if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096) == -1) { printf("SDL_ttf could not initialize! SDL_ttf Error:\n", Mix_GetError(); }
+
 	//Get window surface
 	m_pScreenSurface = SDL_GetWindowSurface(m_pMyWindow->m_pWindow);
 
 	m_RPickUpSpawnTime = m_RG(15 - 7) + 7;
 	m_LPickUpSpawnTime = m_RG(15 - 7) + 7;
 	loadMedia();
+	loadMusic();
 }
 
 
@@ -127,7 +130,7 @@ SDL_Texture* SDLHelper::loadText(std::string text, SDL_Color color, int font)
 	SDL_Surface* textSurface = TTF_RenderText_Solid(m_pFont1, text.c_str(), color);
 	if (textSurface == NULL)
 	{
-		printf("Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError());
+		printf("Unable to load music, SDL_Mixer Error: %s\n", TTF_GetError());
 	}
 	else
 	{
@@ -140,6 +143,19 @@ SDL_Texture* SDLHelper::loadText(std::string text, SDL_Color color, int font)
 	}
 	SDL_FreeSurface(textSurface);
 	return retText;
+
+}
+
+void SDLHelper::loadMusic()
+{
+	m_pSong1 = Mix_LoadMUS("");
+	m_pSong1 = Mix_LoadMUS("");
+	
+	m_pP1Fire = Mix_LoadWAV("");
+	m_pP2Fire = Mix_LoadWAV("");
+	m_pP1Hit = Mix_LoadWAV("");
+	m_pP2Hit = Mix_LoadWAV("");
+
 
 }
 
@@ -192,6 +208,10 @@ void SDLHelper::SpawnProjectile(bool p1, bool p2)
 {
 	if (p1)
 	{
+		if (m_pP1Fire != NULL)
+		{
+
+		}
 		Projectile* proj = new Projectile(m_pPlayer1->getCenter().x, m_pPlayer1->getCenter().y, m_pPlayer1->getWidth() / 2, m_pPlayer1->getHeight() / 2, m_pPlayer1->m_Roation, GameEntity::m_P1color, m_pRenderer, "P1projectile");
 		m_P1Projectiles.push_back(proj);
 	}

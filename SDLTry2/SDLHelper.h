@@ -13,6 +13,7 @@
 #include "PickUp.h"
 #include "randgen.h"
 #include "Button.h"
+#include "SDL_mixer.h"
 
 
 
@@ -104,6 +105,16 @@ private:
 	std::vector<PickUp*> m_P2PickUps;
 	std::vector<Button*> m_Buttons;
 
+
+	//Music files and Sound Effects
+	Mix_Music* m_pSong1               = NULL;
+	Mix_Music* m_pSong2               = NULL;
+
+	Mix_Chunk* m_pP1Fire			  = NULL;
+	Mix_Chunk* m_pP2Fire			  = NULL;
+	Mix_Chunk* m_pP1Hit				  = NULL;
+	Mix_Chunk* m_pP2Hit				  = NULL;
+
 public:
 
 
@@ -114,7 +125,7 @@ public:
 
 	//Loads media
 	void loadMedia();
-
+	void loadMusic();
 	SDL_Texture* loadTexture(std::string path);
 	SDL_Texture* loadText(std::string text, SDL_Color color, int font);
 
