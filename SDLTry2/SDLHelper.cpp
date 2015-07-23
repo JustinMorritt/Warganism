@@ -630,9 +630,6 @@ void SDLHelper::ShowMainMenu()
 	SDL_Rect rec = { 0, 0, MyWindow::m_Width, MyWindow::m_Height };
 	SDL_RenderCopy(m_pRenderer, m_pbackground, NULL, &rec);
 
-// 	m_pInGameTitle->setPos((MyWindow::m_Width / 2) - (m_pInGameTitle->getWidth() / 2), 0);
-// 	m_pInGameTitle->Render(); //RENDER THE TEST TEXT
-
 	if (m_Buttons.size() > 0)
 	{
 		for (int i = 0; i < m_Buttons.size(); i++)
@@ -642,9 +639,6 @@ void SDLHelper::ShowMainMenu()
 			m_Buttons[i]->m_pButtonTex->Render();
 		}
 	}
-
-// 	m_pInGameTitle->setPos((MyWindow::m_Width / 2) - (m_pInGameTitle->getWidth() / 2), 0);
-// 	m_pInGameTitle->Render(); //RENDER THE TITLE TEXT
 }
 
 void SDLHelper::ShowPaused()
@@ -772,6 +766,8 @@ void SDLHelper::ShowGameOn()
 	}
 }
 
+
+
 //LOAD SCREENS**********************************************
 void SDLHelper::LoadMainMenu()
 {
@@ -782,13 +778,13 @@ void SDLHelper::LoadMainMenu()
 		if (!m_Buttons.empty())
 		{
 			m_Buttons.clear();
-			std::cout << m_Buttons.size() << std::endl;
+			//std::cout << m_Buttons.size() << std::endl;
 		}
 	
 
 	//ADD BUTTONS
-	Button* playBut = new Button(MyWindow::m_Width / 2, MyWindow::m_Height / 2, 150, 60, 0, m_pRenderer, "playButt", 20);
-	playBut->m_pButtonTex->LoadFile("Pics/playButton.png");
+	Button* playBut = new Button(MyWindow::m_Width / 2, MyWindow::m_Height / 2, 250, 200, 0, m_pRenderer, "playButt", 20);
+	playBut->m_pButtonTex->LoadFile("Pics/playButt.png");
 	m_Buttons.push_back(playBut);
 	
 	*m_pLoadedState = LoadedState::MAINMENU;
