@@ -693,6 +693,20 @@ void SDLHelper::ShowCharSelection()
 {
 	//CHECK IF LOADED
 	if (*m_pLoadedState != LoadedState::CHARACTERSELECT){ LoadCharSelection(); }
+
+	SDL_Rect rec = { 0, 0, MyWindow::m_Width, MyWindow::m_Height };
+	SDL_RenderCopy(m_pRenderer, m_pbackground, NULL, &rec);
+
+	if (m_Buttons.size() > 0)
+	{
+		for (int i = 0; i < m_Buttons.size(); i++)
+		{
+			m_Buttons[i]->m_pButtonTex->SetMousePos(m_MouseX, m_MouseY);
+			m_Buttons[i]->m_pButtonTex->Update(m_dt);
+			m_Buttons[i]->m_pButtonTex->Render();
+		}
+	}
+
 }
 
 void SDLHelper::ShowGameOn()
@@ -771,19 +785,13 @@ void SDLHelper::ShowGameOn()
 //LOAD SCREENS**********************************************
 void SDLHelper::LoadMainMenu()
 {
-	//TITLE
-	m_pInGameTitle->LoadTextFile(m_pFont2, "Warganism", "royalblue");
 	m_pbackground = loadTexture("Pics/mainmenu.png");
 
-		if (!m_Buttons.empty())
-		{
-			m_Buttons.clear();
-			//std::cout << m_Buttons.size() << std::endl;
-		}
+	if (!m_Buttons.empty())	{m_Buttons.clear();}
 	
 
 	//ADD BUTTONS
-	Button* playBut = new Button(MyWindow::m_Width / 2, MyWindow::m_Height / 2, 250, 200, 0, m_pRenderer, "playButt", 20);
+	Button* playBut = new Button(MyWindow::m_Width / 2, MyWindow::m_Height / 2, 250, 180, 0, m_pRenderer, "playButt", 20);
 	playBut->m_pButtonTex->LoadFile("Pics/playButt.png");
 	m_Buttons.push_back(playBut);
 	
@@ -836,7 +844,18 @@ void SDLHelper::LoadP2Win()
 
 void SDLHelper::LoadCharSelection()
 {
-	m_pbackground = loadTexture("Pics/background.png");
+	if (!m_Buttons.empty())	{ m_Buttons.clear(); }
+
+
+	//ADD BUTTONS
+	Button* playBut = new Button(MyWindow::m_Width / 2, MyWindow::m_Height / 2, 250, 180, 0, m_pRenderer, "whiteButt", 20);
+	playBut->m_pButtonTex->LoadFile("Pics/whiteButt.png");
+	m_Buttons.push_back(playBut);
+
+
+	m_pbackground = loadTexture("Pics/charmenu.png");
+
+	*m_pLoadedState = LoadedState::CHARACTERSELECT;
 }
 
 void SDLHelper::LoadGameOn()
