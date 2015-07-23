@@ -68,8 +68,8 @@
     <ClInclude Include="Button.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SDL2-2.0.3\include\SDL_mixer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="SDL2-2.0.3\lib\x86\SDL2_mixer.lib" />
   </ItemGroup>
 </Project>
