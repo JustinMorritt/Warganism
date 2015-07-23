@@ -1,5 +1,5 @@
 #include "SDLHelper.h"
-
+//TODO re colour all the colour buttons to be the little dude
 
 
 
@@ -83,13 +83,7 @@ void SDLHelper::loadMedia()
 	m_pFont3 = TTF_OpenFont("Fonts/ANUDRG__.ttf", 300);
 	if (m_pFont3 == NULL){ std::cout << "ERROR FONT NOT LOADED ... NULL" << std::endl; }
 
-	//TITLE
-	m_pInGameTitle = new GameEntity(0, 0, 300, 80, 100, 5, "Title", m_pRenderer, false);
 
-	m_pInGameSizeP1 = new GameEntity(0, 0, 100, 40, 0, 0, "P1Size", m_pRenderer, false);
-	m_pInGameSizeP2 = new GameEntity(0, 0, 100, 40, 0, 0, "P2Size", m_pRenderer, false);
-	m_pInGameAmmoP1 = new GameEntity(0, 0, 100, 40, 0, 0, "P1Ammo", m_pRenderer, false);
-	m_pInGameAmmoP2 = new GameEntity(0, 0, 100, 40, 0, 0, "P2Ammo", m_pRenderer, false);
 	m_pPaused = new GameEntity(0, 0, 300, 80, 0, 0, "Paused", m_pRenderer, false);
 }
 
@@ -935,7 +929,7 @@ void SDLHelper::LoadP1Win()
 
 	if (!m_Buttons.empty()){m_Buttons.clear();}
 
-	winBut->m_pButtonTex->LoadFile("Pics/P2Wins.png");
+	winBut->m_pButtonTex->LoadFile("Pics/P1Wins.png");
 	winBut->m_pButtonTex->UseMouseEffects(false,0);
 	quitBut->m_pButtonTex->LoadFile("Pics/quitButt.png");
 	retryBut->m_pButtonTex->LoadFile("Pics/restartButt.png");
@@ -975,90 +969,90 @@ void SDLHelper::LoadCharSelection()
 
 
 	//ADD BUTTONS
-	Button* playBut = new Button(100, MyWindow::m_Height / 2,  170, 100, 0, m_pRenderer, "colourButt", 20);
+	Button* playBut = new Button(100, MyWindow::m_Height / 2, 128, 128, 0, m_pRenderer, "colourButt", 20);
 	playBut->m_pButtonTex->LoadFile("Pics/whiteButt.png");
 	playBut->m_pButtonTex->SetColor("white");
 	m_Buttons.push_back(playBut);
 
-	Button* playBut2 = new Button(250, MyWindow::m_Height / 2, 170, 100, 0, m_pRenderer, "colourButt", 20);
+	Button* playBut2 = new Button(250, MyWindow::m_Height / 2, 128, 128, 0, m_pRenderer, "colourButt", 20);
 	playBut2->m_pButtonTex->LoadFile("Pics/yellowButt.png");
 	playBut2->m_pButtonTex->SetColor("yellow");
 	m_Buttons.push_back(playBut2);
 
-	Button* playBut3 = new Button(400, MyWindow::m_Height / 2, 170, 100, 0, m_pRenderer, "colourButt", 20);
+	Button* playBut3 = new Button(400, MyWindow::m_Height / 2, 128, 128, 0, m_pRenderer, "colourButt", 20);
 	playBut3->m_pButtonTex->LoadFile("Pics/redButt.png");
 	playBut3->m_pButtonTex->SetColor("red");
 	m_Buttons.push_back(playBut3);
 
-	Button* playBut4 = new Button(550, MyWindow::m_Height / 2, 170, 100, 0, m_pRenderer, "colourButt", 20);
+	Button* playBut4 = new Button(550, MyWindow::m_Height / 2, 128, 128, 0, m_pRenderer, "colourButt", 20);
 	playBut4->m_pButtonTex->LoadFile("Pics/rblueButt.png");
 	playBut4->m_pButtonTex->SetColor("royalblue");
 	m_Buttons.push_back(playBut4);
 
-	Button* playBut5 = new Button(700, MyWindow::m_Height / 2, 170, 100, 0, m_pRenderer, "colourButt", 20);
+	Button* playBut5 = new Button(700, MyWindow::m_Height / 2, 128, 128, 0, m_pRenderer, "colourButt", 20);
 	playBut5->m_pButtonTex->LoadFile("Pics/purpleButt.png");
 	playBut5->m_pButtonTex->SetColor("purple");
 	m_Buttons.push_back(playBut5);
 
-	Button* playBut6 = new Button(850, MyWindow::m_Height / 2, 170, 100, 0, m_pRenderer, "colourButt", 20);
+	Button* playBut6 = new Button(850, MyWindow::m_Height / 2, 128, 128, 0, m_pRenderer, "colourButt", 20);
 	playBut6->m_pButtonTex->LoadFile("Pics/pinkButt.png");
 	playBut6->m_pButtonTex->SetColor("pink");
 	m_Buttons.push_back(playBut6);
 
 	//NEXT ROW=========================================================================================
 
-	Button* playBut7 = new Button(100, MyWindow::m_Height / 2 + 100, 170, 100, 0, m_pRenderer, "colourButt", 20);
+	Button* playBut7 = new Button(100, MyWindow::m_Height / 2 + 100, 128, 128, 0, m_pRenderer, "colourButt", 20);
 	playBut7->m_pButtonTex->LoadFile("Pics/orangeButt.png");
 	playBut7->m_pButtonTex->SetColor("orange");
 	m_Buttons.push_back(playBut7);
 
-	Button* playBut8 = new Button(250, MyWindow::m_Height / 2 + 100, 170, 100, 0, m_pRenderer, "colourButt", 20);
+	Button* playBut8 = new Button(250, MyWindow::m_Height / 2 + 100, 128, 128, 0, m_pRenderer, "colourButt", 20);
 	playBut8->m_pButtonTex->LoadFile("Pics/mintButt.png");
 	playBut8->m_pButtonTex->SetColor("mintgreen");
 	m_Buttons.push_back(playBut8);
 
-	Button* playBut9 = new Button(400, MyWindow::m_Height / 2 + 100, 170, 100, 0, m_pRenderer, "colourButt", 20);
+	Button* playBut9 = new Button(400, MyWindow::m_Height / 2 + 100, 128, 128, 0, m_pRenderer, "colourButt", 20);
 	playBut9->m_pButtonTex->LoadFile("Pics/greenButt.png");
 	playBut9->m_pButtonTex->SetColor("green");
 	m_Buttons.push_back(playBut9);
 
-	Button* playBut10 = new Button(550, MyWindow::m_Height / 2 + 100, 170, 100, 0, m_pRenderer, "colourButt", 20);
+	Button* playBut10 = new Button(550, MyWindow::m_Height / 2 + 100, 128, 128, 0, m_pRenderer, "colourButt", 20);
 	playBut10->m_pButtonTex->LoadFile("Pics/grayButt.png");
 	playBut10->m_pButtonTex->SetColor("darkgray");
 	m_Buttons.push_back(playBut10);
 
-	Button* playBut11 = new Button(700, MyWindow::m_Height / 2 + 100, 170, 100, 0, m_pRenderer, "colourButt", 20);
+	Button* playBut11 = new Button(700, MyWindow::m_Height / 2 + 100, 128, 128, 0, m_pRenderer, "colourButt", 20);
 	playBut11->m_pButtonTex->LoadFile("Pics/goldButt.png");
 	playBut11->m_pButtonTex->SetColor("gold");
 	m_Buttons.push_back(playBut11);
 
-	Button* playBut12 = new Button(850, MyWindow::m_Height / 2 + 100, 170, 100, 0, m_pRenderer, "colourButt", 20);
+	Button* playBut12 = new Button(850, MyWindow::m_Height / 2 + 100, 128, 128, 0, m_pRenderer, "colourButt", 20);
 	playBut12->m_pButtonTex->LoadFile("Pics/fuchsiaButt.png");
 	playBut12->m_pButtonTex->SetColor("fuchsia");
 	m_Buttons.push_back(playBut12);
 
 	//NEXT ROW=========================================================================================
-	Button* playBut13 = new Button(100, MyWindow::m_Height / 2 + 200, 170, 100, 0, m_pRenderer, "colourButt", 20);
+	Button* playBut13 = new Button(100, MyWindow::m_Height / 2 + 200, 128, 128, 0, m_pRenderer, "colourButt", 20);
 	playBut13->m_pButtonTex->LoadFile("Pics/dgreenButt.png");
 	playBut13->m_pButtonTex->SetColor("darkgreen");
 	m_Buttons.push_back(playBut13);
 
-	Button* playBut14 = new Button(250, MyWindow::m_Height / 2 + 200, 170, 100, 0, m_pRenderer, "colourButt", 20);
+	Button* playBut14 = new Button(250, MyWindow::m_Height / 2 + 200, 128, 128, 0, m_pRenderer, "colourButt", 20);
 	playBut14->m_pButtonTex->LoadFile("Pics/brownButt.png");
 	playBut14->m_pButtonTex->SetColor("brown");
 	m_Buttons.push_back(playBut14);
 
-	Button* playBut15 = new Button(400, MyWindow::m_Height / 2 + 200, 170, 100, 0, m_pRenderer, "colourButt", 20);
+	Button* playBut15 = new Button(400, MyWindow::m_Height / 2 + 200, 128, 128, 0, m_pRenderer, "colourButt", 20);
 	playBut15->m_pButtonTex->LoadFile("Pics/blueButt.png");
 	playBut15->m_pButtonTex->SetColor("blue");
 	m_Buttons.push_back(playBut15);
 
-	Button* playBut16 = new Button(550, MyWindow::m_Height / 2 + 200, 170, 100, 0, m_pRenderer, "colourButt", 20);
+	Button* playBut16 = new Button(550, MyWindow::m_Height / 2 + 200, 128, 128, 0, m_pRenderer, "colourButt", 20);
 	playBut16->m_pButtonTex->LoadFile("Pics/blackButt.png");
 	playBut16->m_pButtonTex->SetColor("black");
 	m_Buttons.push_back(playBut16);
 
-	Button* playBut17 = new Button(700, MyWindow::m_Height / 2 + 200, 170, 100, 0, m_pRenderer, "colourButt", 20);
+	Button* playBut17 = new Button(700, MyWindow::m_Height / 2 + 200, 128, 128, 0, m_pRenderer, "colourButt", 20);
 	playBut17->m_pButtonTex->LoadFile("Pics/babyButt.png");
 	playBut17->m_pButtonTex->SetColor("babyblue");
 	m_Buttons.push_back(playBut17);
@@ -1081,6 +1075,14 @@ void SDLHelper::LoadGameOn()
 	// 	m_pTexture->SetAnimation(0, 256, 4, 128, 128, 200, true);  // Walk ForWard	[2]
 	// 	m_pTexture->SetAnimation(0, 384, 4, 128, 128, 200, true);  // Walk Backward	[3]
 	// 	m_pTexture->SetAnimation(0, 512, 19, 128, 128, 50, false); // EXPLOSION	[4]
+
+	//TITLE
+	m_pInGameTitle = new GameEntity(0, 0, 300, 80, 100, 5, "Title", m_pRenderer, false);
+
+	m_pInGameSizeP1 = new GameEntity(0, 0, 160, 60, 0, 0, "P1Size", m_pRenderer, false);
+	m_pInGameSizeP2 = new GameEntity(0, 0, 160, 60, 0, 0, "P2Size", m_pRenderer, false);
+	m_pInGameAmmoP1 = new GameEntity(0, 0, 160, 60, 0, 0, "P1Ammo", m_pRenderer, false);
+	m_pInGameAmmoP2 = new GameEntity(0, 0, 160, 60, 0, 0, "P2Ammo", m_pRenderer, false);
 
 	//COLORS .. SO FAR ****************USE LOWERCASE*****************
 	//Pink			//White		//Black			//Red		//Green	
