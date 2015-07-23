@@ -21,6 +21,10 @@ SDLHelper::SDLHelper() : m_dt(0.0f), m_done(false)
 	m_pSoundState = new SoundState;
 	*m_pSoundState = SoundState::SOUNDON;
 
+	//SET GAME MODE
+	m_pGameMode = new GameMode;
+	*m_pGameMode = GameMode::PVP;
+
 	//SDL INIT
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
 	{
@@ -630,6 +634,22 @@ void SDLHelper::MouseHandler(SDL_Event &e)
 							Mix_ResumeMusic();
 						}
 					}
+					else if (m_Buttons[i]->m_pButtonTex->m_Clicked && m_Buttons[i]->m_pButtonTex->m_name == "modeButt")
+					{
+						if (*m_pGameMode == GameMode::PVP)
+						{
+							*m_pGameMode = GameMode::PVCPU;
+							*m_pLoadedState = LoadedState::NONE;
+							Mix_PauseMusic();
+						}
+						else
+						{
+							*m_pGameMode = GameMode::PVP;
+							*m_pLoadedState = LoadedState::NONE;
+							Mix_ResumeMusic();
+						}
+					}
+
 				}
 			}
 		}
@@ -927,9 +947,11 @@ void SDLHelper::LoadMainMenu()
 	
 
 	//ADD BUTTONS
-	Button* playBut = new Button(MyWindow::m_Width / 2, MyWindow::m_Height / 2, 250, 180, 0, m_pRenderer, "playButt", 20);
-	Button* soundBut = new Button(160, MyWindow::m_Height / 2,     250, 100, 0, m_pRenderer, "soundButt", 20);
-	Button* musicBut = new Button(160, MyWindow::m_Height / 2 + 100, 250, 100, 0, m_pRenderer, "musicButt", 20);
+	Button* playBut  = new Button(MyWindow::m_Width / 2, MyWindow::m_Height / 2, 250, 180, 0, m_pRenderer, "playButt", 20);
+	Button* soundBut = new Button(160, MyWindow::m_Height / 2 + 50 ,     250, 100, 0, m_pRenderer, "soundButt", 20);
+	Button* musicBut = new Button(160, MyWindow::m_Height / 2 + 130, 250, 100, 0, m_pRenderer, "musicButt", 20);
+	Button* ModeBut   = new Button(170, MyWindow::m_Height / 2 - 30, 350, 150, 0, m_pRenderer, "modeButt", 20);
+
 
 	playBut->m_pButtonTex->LoadFile("Pics/playButt.png");
 
@@ -945,8 +967,13 @@ void SDLHelper::LoadMainMenu()
 	{
 		musicBut->m_pButtonTex->LoadFile("Pics/musicOffButt.png");
 	}
+	if (*m_pGameMode == GameMode::PVP){ ModeBut->m_pButtonTex->LoadFile("Pics/PvPButt.png"); }
+	else
+	{
+		ModeBut->m_pButtonTex->LoadFile("Pics/PvCPUButt.png");
+	}
 
-
+	m_Buttons.push_back(ModeBut);
 	m_Buttons.push_back(playBut);
 	m_Buttons.push_back(soundBut);
 	m_Buttons.push_back(musicBut);

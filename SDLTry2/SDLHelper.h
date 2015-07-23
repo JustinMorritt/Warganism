@@ -52,6 +52,12 @@ enum class MusicState
 	MUSICOFF
 };
 
+enum class GameMode
+{
+	PVP,
+	PVCPU
+};
+
 
 class SDLHelper
 {
@@ -62,7 +68,7 @@ private:
 	LoadedState* m_pLoadedState;
 	MusicState* m_pMusicState;
 	SoundState* m_pSoundState;
-
+	GameMode* m_pGameMode;
 
 	RandGen m_RG;
 	float m_dt;
