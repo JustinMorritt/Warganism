@@ -1122,12 +1122,12 @@ void SDLHelper::LoadGameOn()
 	// 	m_pTexture->SetAnimation(0, 512, 19, 128, 128, 50, false); // EXPLOSION	[4]
 
 	//TITLE
-	m_pInGameTitle = new GameEntity(0, 0, 300, 80, 100, 5, "Title", m_pRenderer, false);
+	m_pInGameTitle = new GameEntity(0, 0, 300, 100, 100, 5, "Title", m_pRenderer, false);
 
-	m_pInGameSizeP1 = new GameEntity(0, 0, 160, 60, 0, 0, "P1Size", m_pRenderer, false);
-	m_pInGameSizeP2 = new GameEntity(0, 0, 160, 60, 0, 0, "P2Size", m_pRenderer, false);
-	m_pInGameAmmoP1 = new GameEntity(0, 0, 160, 60, 0, 0, "P1Ammo", m_pRenderer, false);
-	m_pInGameAmmoP2 = new GameEntity(0, 0, 160, 60, 0, 0, "P2Ammo", m_pRenderer, false);
+	m_pInGameSizeP1 = new GameEntity(0, 0, 180, 40, 0, 0, "P1Size", m_pRenderer, false);
+	m_pInGameSizeP2 = new GameEntity(0, 0, 180, 40, 0, 0, "P2Size", m_pRenderer, false);
+	m_pInGameAmmoP1 = new GameEntity(0, 0, 180, 40, 0, 0, "P1Ammo", m_pRenderer, false);
+	m_pInGameAmmoP2 = new GameEntity(0, 0, 180, 40, 0, 0, "P2Ammo", m_pRenderer, false);
 
 	//COLORS .. SO FAR ****************USE LOWERCASE*****************
 	//Pink			//White		//Black			//Red		//Green	
