@@ -1226,6 +1226,8 @@ void SDLHelper::close()
 	m_pP2Fire = NULL;
 	m_pP2Hit = NULL;
 
+
+
 	//free the music
 	Mix_FreeMusic(m_pSong1);
 	Mix_FreeMusic(m_pSong2);
@@ -1235,10 +1237,13 @@ void SDLHelper::close()
 
 	//Free global font
 	TTF_CloseFont(m_pFont1);
+	Mix_CloseAudio();
+
 	m_pFont1 = NULL;
 
 	//Quit SDL subsystems
 	IMG_Quit();
 	SDL_Quit();
 	TTF_Quit();
+	Mix_Quit();
 }
