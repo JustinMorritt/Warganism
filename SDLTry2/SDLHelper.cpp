@@ -154,7 +154,8 @@ void SDLHelper::SetDT(float dt)
 void SDLHelper::Update()
 {
 
-
+	std::cout << "GameState = " + std::to_string((int)*m_pGameState) << std::endl;
+	std::cout << "GameState = " + std::to_string((int)*m_pLoadedState) << std::endl;
 	HandleEvents();
 
 	//Clear screen
@@ -502,7 +503,7 @@ void SDLHelper::MouseHandler(SDL_Event &e)
 			}
 		}
 
-		if (*m_pGameState == GameState::MAINMENU && *m_pLoadedState == LoadedState::MAINMENU)
+	   if (*m_pGameState == GameState::MAINMENU && *m_pLoadedState == LoadedState::MAINMENU || *m_pGameState == GameState::P2WIN && *m_pLoadedState == LoadedState::P2WIN || *m_pGameState == GameState::P1WIN && *m_pLoadedState == LoadedState::P1WIN)
 		{
 			if (m_Buttons.size() > 0)
 			{
@@ -520,7 +521,7 @@ void SDLHelper::MouseHandler(SDL_Event &e)
 
 	case SDL_MOUSEBUTTONUP:
 
-		if (*m_pGameState == GameState::MAINMENU && *m_pLoadedState == LoadedState::MAINMENU)
+		if (*m_pGameState == GameState::MAINMENU && *m_pLoadedState == LoadedState::MAINMENU || *m_pGameState == GameState::P2WIN && *m_pLoadedState == LoadedState::P2WIN || *m_pGameState == GameState::P1WIN && *m_pLoadedState == LoadedState::P1WIN  )
 		{
 			if (m_Buttons.size() > 0)
 			{
@@ -530,6 +531,20 @@ void SDLHelper::MouseHandler(SDL_Event &e)
 					if (m_Buttons[i]->m_pButtonTex->m_Clicked && m_Buttons[i]->m_pButtonTex->m_name == "playButt")
 					{
 						*m_pGameState = GameState::GAMEON;
+					}
+
+					else if (m_Buttons[i]->m_pButtonTex->m_Clicked && m_Buttons[i]->m_pButtonTex->m_name == "retryButt")
+					{
+						*m_pGameState = GameState::GAMEON;
+						*m_pLoadedState = LoadedState::GAMEON;
+						ShowGameOn();
+						LoadGameOn();
+						
+					}
+					else if (m_Buttons[i]->m_pButtonTex->m_Clicked && m_Buttons[i]->m_pButtonTex->m_name == "quitButt")
+					{
+						*m_pGameState = GameState::MAINMENU;
+						
 					}
 				}
 			}
@@ -882,6 +897,14 @@ void SDLHelper::LoadGameOn()
 	m_pPlayer2->UseGoToPoint(true);
 	m_pPlayer2->SetColorMod(GameEntity::m_P2color); //COLOUR FOR PLAYER AND BACKDROP BLOB
 
+	if (!m_P1PickUps.empty())
+	{
+		m_P1PickUps.clear();
+	}
+	if (!m_P2PickUps.empty())
+	{
+		m_P2PickUps.clear();
+	}
 	//TITLE
 	m_pInGameTitle->LoadTextFile(m_pFont2, "Fight !", "royalblue");
 

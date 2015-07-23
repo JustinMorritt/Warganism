@@ -56,7 +56,7 @@ GameEntity::GameEntity(int x, int y, int w, int h, int maxSpeed, int accel, std:
 	m_pCenter			= new SDL_Point;
 	m_pCenter->x		= m_pPos->x + (m_pRect.w/2);
 	m_pCenter->y		= m_pPos->y + (m_pRect.h / 2);
-	m_StartAmmo = 1;
+	m_StartAmmo = 10;
 	m_CurrAmmo = m_StartAmmo;
 	CenterPlayers();
 }
