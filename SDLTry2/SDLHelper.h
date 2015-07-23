@@ -13,7 +13,7 @@
 #include "PickUp.h"
 #include "randgen.h"
 #include "Button.h"
-#include "SDL_mixer.h"
+#include "SDL2-2.0.3/include/SDL_mixer.h"
 
 
 

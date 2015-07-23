@@ -59,8 +59,7 @@ SDLHelper::SDLHelper() : m_dt(0.0f), m_done(false)
 		printf("SDL_ttf could not initialize! SDL_ttf Error:\n", TTF_GetError());
 	}
 
-	if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096) == -1) { printf("SDL_ttf could not initialize! SDL_ttf Error:\n", Mix_GetError()); }
-
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) { printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError()); }
 	//Get window surface
 	m_pScreenSurface = SDL_GetWindowSurface(m_pMyWindow->m_pWindow);
 
@@ -142,13 +141,13 @@ SDL_Texture* SDLHelper::loadText(std::string text, SDL_Color color, int font)
 
 void SDLHelper::loadMusic()
 {
-	m_pSong1 = Mix_LoadMUS("");
-	m_pSong1 = Mix_LoadMUS("");
-	
-	m_pP1Fire = Mix_LoadWAV("");
-	m_pP2Fire = Mix_LoadWAV("");
-	m_pP1Hit = Mix_LoadWAV("");
-	m_pP2Hit = Mix_LoadWAV("");
+// 	m_pSong1 = Mix_LoadMUS("");
+// 	m_pSong1 = Mix_LoadMUS("");
+// 	
+// 	m_pP1Fire = Mix_LoadWAV("");
+// 	m_pP2Fire = Mix_LoadWAV("");
+// 	m_pP1Hit = Mix_LoadWAV("");
+// 	m_pP2Hit = Mix_LoadWAV("");
 
 
 }
