@@ -58,6 +58,9 @@ private:
 	int m_MouseY;
 	GameState* m_pGameState;
 	LoadedState* m_pLoadedState;
+	MusicState* m_pMusicState;
+	SoundState* m_pSoundState;
+
 
 	RandGen m_RG;
 	float m_dt;

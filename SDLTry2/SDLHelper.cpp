@@ -15,6 +15,12 @@ SDLHelper::SDLHelper() : m_dt(0.0f), m_done(false)
 	m_pLoadedState = new LoadedState;
 	*m_pLoadedState = LoadedState::NONE; //ININTIALLY NONE
 
+	//SET MUSIC AND SOUND STATE
+	m_pMusicState = new MusicState;
+	*m_pMusicState = MusicState::MUSICON;
+	m_pSoundState = new SoundState;
+	*m_pSoundState = SoundState::SOUNDON;
+
 
 	//SDL INIT
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
@@ -551,7 +557,32 @@ void SDLHelper::MouseHandler(SDL_Event &e)
 						}
 						
 					}
-		
+					else if (m_Buttons[i]->m_pButtonTex->m_Clicked && m_Buttons[i]->m_pButtonTex->m_name == "soundButt")
+					{
+						if (*m_pSoundState == SoundState::SOUNDON)
+						{
+							*m_pSoundState = SoundState::SOUNDOFF;
+							*m_pLoadedState = LoadedState::NONE;
+						}
+						else
+						{
+							*m_pSoundState = SoundState::SOUNDON;
+							*m_pLoadedState = LoadedState::NONE;
+						}
+					}
+					else if (m_Buttons[i]->m_pButtonTex->m_Clicked && m_Buttons[i]->m_pButtonTex->m_name == "musicButt")
+					{
+						if (*m_pMusicState == MusicState::MUSICON)
+						{
+							*m_pMusicState = MusicState::MUSICOFF;
+							*m_pLoadedState = LoadedState::NONE;
+						}
+						else
+						{
+							*m_pMusicState = MusicState::MUSICON;
+							*m_pLoadedState = LoadedState::NONE;
+						}
+					}
 				}
 			}
 		}
@@ -854,8 +885,20 @@ void SDLHelper::LoadMainMenu()
 	Button* musicBut = new Button(160, MyWindow::m_Height / 2 + 100, 250, 100, 0, m_pRenderer, "musicButt", 20);
 
 	playBut->m_pButtonTex->LoadFile("Pics/playButt.png");
-	soundBut->m_pButtonTex->LoadFile("Pics/soundOnButt.png");
-	musicBut->m_pButtonTex->LoadFile("Pics/musicOnButt.png");
+
+
+	if (*m_pSoundState == SoundState::SOUNDON){ soundBut->m_pButtonTex->LoadFile("Pics/soundOnButt.png"); }
+	else
+	{
+		soundBut->m_pButtonTex->LoadFile("Pics/soundOffButt.png");
+	}
+
+	if (*m_pMusicState == MusicState::MUSICON){ musicBut->m_pButtonTex->LoadFile("Pics/musicOnButt.png"); }
+	else
+	{
+		musicBut->m_pButtonTex->LoadFile("Pics/musicOffButt.png");
+	}
+
 
 	m_Buttons.push_back(playBut);
 	m_Buttons.push_back(soundBut);
