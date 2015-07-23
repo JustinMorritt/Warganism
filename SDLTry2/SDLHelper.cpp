@@ -59,7 +59,7 @@ SDLHelper::SDLHelper() : m_dt(0.0f), m_done(false)
 		printf("SDL_ttf could not initialize! SDL_ttf Error:\n", TTF_GetError());
 	}
 
-	if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096) == -1) { printf("SDL_ttf could not initialize! SDL_ttf Error:\n", Mix_GetError(); }
+	if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096) == -1) { printf("SDL_ttf could not initialize! SDL_ttf Error:\n", Mix_GetError()); }
 
 	//Get window surface
 	m_pScreenSurface = SDL_GetWindowSurface(m_pMyWindow->m_pWindow);
