@@ -594,6 +594,7 @@ void SDLHelper::MouseHandler(SDL_Event &e)
 					else if (m_Buttons[i]->m_pButtonTex->m_Clicked && m_Buttons[i]->m_pButtonTex->m_name == "quitButt")
 					{
 						*m_pGameState = GameState::MAINMENU;
+						if (*m_pMusicState == MusicState::MUSICON){ Mix_PlayMusic(m_pSong1, -1); }
 						
 					}
 					else if (m_Buttons[i]->m_pButtonTex->m_Clicked && m_Buttons[i]->m_pButtonTex->m_name == "colourButt")
@@ -647,13 +648,13 @@ void SDLHelper::MouseHandler(SDL_Event &e)
 						{
 							*m_pGameMode = GameMode::PVCPU;
 							*m_pLoadedState = LoadedState::NONE;
-							Mix_PauseMusic();
+							
 						}
 						else
 						{
 							*m_pGameMode = GameMode::PVP;
 							*m_pLoadedState = LoadedState::NONE;
-							Mix_ResumeMusic();
+							
 						}
 					}
 
@@ -949,10 +950,10 @@ void SDLHelper::ShowGameOn()
 void SDLHelper::LoadMainMenu()
 {
 	
-	if (*m_pMusicState == MusicState::MUSICON)
+	if (*m_pMusicState == MusicState::MUSICON && !Mix_PlayingMusic())
 	{ 
-		Mix_FadeInMusic(m_pSong1, -1, 10); 
-		Mix_FadeInMusic(m_pSong1, -1, 10);
+		//Mix_PlayMusic(m_pSong1, -1);
+		Mix_FadeInMusic(m_pSong1, -1, 3000);
 	}
 
 	GameEntity::m_P1color = "";
