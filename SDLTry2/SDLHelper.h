@@ -121,6 +121,7 @@ private:
 	Mix_Chunk* m_pP2Fire			  = NULL;
 	Mix_Chunk* m_pP1Hit				  = NULL;
 	Mix_Chunk* m_pP2Hit				  = NULL;
+	Mix_Chunk* m_pGrow				  = NULL;
 
 public:
 

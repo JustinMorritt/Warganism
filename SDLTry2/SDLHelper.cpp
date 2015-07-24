@@ -116,6 +116,8 @@ void SDLHelper::loadMedia()
 	if (m_pP1Hit == NULL){ std::cout << "ERROR SOUND NOT LOADED ... NULL" << std::endl; }
 	m_pP2Hit = Mix_LoadWAV("Sound/splat1.ogg");
 	if (m_pP2Hit == NULL){ std::cout << "ERROR SOUND NOT LOADED ... NULL" << std::endl; }
+	m_pGrow = Mix_LoadWAV("Sound/grow1.ogg");
+	if (m_pGrow == NULL){ std::cout << "ERROR SOUND NOT LOADED ... NULL" << std::endl; }
 
 	*m_pMusicState = MusicState::MUSICON;
 
@@ -286,6 +288,7 @@ void SDLHelper::UpdatePickUp()
 			if (Collision::CircleVsCircle(m_P1PickUps[i]->m_pPickUpTex->GetCircleCollider(), m_pPlayer1->GetCircleCollider()))
 			{
 				m_P1PickUps.erase(m_P1PickUps.begin() + i);
+				if (*m_pSoundState == SoundState::SOUNDON){ Mix_PlayChannel(-1, m_pGrow, 0); }
 				m_pPlayer1->GetBigger();
 				m_pPlayer1->increaseCurrAmmo();
 				break;
@@ -302,6 +305,7 @@ void SDLHelper::UpdatePickUp()
 			if (Collision::CircleVsCircle(m_P2PickUps[i]->m_pPickUpTex->GetCircleCollider(), m_pPlayer2->GetCircleCollider()))
 			{
 				m_P2PickUps.erase(m_P2PickUps.begin() + i);
+				if (*m_pSoundState == SoundState::SOUNDON){ Mix_PlayChannel(-1, m_pGrow, 0); }
 				m_pPlayer2->GetBigger();
 				m_pPlayer2->increaseCurrAmmo();
 				break;
