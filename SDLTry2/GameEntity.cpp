@@ -175,8 +175,6 @@ void GameEntity::Update(float dt)
 		CheckProjectileBounds();
 	}
 
-
-
 }
 
 void GameEntity::Render()

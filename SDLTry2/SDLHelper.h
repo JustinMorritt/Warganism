@@ -27,11 +27,7 @@ class SDLHelper
 private:
 	int m_MouseX;
 	int m_MouseY;
-	GameState* m_pGameState;
-	LoadedState* m_pLoadedState;
-	MusicState* m_pMusicState;
-	SoundState* m_pSoundState;
-	GameMode* m_pGameMode;
+
 
 	RandGen m_RG;
 	float m_dt;
@@ -130,6 +126,7 @@ public:
 	void ShowP2Win();
 	void ShowCharSelection();
 	void ShowGameOn();
+
 	//GAME FUNCTIONS (LOAD)
 	void LoadMainMenu();
 	void LoadPaused();

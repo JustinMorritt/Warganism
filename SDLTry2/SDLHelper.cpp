@@ -6,24 +6,20 @@
 SDLHelper::SDLHelper() : m_dt(0.0f), m_done(false)
 {
 	//SET INITIAL GAMESTATE
-	m_pGameState = new GameState;
-	*m_pGameState = GameState::MAINMENU;
-	if (*m_pGameState == GameState::MAINMENU){ std::cout << "MAINMENU ON" << std::endl; }
-	if (*m_pGameState == GameState::GAMEON){ std::cout << "GAMESCREEN ON" << std::endl; }
+
+	*StateMachine::pGameState = GameState::MAINMENU;
+	if (*StateMachine::pGameState == GameState::MAINMENU){ std::cout << "MAINMENU ON" << std::endl; }
+	if (*StateMachine::pGameState == GameState::GAMEON){ std::cout << "GAMESCREEN ON" << std::endl; }
 
 	//SET LOADED STATE
-	m_pLoadedState = new LoadedState;
-	*m_pLoadedState = LoadedState::NONE; //ININTIALLY NONE
+	*StateMachine::pLoadedState = LoadedState::NONE; //ININTIALLY NONE
 
 	//SET MUSIC AND SOUND STATE
-	m_pMusicState = new MusicState;
-	*m_pMusicState = MusicState::MUSICON;
-	m_pSoundState = new SoundState;
-	*m_pSoundState = SoundState::SOUNDON;
+	*StateMachine::pMusicState = MusicState::MUSICON;
+	*StateMachine::pSoundState = SoundState::SOUNDON;
 
 	//SET GAME MODE
-	m_pGameMode = new GameMode;
-	*m_pGameMode = GameMode::PVP;
+	*StateMachine::pGameMode = GameMode::PVP;
 
 	//SDL INIT
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
@@ -119,7 +115,7 @@ void SDLHelper::loadMedia()
 	m_pGrow = Mix_LoadWAV("Sound/grow1.ogg");
 	if (m_pGrow == NULL){ std::cout << "ERROR SOUND NOT LOADED ... NULL" << std::endl; }
 
-	*m_pMusicState = MusicState::MUSICON;
+	*StateMachine::pMusicState = MusicState::MUSICON;
 
 	m_pPaused = new GameEntity(0, 0, 300, 80, 0, 0, "Paused", m_pRenderer, false);
 }
@@ -198,12 +194,12 @@ void SDLHelper::Update()
 	SDL_RenderClear(m_pRenderer);
 
 
-	if (*m_pGameState == GameState::MAINMENU){ ShowMainMenu(); }
-	if (*m_pGameState == GameState::CHARACTERSELECT){ ShowCharSelection(); }
-	if (*m_pGameState == GameState::GAMEON){ ShowGameOn(); }
-	if (*m_pGameState == GameState::PAUSED){ ShowPaused(); }
-	if (*m_pGameState == GameState::P1WIN){ ShowP1Win(); }
-	if (*m_pGameState == GameState::P2WIN){ ShowP2Win(); }
+	if (*StateMachine::pGameState == GameState::MAINMENU){ ShowMainMenu(); }
+	if (*StateMachine::pGameState == GameState::CHARACTERSELECT){ ShowCharSelection(); }
+	if (*StateMachine::pGameState == GameState::GAMEON){ ShowGameOn(); }
+	if (*StateMachine::pGameState == GameState::PAUSED){ ShowPaused(); }
+	if (*StateMachine::pGameState == GameState::P1WIN){ ShowP1Win(); }
+	if (*StateMachine::pGameState == GameState::P2WIN){ ShowP2Win(); }
 
 	//Update screen
 	SDL_RenderPresent(m_pRenderer);
@@ -224,7 +220,7 @@ void SDLHelper::SpawnProjectile(bool p1, bool p2)
 	{
 
 	
-		if (*m_pSoundState == SoundState::SOUNDON){ Mix_PlayChannel(-1, m_pP1Fire, 0); }
+		if (*StateMachine::pSoundState == SoundState::SOUNDON){ Mix_PlayChannel(-1, m_pP1Fire, 0); }
 		
 		
 		Projectile* proj = new Projectile(m_pPlayer1->getCenter().x, m_pPlayer1->getCenter().y, m_pPlayer1->getWidth() / 2, m_pPlayer1->getHeight() / 2, m_pPlayer1->m_Roation, GameEntity::m_P1color, m_pRenderer, "P1projectile");
@@ -233,7 +229,7 @@ void SDLHelper::SpawnProjectile(bool p1, bool p2)
 	else if (p2)
 	{
 	
-		if (*m_pSoundState == SoundState::SOUNDON){ Mix_PlayChannel(-1, m_pP2Fire, 0); }
+		if (*StateMachine::pSoundState == SoundState::SOUNDON){ Mix_PlayChannel(-1, m_pP2Fire, 0); }
 		
 		//std::cout << "Made a Projectile" << std::endl;
 		Projectile* proj = new Projectile(m_pPlayer2->getCenter().x, m_pPlayer2->getCenter().y, m_pPlayer2->getWidth() / 2, m_pPlayer2->getHeight() / 2, m_pPlayer2->m_Roation, GameEntity::m_P2color, m_pRenderer, "P2projectile");
@@ -288,7 +284,7 @@ void SDLHelper::UpdatePickUp()
 			if (Collision::CircleVsCircle(m_P1PickUps[i]->m_pPickUpTex->GetCircleCollider(), m_pPlayer1->GetCircleCollider()))
 			{
 				m_P1PickUps.erase(m_P1PickUps.begin() + i);
-				if (*m_pSoundState == SoundState::SOUNDON){ Mix_PlayChannel(-1, m_pGrow, 0); }
+				if (*StateMachine::pSoundState == SoundState::SOUNDON){ Mix_PlayChannel(-1, m_pGrow, 0); }
 				m_pPlayer1->GetBigger();
 				m_pPlayer1->increaseCurrAmmo();
 				break;
@@ -305,7 +301,7 @@ void SDLHelper::UpdatePickUp()
 			if (Collision::CircleVsCircle(m_P2PickUps[i]->m_pPickUpTex->GetCircleCollider(), m_pPlayer2->GetCircleCollider()))
 			{
 				m_P2PickUps.erase(m_P2PickUps.begin() + i);
-				if (*m_pSoundState == SoundState::SOUNDON){ Mix_PlayChannel(-1, m_pGrow, 0); }
+				if (*StateMachine::pSoundState == SoundState::SOUNDON){ Mix_PlayChannel(-1, m_pGrow, 0); }
 				m_pPlayer2->GetBigger();
 				m_pPlayer2->increaseCurrAmmo();
 				break;
@@ -321,7 +317,9 @@ void SDLHelper::UpdateProjectiles()
 	{
 		for (int i = 0; i < m_P1Projectiles.size(); i++)
 		{
-			if (*m_pGameState != GameState::PAUSED && *m_pGameState != GameState::P1WIN && *m_pGameState != GameState::P2WIN)
+			if (*StateMachine::pGameState != GameState::PAUSED &&
+				*StateMachine::pGameState != GameState::P1WIN &&
+				*StateMachine::pGameState != GameState::P2WIN)
 			{
 				m_P1Projectiles[i]->m_pProjTex->Update(m_dt);
 			}
@@ -330,7 +328,7 @@ void SDLHelper::UpdateProjectiles()
 			if (Collision::CircleVsCircle(m_P1Projectiles[i]->m_pProjTex->GetCircleCollider(), m_pPlayer2->GetCircleCollider()) && m_P1Projectiles[i]->m_pProjTex->UsingCircleCollider())
 			{
 				//std::cout << "Erased a P1 Projectile -- COLLISION" << std::endl;
-				if (*m_pSoundState == SoundState::SOUNDON){ Mix_PlayChannel(-1, m_pP2Hit, 0); }
+				if (*StateMachine::pSoundState == SoundState::SOUNDON){ Mix_PlayChannel(-1, m_pP2Hit, 0); }
 
 				
 				m_pPlayer2->GetSmaller();
@@ -354,7 +352,9 @@ void SDLHelper::UpdateProjectiles()
 	{
 		for (int i = 0; i < m_P2Projectiles.size(); i++)
 		{
-			if (*m_pGameState != GameState::PAUSED && *m_pGameState != GameState::P1WIN && *m_pGameState != GameState::P2WIN)
+			if (*StateMachine::pGameState != GameState::PAUSED &&
+				*StateMachine::pGameState != GameState::P1WIN &&
+				*StateMachine::pGameState != GameState::P2WIN)
 			{
 				m_P2Projectiles[i]->m_pProjTex->Update(m_dt);
 			}
@@ -362,7 +362,7 @@ void SDLHelper::UpdateProjectiles()
 			if (Collision::CircleVsCircle(m_P2Projectiles[i]->m_pProjTex->GetCircleCollider(), m_pPlayer1->GetCircleCollider()) && m_P2Projectiles[i]->m_pProjTex->UsingCircleCollider())
 			{
 				//std::cout << "Erased a P2 Projectile --COLLISION" << std::endl;
-				if (*m_pSoundState == SoundState::SOUNDON){ Mix_PlayChannel(-1, m_pP1Hit, 0); }
+				if (*StateMachine::pSoundState == SoundState::SOUNDON){ Mix_PlayChannel(-1, m_pP1Hit, 0); }
 
 				m_pPlayer1->GetSmaller();
 				m_P2Projectiles[i]->m_pProjTex->SetCurrentAnimation(0);
@@ -403,7 +403,10 @@ void SDLHelper::HandleEvents() //Returns true if Quit is Clicked
 		}
 		else if (e.type == SDL_KEYDOWN || e.type == SDL_KEYUP) //KEYBOARD EVENTS
 		{
-			if (*m_pGameState == GameState::GAMEON && *m_pLoadedState == LoadedState::GAMEON || *m_pGameState == GameState::PAUSED && *m_pLoadedState == LoadedState::PAUSED)
+			if (*StateMachine::pGameState == GameState::GAMEON &&
+				*StateMachine::pLoadedState == LoadedState::GAMEON ||
+				*StateMachine::pGameState == GameState::PAUSED &&
+				*StateMachine::pLoadedState == LoadedState::PAUSED)
 			{
 				KeyBoardHandler(e);
 			}
@@ -439,9 +442,9 @@ void SDLHelper::KeyBoardHandler(SDL_Event &e)
 			break;
 
 		case SDLK_SPACE:
-			if (*m_pGameState == GameState::GAMEON && *m_pLoadedState == LoadedState::GAMEON)
+			if (*StateMachine::pGameState == GameState::GAMEON && *StateMachine::pLoadedState == LoadedState::GAMEON)
 			{
-				if (m_pPlayer1->getCurrAmmo() > 0 && *m_pGameState != GameState::PAUSED)
+				if (m_pPlayer1->getCurrAmmo() > 0 && *StateMachine::pGameState != GameState::PAUSED)
 				{
 					SpawnProjectile(true, false);
 					m_pPlayer1->decreaseCurrAmmo();
@@ -492,14 +495,14 @@ void SDLHelper::KeyBoardHandler(SDL_Event &e)
 			m_pPlayer1->removeForce("right");
 			break;
 		case SDLK_p:
-			if (*m_pGameState != GameState::PAUSED)
+			if (*StateMachine::pGameState != GameState::PAUSED)
 			{
-				*m_pGameState = GameState::PAUSED;
+				*StateMachine::pGameState = GameState::PAUSED;
 			}
 			else
 			{
-				*m_pGameState = GameState::GAMEON;
-				*m_pLoadedState = LoadedState::GAMEON;
+				*StateMachine::pGameState = GameState::GAMEON;
+				*StateMachine::pLoadedState = LoadedState::GAMEON;
 			}
 		case SDLK_SPACE:
 			break;
@@ -529,7 +532,7 @@ void SDLHelper::MouseHandler(SDL_Event &e)
 {
 	SDL_GetMouseState(&m_MouseX, &m_MouseY);
 
-	if (*m_pGameState == GameState::GAMEON && *m_pLoadedState == LoadedState::GAMEON)
+	if (*StateMachine::pGameState == GameState::GAMEON && *StateMachine::pLoadedState == LoadedState::GAMEON)
 	{
 		m_pPlayer2->SetMousePos(m_MouseX, m_MouseY);
 	}
@@ -543,20 +546,20 @@ void SDLHelper::MouseHandler(SDL_Event &e)
 		break;
 
 	case SDL_MOUSEBUTTONDOWN:
-		if (*m_pGameState == GameState::GAMEON && *m_pLoadedState == LoadedState::GAMEON)
+		if (*StateMachine::pGameState == GameState::GAMEON && *StateMachine::pLoadedState == LoadedState::GAMEON)
 		{
-			if (m_pPlayer2->getCurrAmmo() > 0 && *m_pGameState != GameState::PAUSED)
+			if (m_pPlayer2->getCurrAmmo() > 0 && *StateMachine::pGameState != GameState::PAUSED)
 			{
 				SpawnProjectile(false, true);
 				m_pPlayer2->decreaseCurrAmmo();
 			}
 		}
 
-	   if (*m_pGameState == GameState::MAINMENU && *m_pLoadedState == LoadedState::MAINMENU || 
-		   *m_pGameState == GameState::P2WIN && *m_pLoadedState == LoadedState::P2WIN || 
-		   *m_pGameState == GameState::P1WIN && *m_pLoadedState == LoadedState::P1WIN ||
-		   *m_pGameState == GameState::CHARACTERSELECT && *m_pLoadedState == LoadedState::CHARACTERSELECT ||
-		   *m_pGameState == GameState::PAUSED && *m_pLoadedState == LoadedState::PAUSED)
+		if (*StateMachine::pGameState == GameState::MAINMENU &&			*StateMachine::pLoadedState == LoadedState::MAINMENU ||
+		   *StateMachine::pGameState == GameState::P2WIN &&				*StateMachine::pLoadedState == LoadedState::P2WIN || 
+		   *StateMachine::pGameState == GameState::P1WIN &&				*StateMachine::pLoadedState == LoadedState::P1WIN ||
+		   *StateMachine::pGameState == GameState::CHARACTERSELECT &&	*StateMachine::pLoadedState == LoadedState::CHARACTERSELECT ||
+		   *StateMachine::pGameState == GameState::PAUSED &&			*StateMachine::pLoadedState == LoadedState::PAUSED)
 		{
 			if (m_Buttons.size() > 0)
 			{
@@ -571,11 +574,11 @@ void SDLHelper::MouseHandler(SDL_Event &e)
 
 	case SDL_MOUSEBUTTONUP:
 
-		if (*m_pGameState == GameState::MAINMENU && *m_pLoadedState == LoadedState::MAINMENU || 
-			*m_pGameState == GameState::P2WIN && *m_pLoadedState == LoadedState::P2WIN || 
-			*m_pGameState == GameState::P1WIN && *m_pLoadedState == LoadedState::P1WIN ||
-			*m_pGameState == GameState::CHARACTERSELECT && *m_pLoadedState == LoadedState::CHARACTERSELECT || 
-			*m_pGameState == GameState::PAUSED && *m_pLoadedState == LoadedState::PAUSED)
+		if (*StateMachine::pGameState == GameState::MAINMENU &&			*StateMachine::pLoadedState == LoadedState::MAINMENU || 
+			*StateMachine::pGameState == GameState::P2WIN &&			*StateMachine::pLoadedState == LoadedState::P2WIN || 
+			*StateMachine::pGameState == GameState::P1WIN &&			*StateMachine::pLoadedState == LoadedState::P1WIN ||
+			*StateMachine::pGameState == GameState::CHARACTERSELECT &&	*StateMachine::pLoadedState == LoadedState::CHARACTERSELECT || 
+			*StateMachine::pGameState == GameState::PAUSED &&			*StateMachine::pLoadedState == LoadedState::PAUSED)
 		{
 			if (m_Buttons.size() > 0)
 			{
@@ -584,17 +587,17 @@ void SDLHelper::MouseHandler(SDL_Event &e)
 					m_Buttons[i]->m_pButtonTex->m_ClickDown = false;
 					if (m_Buttons[i]->m_pButtonTex->m_Clicked && m_Buttons[i]->m_pButtonTex->m_name == "playButt")
 					{
-						*m_pGameState = GameState::CHARACTERSELECT;
+						*StateMachine::pGameState = GameState::CHARACTERSELECT;
 					}
 					else if (m_Buttons[i]->m_pButtonTex->m_Clicked && m_Buttons[i]->m_pButtonTex->m_name == "retryButt")
 					{
-						*m_pGameState = GameState::GAMEON;
-						*m_pLoadedState = LoadedState::NONE;
+						*StateMachine::pGameState = GameState::GAMEON;
+						*StateMachine::pLoadedState = LoadedState::NONE;
 					}
 					else if (m_Buttons[i]->m_pButtonTex->m_Clicked && m_Buttons[i]->m_pButtonTex->m_name == "quitButt")
 					{
-						*m_pGameState = GameState::MAINMENU;
-						if (*m_pMusicState == MusicState::MUSICON){ Mix_PlayMusic(m_pSong1, -1); }
+						*StateMachine::pGameState = GameState::MAINMENU;
+						if (*StateMachine::pMusicState == MusicState::MUSICON){ Mix_PlayMusic(m_pSong1, -1); }
 						
 					}
 					else if (m_Buttons[i]->m_pButtonTex->m_Clicked && m_Buttons[i]->m_pButtonTex->m_name == "colourButt")
@@ -614,46 +617,46 @@ void SDLHelper::MouseHandler(SDL_Event &e)
 					}
 					else if (m_Buttons[i]->m_pButtonTex->m_Clicked && m_Buttons[i]->m_pButtonTex->m_name == "soundButt")
 					{
-						if (*m_pSoundState == SoundState::SOUNDON)
+						if (*StateMachine::pSoundState == SoundState::SOUNDON)
 						{
-							*m_pSoundState = SoundState::SOUNDOFF;
-							*m_pLoadedState = LoadedState::NONE;
+							*StateMachine::pSoundState = SoundState::SOUNDOFF;
+							*StateMachine::pLoadedState = LoadedState::NONE;
 							
 						}
 						else
 						{
-							*m_pSoundState = SoundState::SOUNDON;
-							*m_pLoadedState = LoadedState::NONE;
+							*StateMachine::pSoundState = SoundState::SOUNDON;
+							*StateMachine::pLoadedState = LoadedState::NONE;
 							
 						}
 					}
 					else if (m_Buttons[i]->m_pButtonTex->m_Clicked && m_Buttons[i]->m_pButtonTex->m_name == "musicButt")
 					{
-						if (*m_pMusicState == MusicState::MUSICON)
+						if (*StateMachine::pMusicState == MusicState::MUSICON)
 						{
-							*m_pMusicState = MusicState::MUSICOFF;
-							*m_pLoadedState = LoadedState::NONE;
+							*StateMachine::pMusicState = MusicState::MUSICOFF;
+							*StateMachine::pLoadedState = LoadedState::NONE;
 							Mix_PauseMusic();
 						}
 						else
 						{
-							*m_pMusicState = MusicState::MUSICON;
-							*m_pLoadedState = LoadedState::NONE;
+							*StateMachine::pMusicState = MusicState::MUSICON;
+							*StateMachine::pLoadedState = LoadedState::NONE;
 							Mix_ResumeMusic();
 						}
 					}
 					else if (m_Buttons[i]->m_pButtonTex->m_Clicked && m_Buttons[i]->m_pButtonTex->m_name == "modeButt")
 					{
-						if (*m_pGameMode == GameMode::PVP)
+						if (*StateMachine::pGameMode == GameMode::PVP)
 						{
-							*m_pGameMode = GameMode::PVCPU;
-							*m_pLoadedState = LoadedState::NONE;
+							*StateMachine::pGameMode = GameMode::PVCPU;
+							*StateMachine::pLoadedState = LoadedState::NONE;
 							
 						}
 						else
 						{
-							*m_pGameMode = GameMode::PVP;
-							*m_pLoadedState = LoadedState::NONE;
+							*StateMachine::pGameMode = GameMode::PVP;
+							*StateMachine::pLoadedState = LoadedState::NONE;
 							
 						}
 					}
@@ -752,7 +755,7 @@ void SDLHelper::DrawPoint(int x, int y, std::string color)
 
 void SDLHelper::ShowMainMenu()
 {
-	if (*m_pLoadedState != LoadedState::MAINMENU){ LoadMainMenu(); }
+	if (*StateMachine::pLoadedState != LoadedState::MAINMENU){ LoadMainMenu(); }
 
 	
 
@@ -774,7 +777,7 @@ void SDLHelper::ShowMainMenu()
 
 void SDLHelper::ShowPaused()
 {
-	if (*m_pLoadedState != LoadedState::PAUSED){ LoadPaused(); }
+	if (*StateMachine::pLoadedState != LoadedState::PAUSED){ LoadPaused(); }
 
 	DrawRect(0, 0, MyWindow::getWidth(), MyWindow::getHeight(), "halfblack");
 	ShowGameOn();
@@ -797,7 +800,7 @@ void SDLHelper::ShowPaused()
 
 void SDLHelper::ShowP1Win()
 {
-	if (*m_pLoadedState != LoadedState::P1WIN){ LoadP1Win(); }
+	if (*StateMachine::pLoadedState != LoadedState::P1WIN){ LoadP1Win(); }
 	DrawRect(0, 0, MyWindow::getWidth(), MyWindow::getHeight(), "halfblack");
 	ShowGameOn();
 	if (m_Buttons.size() > 0)
@@ -813,7 +816,7 @@ void SDLHelper::ShowP1Win()
 
 void SDLHelper::ShowP2Win()
 {
-	if (*m_pLoadedState != LoadedState::P2WIN){ LoadP2Win(); }
+	if (*StateMachine::pLoadedState != LoadedState::P2WIN){ LoadP2Win(); }
 	DrawRect(0, 0, MyWindow::getWidth(), MyWindow::getHeight(), "halfblack");
 	ShowGameOn();
 	if (m_Buttons.size() > 0)
@@ -833,7 +836,7 @@ void SDLHelper::ShowCharSelection()
 
 
 	//CHECK IF LOADED
-	if (*m_pLoadedState != LoadedState::CHARACTERSELECT){ LoadCharSelection(); }
+	if (*StateMachine::pLoadedState != LoadedState::CHARACTERSELECT){ LoadCharSelection(); }
 
 	SDL_Rect rec = { 0, 0, MyWindow::m_Width, MyWindow::m_Height };
 	SDL_RenderCopy(m_pRenderer, m_pbackground, NULL, &rec);
@@ -845,12 +848,12 @@ void SDLHelper::ShowCharSelection()
 			if (m_Buttons[i]->m_pButtonTex->m_name == "Player1" && GameEntity::m_P1color != "")
 			{
 				m_Buttons[i]->m_pButtonTex->SetName("Player2");
-				if (*m_pGameMode == GameMode::PVCPU){ m_Buttons[i]->m_pButtonTex->LoadFile("Pics/CPU.png"); }
+				if (*StateMachine::pGameMode == GameMode::PVCPU){ m_Buttons[i]->m_pButtonTex->LoadFile("Pics/CPU.png"); }
 				else{ m_Buttons[i]->m_pButtonTex->LoadFile("Pics/player2.png"); }
 			}
 			if (m_Buttons[i]->m_pButtonTex->m_name == "Player2" && GameEntity::m_P2color != "")
 			{
-				*m_pGameState = GameState::GAMEON;
+				*StateMachine::pGameState = GameState::GAMEON;
 			}
 
 			m_Buttons[i]->m_pButtonTex->SetMousePos(m_MouseX, m_MouseY);
@@ -864,8 +867,8 @@ void SDLHelper::ShowCharSelection()
 void SDLHelper::ShowGameOn()
 {
 	//CHECK IF LOADED
-	if (*m_pLoadedState != LoadedState::GAMEON && *m_pLoadedState != LoadedState::PAUSED && *m_pLoadedState != LoadedState::P1WIN && *m_pLoadedState != LoadedState::P2WIN){ LoadGameOn(); }
-	if (*m_pGameState != GameState::PAUSED && *m_pGameState != GameState::P1WIN && *m_pGameState != GameState::P2WIN)
+	if (*StateMachine::pLoadedState != LoadedState::GAMEON && *StateMachine::pLoadedState != LoadedState::PAUSED && *StateMachine::pLoadedState != LoadedState::P1WIN && *StateMachine::pLoadedState != LoadedState::P2WIN){ LoadGameOn(); }
+	if (*StateMachine::pGameState != GameState::PAUSED && *StateMachine::pGameState != GameState::P1WIN && *StateMachine::pGameState != GameState::P2WIN)
 	{
 		m_RPickUpSpawnTimeElapsed += m_dt;
 		m_LPickUpSpawnTimeElapsed += m_dt;
@@ -935,12 +938,12 @@ void SDLHelper::ShowGameOn()
 	if (m_pPlayer1->getWidth() <= 0)
 	{
 		m_pPlayer1->SetScale(0, 0);
-		*m_pGameState = GameState::P2WIN;
+		*StateMachine::pGameState = GameState::P2WIN;
 	}
 	else if (m_pPlayer2->getWidth() <= 0)
 	{
 		m_pPlayer2->SetScale(0, 0);
-		*m_pGameState = GameState::P1WIN;
+		*StateMachine::pGameState = GameState::P1WIN;
 	}
 }
 
@@ -950,7 +953,7 @@ void SDLHelper::ShowGameOn()
 void SDLHelper::LoadMainMenu()
 {
 	
-	if (*m_pMusicState == MusicState::MUSICON && !Mix_PlayingMusic())
+	if (*StateMachine::pMusicState == MusicState::MUSICON && !Mix_PlayingMusic())
 	{ 
 		//Mix_PlayMusic(m_pSong1, -1);
 		Mix_FadeInMusic(m_pSong1, -1, 3000);
@@ -973,18 +976,18 @@ void SDLHelper::LoadMainMenu()
 	playBut->m_pButtonTex->LoadFile("Pics/playButt.png");
 
 
-	if (*m_pSoundState == SoundState::SOUNDON){ soundBut->m_pButtonTex->LoadFile("Pics/soundOnButt.png"); }
+	if (*StateMachine::pSoundState == SoundState::SOUNDON){ soundBut->m_pButtonTex->LoadFile("Pics/soundOnButt.png"); }
 	else
 	{
 		soundBut->m_pButtonTex->LoadFile("Pics/soundOffButt.png");
 	}
 
-	if (*m_pMusicState == MusicState::MUSICON){ musicBut->m_pButtonTex->LoadFile("Pics/musicOnButt.png"); }
+	if (*StateMachine::pMusicState == MusicState::MUSICON){ musicBut->m_pButtonTex->LoadFile("Pics/musicOnButt.png"); }
 	else
 	{
 		musicBut->m_pButtonTex->LoadFile("Pics/musicOffButt.png");
 	}
-	if (*m_pGameMode == GameMode::PVP){ ModeBut->m_pButtonTex->LoadFile("Pics/PvPButt.png"); }
+	if (*StateMachine::pGameMode == GameMode::PVP){ ModeBut->m_pButtonTex->LoadFile("Pics/PvPButt.png"); }
 	else
 	{
 		ModeBut->m_pButtonTex->LoadFile("Pics/PvCPUButt.png");
@@ -995,7 +998,7 @@ void SDLHelper::LoadMainMenu()
 	m_Buttons.push_back(soundBut);
 	m_Buttons.push_back(musicBut);
 	
-	*m_pLoadedState = LoadedState::MAINMENU;
+	*StateMachine::pLoadedState = LoadedState::MAINMENU;
 }
 
 void SDLHelper::LoadPaused()
@@ -1015,7 +1018,7 @@ void SDLHelper::LoadPaused()
 	m_Buttons.push_back(retryBut);
 
 
-	*m_pLoadedState = LoadedState::PAUSED;
+	*StateMachine::pLoadedState = LoadedState::PAUSED;
 }
 
 void SDLHelper::LoadP1Win()
@@ -1033,7 +1036,7 @@ void SDLHelper::LoadP1Win()
 	m_Buttons.push_back(winBut);
 	m_Buttons.push_back(quitBut);
 	m_Buttons.push_back(retryBut);
-	*m_pLoadedState = LoadedState::P1WIN;
+	*StateMachine::pLoadedState = LoadedState::P1WIN;
 }
 
 void SDLHelper::LoadP2Win()
@@ -1053,7 +1056,7 @@ void SDLHelper::LoadP2Win()
 	m_Buttons.push_back(winBut);
 	m_Buttons.push_back(quitBut);
 	m_Buttons.push_back(retryBut);
-	*m_pLoadedState = LoadedState::P2WIN;
+	*StateMachine::pLoadedState = LoadedState::P2WIN;
 }
 
 void SDLHelper::LoadCharSelection()
@@ -1160,7 +1163,7 @@ void SDLHelper::LoadCharSelection()
 
 	m_pbackground = loadTexture("Pics/charmenu.png");
 
-	*m_pLoadedState = LoadedState::CHARACTERSELECT;
+	*StateMachine::pLoadedState = LoadedState::CHARACTERSELECT;
 }
 
 void SDLHelper::LoadGameOn()
@@ -1174,7 +1177,14 @@ void SDLHelper::LoadGameOn()
 	// 	m_pTexture->SetAnimation(0, 384, 4, 128, 128, 200, true);  // Walk Backward	[3]
 	// 	m_pTexture->SetAnimation(0, 512, 19, 128, 128, 50, false); // EXPLOSION	[4]
 
-	if (*m_pMusicState == MusicState::MUSICON)
+	//COLORS .. SO FAR ****************USE LOWERCASE*****************
+	//Pink			//White		//Black			//Red		//Green	
+	//DarkGreen		//Blue		//RoyalBlue		//BabyBlue	//MintGreen	
+	//Orange		//Yellow	//Gold			//Fuchsia	//Purple
+	//Brown			//DarkGray	//LightGray
+	//**************************************************************
+
+	if (*StateMachine::pMusicState == MusicState::MUSICON)
 	{
 		Mix_FadeInMusic(m_pSong2, -1, 10);
 		Mix_FadeInMusic(m_pSong2, -1, 10);
@@ -1189,15 +1199,7 @@ void SDLHelper::LoadGameOn()
 	m_pInGameAmmoP1 = new GameEntity(0, 0, 180, 40, 0, 0, "P1Ammo", m_pRenderer, false);
 	m_pInGameAmmoP2 = new GameEntity(0, 0, 180, 40, 0, 0, "P2Ammo", m_pRenderer, false);
 
-	//COLORS .. SO FAR ****************USE LOWERCASE*****************
-	//Pink			//White		//Black			//Red		//Green	
-	//DarkGreen		//Blue		//RoyalBlue		//BabyBlue	//MintGreen	
-	//Orange		//Yellow	//Gold			//Fuchsia	//Purple
-	//Brown			//DarkGray	//LightGray
-	//**************************************************************
-
 	//PLAYER 1
-	//GameEntity::m_P1color = "green";
 	//SET UP CHARACTER       x   y    w    h   maxS Accel					
 	m_pPlayer1 = new GameEntity((SCREEN_WIDTH / 2) - (SCREEN_WIDTH / 4) - 64, (SCREEN_HEIGHT / 2) - (SCREEN_HEIGHT / 4) + 64, 128, 128, 350, 20, "player1", m_pRenderer, false);
 	m_pPlayer1->LoadFile("Pics/blobee.png"); // Load Up The Full Sprite Sheet
@@ -1206,9 +1208,8 @@ void SDLHelper::LoadGameOn()
 	m_pPlayer1->UseKeyForces(true);
 	m_pPlayer1->SetColorMod(GameEntity::m_P1color); //COLOUR FOR PLAYER AND BACKDROP BLOB
 
-
+	if (*StateMachine::pGameMode == GameMode::PVP){}
 	//PLAYER 2
-	//GameEntity::m_P2color = "purple";
 	//SET UP CHARACTER       x   y    w    h   maxS Accel					
 	m_pPlayer2 = new GameEntity((SCREEN_WIDTH / 2) + (SCREEN_WIDTH / 4) - 64, (SCREEN_HEIGHT / 2) - (SCREEN_HEIGHT / 4) + 64, 128, 128, 350, 20, "player2", m_pRenderer, false);
 	m_pPlayer2->LoadFile("Pics/blobee.png");  // Load Up The Full Sprite Sheet
@@ -1227,6 +1228,8 @@ void SDLHelper::LoadGameOn()
 	}
 	if (!m_P1Projectiles.empty()) { m_P1Projectiles.clear(); }
 	if (!m_P2Projectiles.empty()) { m_P2Projectiles.clear(); }
+
+
 	//TITLE
 	m_pInGameTitle->LoadTextFile(m_pFont2, "Fight !", "royalblue");
 
@@ -1237,9 +1240,6 @@ void SDLHelper::LoadGameOn()
 
 	m_pbackground = loadTexture("Pics/background.png");
 
-
-	
-
 	m_pInGameTitle->setPos((MyWindow::m_Width / 2) - (m_pInGameTitle->getWidth() / 2), 0);
 	m_pInGameSizeP1->setPos((MyWindow::m_Width / 2) - (MyWindow::m_Width / 4 + m_pInGameSizeP1->getWidth()), 10);
 	m_pInGameSizeP2->setPos((MyWindow::m_Width / 2) + (MyWindow::m_Width / 4), 10);
@@ -1248,7 +1248,7 @@ void SDLHelper::LoadGameOn()
 	m_RPickUpSpawnTimeElapsed = 0;
 	m_LPickUpSpawnTimeElapsed = 0;
 
-	*m_pLoadedState = LoadedState::GAMEON;
+	*StateMachine::pLoadedState = LoadedState::GAMEON;
 }
 
 

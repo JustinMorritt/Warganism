@@ -8,7 +8,7 @@
 #include <utility>
 #include <cmath>
 #include "MyWindow.h"
-#include "StateMachine.h"
+
 
 
 struct AnimationConfig
@@ -104,7 +104,6 @@ public:
 	static std::string m_P2color;
 
 private:
-	GameMode* m_TheGameMode;
 	SDL_Renderer* m_pTheRenderer;
 	Vec2* m_pPos;
 	Vec2* m_pVel;

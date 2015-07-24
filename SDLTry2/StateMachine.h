@@ -51,3 +51,14 @@ enum class GameMode
 	PVP,
 	PVCPU
 };
+
+struct StateMachine
+{
+	static GameState*	pGameState;
+	static LoadedState* pLoadedState;
+	static SoundState*	pSoundState;
+	static MusicState*	pMusicState;
+	static GameMode*	pGameMode;
+	static CPUState*	pCPU;
+};
+
