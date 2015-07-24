@@ -37,15 +37,11 @@ private:
 	float m_LPickUpSpawnTime;
 	float m_RPickUpSpawnTime;
 
+
 	float m_LSlimeSpawnTimeElapsed;
 	float m_RSlimeSpawnTimeElapsed;
-	float m_LSlimepawnTime;
+	float m_LSlimeSpawnTime;
 	float m_RSlimeSpawnTime;
-
-	float m_LSlimeDeadTimeElapsed;
-	float m_RSlimeDeadTimeElapsed;
-	float m_LSlimeDeadTime;
-	float m_RSlimeTime;
 
 	SDL_Renderer* m_pRenderer		= NULL;				//The window renderer 
 	SDL_Surface* m_pScreenSurface	= NULL;				//The surface contained by the window
@@ -80,8 +76,8 @@ private:
 	std::vector<PickUp*> m_P1PickUps;
 	std::vector<PickUp*> m_P2PickUps;
 	std::vector<Button*> m_Buttons;
-	std::vector<Particle*> m_RParticles;
-	std::vector<Particle*> m_LParticles;
+	std::vector<Particle*> m_RSlime;
+	std::vector<Particle*> m_LSlime;
 
 
 	//Music files and Sound Effects
@@ -113,8 +109,11 @@ public:
 	void SpawnProjectile(bool p1,bool p2);
 	void SpawnRPickUp();
 	void SpawnLPickUp();
+	void SpawnLSlime();
+	void SpawnRSlime();
 	void UpdateProjectiles();
 	void UpdatePickUp();
+	void UpdateSlime();
 	void HandleEvents();
 	void KeyBoardHandler(SDL_Event &e);
 	void MouseHandler(SDL_Event &e);

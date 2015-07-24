@@ -76,6 +76,8 @@ SDLHelper::SDLHelper() : m_dt(0.0f), m_done(false)
 	
 	m_RPickUpSpawnTime = m_RG(15 - 7) + 7;
 	m_LPickUpSpawnTime = m_RG(15 - 7) + 7;
+	m_LSlimeSpawnTime = 0.01;
+	m_RSlimeSpawnTime = 0.01;
 	loadMedia();
 	
 }
@@ -249,6 +251,30 @@ void SDLHelper::SpawnRPickUp()
 
 }
 
+void SDLHelper::SpawnLSlime()
+{
+	int x = m_pPlayer1->getCenter().x;
+	int y = m_pPlayer1->getCenter().y;
+	int dir = m_pPlayer1->m_Roation;
+	int size = 32;
+	std::string color = m_pPlayer1->m_color;
+	Particle* slime = new Particle(x, y, size, size, dir, color, m_pRenderer, "Slime");
+	m_LSlime.push_back(slime);
+
+}
+
+void SDLHelper::SpawnRSlime()
+{
+	int x = m_pPlayer2->getCenter().x;
+	int y = m_pPlayer2->getCenter().y;
+	int dir = m_pPlayer2->m_Roation;
+	int size = 32;
+	std::string color = m_pPlayer2->m_color;
+	Particle* slime = new Particle(x, y, size, size, dir, color, m_pRenderer, "Slime");
+	m_RSlime.push_back(slime);
+
+}
+
 void SDLHelper::SpawnLPickUp()
 {
 
@@ -378,6 +404,34 @@ void SDLHelper::UpdateProjectiles()
 
 }
 
+void SDLHelper::UpdateSlime()
+{
+	if (!m_RSlime.empty())
+	{
+		for (unsigned int i = 0; i < m_RSlime.size(); ++i)
+		{
+			m_RSlime[i]->Update(m_dt);
+			m_RSlime[i]->m_pSlimeTex->Render();
+			if (m_RSlime[i]->getDead())
+			{
+				m_RSlime.erase(m_RSlime.begin() + i);
+			}
+		}
+	}
+
+	if (!m_LSlime.empty())
+	{
+		for (unsigned int i = 0; i < m_LSlime.size(); ++i)
+		{
+			m_LSlime[i]->Update(m_dt);
+			m_LSlime[i]->m_pSlimeTex->Render();
+			if (m_LSlime[i]->getDead())
+			{
+				m_LSlime.erase(m_LSlime.begin() + i);
+			}
+		}
+	}
+}
 
 
 
@@ -867,6 +921,8 @@ void SDLHelper::ShowGameOn()
 	{
 		m_RPickUpSpawnTimeElapsed += m_dt;
 		m_LPickUpSpawnTimeElapsed += m_dt;
+		m_RSlimeSpawnTimeElapsed += m_dt;
+		m_LSlimeSpawnTimeElapsed += m_dt;
 
 
 
@@ -883,9 +939,24 @@ void SDLHelper::ShowGameOn()
 			m_LPickUpSpawnTimeElapsed = 0;
 			m_LPickUpSpawnTime = m_RG(6) + 1;
 		}
+		if (m_LSlimeSpawnTimeElapsed > m_LSlimeSpawnTime)
+		{
+			SpawnLSlime();
+			m_LSlimeSpawnTimeElapsed = 0;
+		}
+		if (m_RSlimeSpawnTimeElapsed > m_RSlimeSpawnTime)
+		{
+			SpawnRSlime();
+			m_RSlimeSpawnTimeElapsed = 0;
+
+		}
 
 		m_pPlayer2->Update(m_dt);
 		m_pPlayer1->Update(m_dt);
+		UpdateSlime();
+
+
+		
 	}
 	
 	
@@ -1239,6 +1310,14 @@ void SDLHelper::LoadGameOn()
 	if (!m_P2PickUps.empty())
 	{
 		m_P2PickUps.clear();
+	}
+	if (!m_RSlime.empty())
+	{
+		m_RSlime.clear();
+	}
+	if (!m_LSlime.empty())
+	{
+		m_LSlime.clear();
 	}
 	if (!m_P1Projectiles.empty()) { m_P1Projectiles.clear(); }
 	if (!m_P2Projectiles.empty()) { m_P2Projectiles.clear(); }
