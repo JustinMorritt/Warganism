@@ -9,6 +9,7 @@ Particle::Particle(int x, int y, int w, int h, double DIR, std::string color, SD
 
 	m_pProjTex->m_Roation = DIR;
 	m_pProjTex->CalculateRotation();
+	m_isDead = false;
 	
 
 }
@@ -18,7 +19,13 @@ Particle::~Particle()
 {
 }
 
-bool Particle::isDead()
+void Particle::setDead(bool isdead)
 {
 
+	m_isDead = isdead;
+}
+
+bool Particle::getDead()
+{
+	return m_isDead;
 }

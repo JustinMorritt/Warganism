@@ -14,7 +14,8 @@
 #include "randgen.h"
 #include "Button.h"
 #include "SDL_mixer.h"
-#include <stdio.h>
+#include "Particle.h"
+
 
 
 
@@ -78,6 +79,16 @@ private:
 	float m_LPickUpSpawnTime;
 	float m_RPickUpSpawnTime;
 
+	float m_LSlimeSpawnTimeElapsed;
+	float m_RSlimeSpawnTimeElapsed;
+	float m_LSlimepawnTime;
+	float m_RSlimeSpawnTime;
+
+	float m_LSlimeDeadTimeElapsed;
+	float m_RSlimeDeadTimeElapsed;
+	float m_LSlimeDeadTime;
+	float m_RSlimeTime;
+
 	SDL_Renderer* m_pRenderer		= NULL;				//The window renderer 
 	SDL_Surface* m_pScreenSurface	= NULL;				//The surface contained by the window
 
@@ -111,6 +122,8 @@ private:
 	std::vector<PickUp*> m_P1PickUps;
 	std::vector<PickUp*> m_P2PickUps;
 	std::vector<Button*> m_Buttons;
+	std::vector<Particle*> m_RParticles;
+	std::vector<Particle*> m_LParticles;
 
 
 	//Music files and Sound Effects
