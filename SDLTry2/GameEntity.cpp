@@ -655,6 +655,11 @@ void GameEntity::UpdateColliders()
 	m_pCircleCollider->r = m_pRect.w/2;
 }
 
+bool GameEntity::UsingCircleCollider()
+{
+	return m_UseCircleCollider;
+}
+
 void GameEntity::CenterPlayers()
 {
 	if (getName() == "player1")

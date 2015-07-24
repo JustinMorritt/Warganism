@@ -31,7 +31,16 @@ SDLHelper::SDLHelper() : m_dt(0.0f), m_done(false)
 		printf("SDL_Init Error:", SDL_GetError());
 	}
 
-	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) { printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError()); }
+	// load support for the OGG and MOD sample/music formats
+	int flags2 = MIX_INIT_OGG | MIX_INIT_MOD | MIX_INIT_MP3;
+	int initted2 = Mix_Init(flags2);
+	if (initted2&flags2 != flags2) {
+		printf("Mix_Init: Failed to init required ogg and mod support!\n");
+		printf("Mix_Init: %s\n", Mix_GetError());
+		// handle error
+	}
+
+	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) { printf("SDL_mixer could not initialize! SDL_mixer Error: \n", Mix_GetError()); }
 
 
 	m_pMyWindow = new MyWindow();
@@ -95,19 +104,20 @@ void SDLHelper::loadMedia()
 	if (m_pFont3 == NULL){ std::cout << "ERROR FONT NOT LOADED ... NULL" << std::endl; }
 
 
-	m_pSong1 = Mix_LoadMUS("");
+	m_pSong1 = Mix_LoadMUS("Sound/mainfunk.ogg");
 	if (m_pSong1 == NULL){ std::cout << "ERROR MUSIC NOT LOADED ... NULL" << std::endl; }
-	m_pSong2 = Mix_LoadMUS("");
+	m_pSong2 = Mix_LoadMUS("Sound/funk.ogg");
 	if (m_pSong2 == NULL){ std::cout << "ERROR MUSIC NOT LOADED ... NULL" << std::endl; }
-	m_pP1Fire = Mix_LoadWAV("");
+	m_pP1Fire = Mix_LoadWAV("Sound/woosh1.ogg");
 	if (m_pP1Fire == NULL){ std::cout << "ERROR SOUND NOT LOADED ... NULL" << std::endl; }
-	m_pP2Fire = Mix_LoadWAV("");
+	m_pP2Fire = Mix_LoadWAV("Sound/woosh3.ogg");
 	if (m_pP2Fire == NULL){ std::cout << "ERROR SOUND NOT LOADED ... NULL" << std::endl; }
-	m_pP1Hit = Mix_LoadWAV("");
+	m_pP1Hit = Mix_LoadWAV("Sound/splat2.ogg");
 	if (m_pP1Hit == NULL){ std::cout << "ERROR SOUND NOT LOADED ... NULL" << std::endl; }
-	m_pP2Hit = Mix_LoadWAV("");
+	m_pP2Hit = Mix_LoadWAV("Sound/splat1.ogg");
 	if (m_pP2Hit == NULL){ std::cout << "ERROR SOUND NOT LOADED ... NULL" << std::endl; }
 
+	*m_pMusicState = MusicState::MUSICON;
 
 	m_pPaused = new GameEntity(0, 0, 300, 80, 0, 0, "Paused", m_pRenderer, false);
 }
@@ -211,20 +221,18 @@ void SDLHelper::SpawnProjectile(bool p1, bool p2)
 	if (p1)
 	{
 
-		if (m_pP2Fire != NULL && *m_pSoundState == SoundState::SOUNDON)
-		{
-			Mix_PlayChannel(-1, m_pP1Fire, 0);
-		}
+	
+		if (*m_pSoundState == SoundState::SOUNDON){ Mix_PlayChannel(-1, m_pP1Fire, 0); }
+		
 		
 		Projectile* proj = new Projectile(m_pPlayer1->getCenter().x, m_pPlayer1->getCenter().y, m_pPlayer1->getWidth() / 2, m_pPlayer1->getHeight() / 2, m_pPlayer1->m_Roation, GameEntity::m_P1color, m_pRenderer, "P1projectile");
 		m_P1Projectiles.push_back(proj);
 	}
 	else if (p2)
 	{
-		if (m_pP2Fire != NULL)
-		{
-			Mix_PlayChannel(-1, m_pP2Fire, 0 && *m_pSoundState == SoundState::SOUNDON);
-		}
+	
+		if (*m_pSoundState == SoundState::SOUNDON){ Mix_PlayChannel(-1, m_pP2Fire, 0); }
+		
 		//std::cout << "Made a Projectile" << std::endl;
 		Projectile* proj = new Projectile(m_pPlayer2->getCenter().x, m_pPlayer2->getCenter().y, m_pPlayer2->getWidth() / 2, m_pPlayer2->getHeight() / 2, m_pPlayer2->m_Roation, GameEntity::m_P2color, m_pRenderer, "P2projectile");
 		m_P2Projectiles.push_back(proj);
@@ -315,20 +323,17 @@ void SDLHelper::UpdateProjectiles()
 			}
 			m_P1Projectiles[i]->m_pProjTex->Render();
 
-			if (Collision::CircleVsCircle(m_P1Projectiles[i]->m_pProjTex->GetCircleCollider(), m_pPlayer2->GetCircleCollider()) && !m_P1Projectiles[i]->m_pProjTex->Animating())
+			if (Collision::CircleVsCircle(m_P1Projectiles[i]->m_pProjTex->GetCircleCollider(), m_pPlayer2->GetCircleCollider()) && m_P1Projectiles[i]->m_pProjTex->UsingCircleCollider())
 			{
 				//std::cout << "Erased a P1 Projectile -- COLLISION" << std::endl;
-				if (m_pP2Hit != NULL && *m_pSoundState == SoundState::SOUNDON)
-				{
-					m_pP2Hit;
-				}
+				if (*m_pSoundState == SoundState::SOUNDON){ Mix_PlayChannel(-1, m_pP2Hit, 0); }
 
 				
 				m_pPlayer2->GetSmaller();
 				m_P1Projectiles[i]->m_pProjTex->SetCurrentAnimation(0);
 				m_P1Projectiles[i]->m_pProjTex->SetAnimate(true);
 				m_P1Projectiles[i]->m_pProjTex->setVel(0.0, 0.0);
-			
+				m_P1Projectiles[i]->m_pProjTex->TurnOnCollider(false, false);
 				//m_P1Projectiles.erase(m_P1Projectiles.begin() + i);
 				break;
 			}
@@ -350,18 +355,16 @@ void SDLHelper::UpdateProjectiles()
 				m_P2Projectiles[i]->m_pProjTex->Update(m_dt);
 			}
 			m_P2Projectiles[i]->m_pProjTex->Render();
-			if (Collision::CircleVsCircle(m_P2Projectiles[i]->m_pProjTex->GetCircleCollider(), m_pPlayer1->GetCircleCollider()) && !m_P2Projectiles[i]->m_pProjTex->Animating())
+			if (Collision::CircleVsCircle(m_P2Projectiles[i]->m_pProjTex->GetCircleCollider(), m_pPlayer1->GetCircleCollider()) && m_P2Projectiles[i]->m_pProjTex->UsingCircleCollider())
 			{
 				//std::cout << "Erased a P2 Projectile --COLLISION" << std::endl;
-				if (m_pP1Hit != NULL && *m_pSoundState == SoundState::SOUNDON)
-				{
-					m_pP1Hit;
-				}
+				if (*m_pSoundState == SoundState::SOUNDON){ Mix_PlayChannel(-1, m_pP1Hit, 0); }
 
 				m_pPlayer1->GetSmaller();
 				m_P2Projectiles[i]->m_pProjTex->SetCurrentAnimation(0);
 				m_P2Projectiles[i]->m_pProjTex->SetAnimate(true);
 				m_P2Projectiles[i]->m_pProjTex->setVel(0.0, 0.0);
+				m_P2Projectiles[i]->m_pProjTex->TurnOnCollider(false, false);
 				
 				//m_P2Projectiles.erase(m_P2Projectiles.begin() + i);
 				break;
@@ -746,6 +749,8 @@ void SDLHelper::ShowMainMenu()
 {
 	if (*m_pLoadedState != LoadedState::MAINMENU){ LoadMainMenu(); }
 
+	
+
 	SDL_Rect rec = { 0, 0, MyWindow::m_Width, MyWindow::m_Height };
 	SDL_RenderCopy(m_pRenderer, m_pbackground, NULL, &rec);
 
@@ -939,6 +944,13 @@ void SDLHelper::ShowGameOn()
 //LOAD SCREENS**********************************************
 void SDLHelper::LoadMainMenu()
 {
+	
+	if (*m_pMusicState == MusicState::MUSICON)
+	{ 
+		Mix_FadeInMusic(m_pSong1, -1, 10); 
+		Mix_FadeInMusic(m_pSong1, -1, 10);
+	}
+
 	GameEntity::m_P1color = "";
 	GameEntity::m_P2color = "";
 	m_pbackground = loadTexture("Pics/mainmenu.png");
@@ -1156,6 +1168,13 @@ void SDLHelper::LoadGameOn()
 	// 	m_pTexture->SetAnimation(0, 256, 4, 128, 128, 200, true);  // Walk ForWard	[2]
 	// 	m_pTexture->SetAnimation(0, 384, 4, 128, 128, 200, true);  // Walk Backward	[3]
 	// 	m_pTexture->SetAnimation(0, 512, 19, 128, 128, 50, false); // EXPLOSION	[4]
+
+	if (*m_pMusicState == MusicState::MUSICON)
+	{
+		Mix_FadeInMusic(m_pSong2, -1, 10);
+		Mix_FadeInMusic(m_pSong2, -1, 10);
+	}
+
 
 	//TITLE
 	m_pInGameTitle = new GameEntity(0, 0, 300, 100, 100, 5, "Title", m_pRenderer, false);

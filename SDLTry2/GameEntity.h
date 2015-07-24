@@ -73,6 +73,7 @@ public:
 	void CheckProjectileBounds();
 	void TurnOnCollider(bool square, bool circle);
 	void UpdateColliders();
+	bool UsingCircleCollider();
 	void CenterPlayers();
 	void SetMousePos(int x, int y);
 	bool IsProjectileDone();

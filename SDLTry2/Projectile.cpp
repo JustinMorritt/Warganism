@@ -10,7 +10,7 @@ Projectile::Projectile(int x, int y, int w, int h, double DIR, std::string color
 	m_pProjTex->SetColorMod(color);
 	m_pProjTex->UseGoOneDir(true);
 	m_pProjTex->SetAnimation(0, 0, 4, 64, 64, 50, false);
-
+	m_pProjTex->TurnOnCollider(true, true);
 
 	//CALC DIR
 	Vec2 goVec; 
