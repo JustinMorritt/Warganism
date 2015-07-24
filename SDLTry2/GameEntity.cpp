@@ -657,9 +657,6 @@ void GameEntity::GenerateRandomAIDest()
 	int randomX = RG(MyWindow::getWidth() - MyWindow::getWidth() / 2) + MyWindow::getWidth() / 2;
 	int randomY = RG(MyWindow::getHeight()) + 1;
 	SDL_Point newPoint{ randomX, randomY };
-
-	std::cout << randomX << std::endl;
-
 	AIDest->x = randomX;
 	AIDest->y = randomY;
 }
