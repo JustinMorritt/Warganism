@@ -256,7 +256,7 @@ void SDLHelper::SpawnLSlime()
 	int x = m_pPlayer1->getCenter().x;
 	int y = m_pPlayer1->getCenter().y;
 	int dir = m_pPlayer1->m_Roation;
-	int size = 32;
+	int size = m_pPlayer1->getWidth() / 4;
 	std::string color = m_pPlayer1->m_color;
 	Particle* slime = new Particle(x, y, size, size, dir, color, m_pRenderer, "Slime");
 	m_LSlime.push_back(slime);
@@ -268,7 +268,7 @@ void SDLHelper::SpawnRSlime()
 	int x = m_pPlayer2->getCenter().x;
 	int y = m_pPlayer2->getCenter().y;
 	int dir = m_pPlayer2->m_Roation;
-	int size = 32;
+	int size = m_pPlayer2->getWidth() / 4;
 	std::string color = m_pPlayer2->m_color;
 	Particle* slime = new Particle(x, y, size, size, dir, color, m_pRenderer, "Slime");
 	m_RSlime.push_back(slime);
@@ -311,6 +311,8 @@ void SDLHelper::UpdatePickUp()
 				break;
 			}
 		}
+
+		
 	}
 
 	if (m_P2PickUps.size() > 0)
@@ -410,7 +412,12 @@ void SDLHelper::UpdateSlime()
 	{
 		for (unsigned int i = 0; i < m_RSlime.size(); ++i)
 		{
-			m_RSlime[i]->Update(m_dt);
+			if (*StateMachine::pGameState != GameState::PAUSED &&
+				*StateMachine::pGameState != GameState::P1WIN &&
+				*StateMachine::pGameState != GameState::P2WIN)
+			{
+				m_RSlime[i]->Update(m_dt);
+			}
 			m_RSlime[i]->m_pSlimeTex->Render();
 			if (m_RSlime[i]->getDead())
 			{
@@ -423,7 +430,12 @@ void SDLHelper::UpdateSlime()
 	{
 		for (unsigned int i = 0; i < m_LSlime.size(); ++i)
 		{
-			m_LSlime[i]->Update(m_dt);
+			if (*StateMachine::pGameState != GameState::PAUSED &&
+				*StateMachine::pGameState != GameState::P1WIN &&
+				*StateMachine::pGameState != GameState::P2WIN)
+			{
+				m_LSlime[i]->Update(m_dt);
+			}
 			m_LSlime[i]->m_pSlimeTex->Render();
 			if (m_LSlime[i]->getDead())
 			{
@@ -953,7 +965,7 @@ void SDLHelper::ShowGameOn()
 
 		m_pPlayer2->Update(m_dt);
 		m_pPlayer1->Update(m_dt);
-		UpdateSlime();
+	
 
 
 		
@@ -969,13 +981,14 @@ void SDLHelper::ShowGameOn()
 	SDL_RenderCopy(m_pRenderer, m_pP2BG, NULL, &rec);
 
 	SDL_RenderCopy(m_pRenderer, m_pbackground, NULL, &rec);
-	
+	UpdateSlime();
 	//PLAYER 1
 	m_pPlayer1->Render();
 	//PLAYER 2	
 	m_pPlayer2->Render();
 	UpdateProjectiles();
 	UpdatePickUp();
+
 
 
 	//UI STUFF 
