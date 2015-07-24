@@ -126,10 +126,7 @@ void GameEntity::Free()
 
 void GameEntity::Update(float dt)
 {
-	if (m_name == "player1"){ 
-		P1Pos->y = getCenter().y;
-		P1Pos->x = getCenter().x;
-	}
+
 	//IF WINDOW RESIZED 
 	if (MyWindow::resetP1Pos || MyWindow::resetP2Pos){ CenterPlayers(); }
 
@@ -161,10 +158,6 @@ void GameEntity::Update(float dt)
 			if (m_UseKeyForces){ ApplyForces(); }
 			m_timePassed = 0;
 		}
-		else if	(m_name == "CPU")
-		{
-			UpdateAi();
-		}
 	}
 
 	if (m_name == "player1" || m_name == "player2" || m_name == "CPU"){ CheckPlayerBounds(); }
@@ -178,6 +171,15 @@ void GameEntity::Update(float dt)
 	if (m_name == "P1projectile" || m_name == "P2projectile")
 	{
 		CheckProjectileBounds();
+	}
+	if (m_name == "player1"){
+		P1Pos->y = getCenter().y;
+		P1Pos->x = getCenter().x;
+	}
+
+	else if (m_name == "CPU")
+	{
+		UpdateAi();
 	}
 
 }
@@ -668,7 +670,7 @@ bool GameEntity::AimingCorrect()
 	// 		if its 1 then they are Facing Exact Direction 
 
 	Vec2 myDir = VectorMath::Normalize(m_pVel);
-	Vec2 direction = { P1Pos->x - m_pPos->x, P1Pos->y - m_pPos->y };
+	Vec2 direction = { P1Pos->x - m_pCenter->x, P1Pos->y - m_pCenter->y };
 	Vec2 normDir = VectorMath::Normalize(&direction);
 
 	//DOT PRODUCT
@@ -823,6 +825,7 @@ void GameEntity::UpdateAi()
 	}
 	else if (*StateMachine::pCPU == CPUState::MOVE)
 	{
+		if (AimingCorrect()){ *StateMachine::pCPU = CPUState::SHOOTENEMY; }
 		GoToPoint(AIDest->x, AIDest->y);
 		if (m_AITimePassed > 0.5) //60times time a second
 		{
@@ -831,6 +834,7 @@ void GameEntity::UpdateAi()
 				if (AimingCorrect()){ *StateMachine::pCPU = CPUState::SHOOTENEMY;  }
 				else
 				{
+					
 					*StateMachine::pCPU = CPUState::RANDOMDESTINATION;
 					hasShot = true;
 				}
