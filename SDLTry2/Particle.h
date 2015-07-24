@@ -8,6 +8,7 @@ private:
 	float m_timeElapsed;
 	float m_deadTime;
 	int m_currAlpha;
+	float m_sizeMultipler;
 public:	
 	GameEntity* m_pSlimeTex;
 	void Update(float dt);

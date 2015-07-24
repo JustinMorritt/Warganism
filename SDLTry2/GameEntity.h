@@ -93,7 +93,9 @@ public:
 	int getWidth();
 	int getHeight();
 	Vec2* getPos();
-	
+	bool getBig();
+	bool getSmall();
+
 
 	//COLOUR
 	SDL_Color getColor();

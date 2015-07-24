@@ -15,6 +15,7 @@ PickUp::PickUp(int x, int y, int w, int h, SDL_Renderer* theRenderer, std::strin
 }
 
 
+
 PickUp::~PickUp()
 {
 	m_pPickUpTex->Free();

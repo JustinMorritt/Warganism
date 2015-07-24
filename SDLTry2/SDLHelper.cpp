@@ -256,7 +256,7 @@ void SDLHelper::SpawnLSlime()
 	int x = m_pPlayer1->getCenter().x;
 	int y = m_pPlayer1->getCenter().y;
 	int dir = m_pPlayer1->m_Roation;
-	int size = 32;
+	int size = m_pPlayer1->getWidth() / 4;
 	std::string color = m_pPlayer1->m_color;
 	Particle* slime = new Particle(x, y, size, size, dir, color, m_pRenderer, "Slime");
 	m_LSlime.push_back(slime);
@@ -268,7 +268,7 @@ void SDLHelper::SpawnRSlime()
 	int x = m_pPlayer2->getCenter().x;
 	int y = m_pPlayer2->getCenter().y;
 	int dir = m_pPlayer2->m_Roation;
-	int size = 32;
+	int size = m_pPlayer2->getWidth() / 4;
 	std::string color = m_pPlayer2->m_color;
 	Particle* slime = new Particle(x, y, size, size, dir, color, m_pRenderer, "Slime");
 	m_RSlime.push_back(slime);
@@ -311,6 +311,8 @@ void SDLHelper::UpdatePickUp()
 				break;
 			}
 		}
+
+		
 	}
 
 	if (m_P2PickUps.size() > 0)
