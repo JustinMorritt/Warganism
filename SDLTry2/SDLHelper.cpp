@@ -1017,6 +1017,7 @@ void SDLHelper::ShowGameOn()
 	{
 		SpawnProjectile(false, true);
 		*StateMachine::pCPU = CPUState::RANDOMDESTINATION;
+		m_pPlayer2->hasShot = true;
 		m_pPlayer2->decreaseCurrAmmo();
 	}
 

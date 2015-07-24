@@ -126,6 +126,10 @@ void GameEntity::Free()
 
 void GameEntity::Update(float dt)
 {
+	if (m_name == "player1"){ 
+		P1Pos->y = getCenter().y;
+		P1Pos->x = getCenter().x;
+	}
 	//IF WINDOW RESIZED 
 	if (MyWindow::resetP1Pos || MyWindow::resetP2Pos){ CenterPlayers(); }
 
@@ -646,12 +650,37 @@ void GameEntity::CheckProjectileBounds()
 
 void GameEntity::GenerateRandomAIDest()
 {
+	
 	RandGen RG;
 	int randomX = RG(MyWindow::getWidth() - MyWindow::getWidth() / 2) + MyWindow::getWidth() / 2;
 	int randomY = RG(MyWindow::getHeight()) + 1;
 	SDL_Point newPoint{ randomX, randomY };
+
+	std::cout << randomX << std::endl;
+
 	AIDest->x = randomX;
 	AIDest->y = randomY;
+}
+
+bool GameEntity::AimingCorrect()
+{
+	// 	normalize both Direction and vector Created from Center to Center .. Dot Product Them
+	// 		if its 1 then they are Facing Exact Direction 
+
+	Vec2 myDir = VectorMath::Normalize(m_pVel);
+	Vec2 direction = { P1Pos->x - m_pPos->x, P1Pos->y - m_pPos->y };
+	Vec2 normDir = VectorMath::Normalize(&direction);
+
+	//DOT PRODUCT
+	float DP = (myDir.x * normDir.x) + (myDir.y * normDir.y); // If 1 facig exact;
+
+	//std::cout << DP << std::endl;
+
+	if (DP > 0.9){ return true; }
+
+
+	return false;
+	//from me to target
 }
 
 void GameEntity::TurnOnCollider(bool square, bool circle)
@@ -687,7 +716,7 @@ void GameEntity::CenterPlayers()
 		setPos((MyWindow::m_Width / 2 - MyWindow::m_Width / 4) - (m_pRect.w / 2), MyWindow::m_Height / 2 - (m_pRect.h / 2));
 		MyWindow::resetP1Pos = false;
 	}
-	if (getName() == "player2")
+	if (getName() == "player2" || getName() == "CPU")
 	{
 		setPos((MyWindow::m_Width / 2 + MyWindow::m_Width / 4) - (m_pRect.w / 2), MyWindow::m_Height / 2 - (m_pRect.h / 2));
 		MyWindow::resetP2Pos = false;
@@ -775,11 +804,8 @@ void GameEntity::TurnOnAi(bool on)
 
 void GameEntity::UpdateAi()
 {
-	
-// 	if (*StateMachine::pCPU == CPUState::RANDOMDESTINATION)
-// 	{
-	//std::cout << *StateMachine::(int)pCPU << std::endl;
-/*	}*/
+
+
 
 	m_AITimePassed += m_dt;
 
@@ -798,11 +824,22 @@ void GameEntity::UpdateAi()
 	else if (*StateMachine::pCPU == CPUState::MOVE)
 	{
 		GoToPoint(AIDest->x, AIDest->y);
-		if (m_AITimePassed > 1) //60times time a second
+		if (m_AITimePassed > 0.5) //60times time a second
 		{
-			if (m_CurrAmmo > 0) //60times time a second
+			if (m_CurrAmmo > 0 && !hasShot) //60times time a second
 			{
-				*StateMachine::pCPU = CPUState::SHOOTENEMY;
+				if (AimingCorrect()){ *StateMachine::pCPU = CPUState::SHOOTENEMY;  }
+				else
+				{
+					*StateMachine::pCPU = CPUState::RANDOMDESTINATION;
+					hasShot = true;
+				}
+				
+			}
+			else
+			{
+				hasShot = false;
+				*StateMachine::pCPU = CPUState::RANDOMDESTINATION;
 			}
 			
 			m_AITimePassed = 0.0f;
@@ -813,7 +850,7 @@ void GameEntity::UpdateAi()
 	{
 		if (m_AITimePassed > 0.04) //60times time a second
 		{
-			if (m_CurrAmmo > 0)
+			if (m_CurrAmmo > 0 && !hasShot)
 			{
 				*StateMachine::pCPU = CPUState::AIMENEMY;
 			}
@@ -831,15 +868,10 @@ void GameEntity::UpdateAi()
 	}
 }
 
-Vec2* GameEntity::getP1Pos()
-=======
 
 
-void GameEntity::UpdateAi()
->>>>>>> 334c1275f66553c871f5e33bd85206568e595a6c
-{
 
-}
+Vec2* GameEntity::P1Pos = new Vec2;
 
 //STATIC STUFF
 std::string GameEntity::m_P1color = "";

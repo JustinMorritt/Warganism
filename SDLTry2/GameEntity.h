@@ -69,10 +69,11 @@ public:
 	//AI
 	void TurnOnAi(bool on);
 	void UpdateAi();
-	Vec2* getP1Pos(); // USED WITH AI
 	static Vec2* P1Pos;
 	SDL_Point* AIDest = NULL;
 	void GenerateRandomAIDest();
+	bool hasShot;
+	bool AimingCorrect();
 
 
 	//MULTIUSED
