@@ -132,8 +132,7 @@ void GameEntity::Update(float dt)
 	//ROTATE TO DIRECTION IF APPLICABLE
 	if (m_RotateToDir)
 	{
-		if (m_GoDown || m_GoLeft || m_GoRight || m_GoUp){ CalculateRotation(); } //ONLY IF A KEY BEING PRESSED 
-		if (m_UseGoToPoint){ CalculateRotation();}
+		if (m_GoDown || m_GoLeft || m_GoRight || m_GoUp || m_UseGoToPoint){ CalculateRotation(); } //ONLY IF A KEY BEING PRESSED 
 	}
 	
 	m_dt = dt; //Assigned for use in SpriteAnimation
@@ -226,35 +225,31 @@ int GameEntity::getCurrAmmo()
 {
 	return m_CurrAmmo;
 }
+
 std::string GameEntity::getName()
 {
 	return m_name;
 }
-
 
 void GameEntity::SetName(std::string name)
 {
 	m_name = name;
 }
 
-
 int GameEntity::getWidth()
 {
 	return m_pRect.w;
 }
-
 
 SDL_Rect* GameEntity::getRect()
 {
 	return &m_pRect;
 }
 
-
 int GameEntity::getHeight()
 {
 	return m_pRect.h;
 }
-
 
 Vec2* GameEntity::getPos()
 {
@@ -503,11 +498,12 @@ void GameEntity::GoOneDirForever(float x, float y)
 	m_pVel->y = y * m_maxSpeed;
 }
 
-
 void GameEntity::UseGoToPoint(bool on)
 {
 	m_UseGoToPoint = on;
 }
+
+
 
 void GameEntity::UseKeyForces(bool on)
 {
@@ -742,6 +738,14 @@ void GameEntity::ApplyMouseEffects(int mouseX, int mouseY)
 		if (m_PosOffset){ setPos(m_OX, m_OY); m_PosOffset = false; }
 		SetScale(m_OW, m_OH);
 	}
+}
+
+
+
+//AI FUNCTIONS
+void GameEntity::TurnOnAi(bool on)
+{
+	m_UseAI = on;
 }
 
 

@@ -845,8 +845,8 @@ void SDLHelper::ShowCharSelection()
 			if (m_Buttons[i]->m_pButtonTex->m_name == "Player1" && GameEntity::m_P1color != "")
 			{
 				m_Buttons[i]->m_pButtonTex->SetName("Player2");
-				m_Buttons[i]->m_pButtonTex->LoadFile("Pics/player2.png");
-				
+				if (*m_pGameMode == GameMode::PVCPU){ m_Buttons[i]->m_pButtonTex->LoadFile("Pics/CPU.png"); }
+				else{ m_Buttons[i]->m_pButtonTex->LoadFile("Pics/player2.png"); }
 			}
 			if (m_Buttons[i]->m_pButtonTex->m_name == "Player2" && GameEntity::m_P2color != "")
 			{

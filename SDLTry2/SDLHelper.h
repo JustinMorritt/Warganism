@@ -15,49 +15,11 @@
 #include "Button.h"
 #include "SDL_mixer.h"
 #include "Particle.h"
-
+#include "StateMachine.h"
 
 
 
 //Fonts: ANUDRG__.ttf
-enum class GameState
-{
-	MAINMENU,
-	PAUSED,
-	P1WIN,
-	P2WIN,
-	CHARACTERSELECT,
-	GAMEON
-};
-
-enum class LoadedState
-{
-	MAINMENU,
-	PAUSED,
-	P1WIN,
-	P2WIN,
-	CHARACTERSELECT,
-	GAMEON,
-	NONE
-};
-
-enum class SoundState
-{
-	SOUNDON,
-	SOUNDOFF
-};
-
-enum class MusicState
-{
-	MUSICON,
-	MUSICOFF
-};
-
-enum class GameMode
-{
-	PVP,
-	PVCPU
-};
 
 
 class SDLHelper

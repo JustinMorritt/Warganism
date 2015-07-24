@@ -8,6 +8,7 @@
 #include <utility>
 #include <cmath>
 #include "MyWindow.h"
+#include "StateMachine.h"
 
 
 struct AnimationConfig
@@ -28,64 +29,72 @@ public:
 	void Free();
 	void Update(float dt);
 	void Render();
-	void SetAlpha(Uint8 alpha); //0xFF
-	void SetScale(int w, int h);
-
-	void setPos(float x, float y);
-	void setVel(float x, float y);
-	int getCurrAmmo();
-	std::string getName();
-	void SetName(std::string name);
-	SDL_Rect* getRect();
-	int getWidth();
-	int getHeight(); 
 	
-	Vec2* getPos(); 
-
 	//SPRITE ANIMATION
 	void SetAnimation(int x, int y, int numFrames, int frameW, int frameH, float delay, bool loop);
 	void UpdateAnimation();
 	bool GetAnimDone();
 	void SetAnimate(bool on);
-
-	void ApplyForces();
-	
 	bool Animating();
-	SDL_Point getCenter();
 	void SetCurrentAnimation(int num);
 	int GetCurrentAnimation();
 	SDL_Rect GetCurrentFrame();
-	Circle GetCircleCollider();
 
-	void SetColor(std::string color); //USED FOR FONTS
-	void SetColorMod(std::string color);
-	SDL_Color getColor();
+	//PLAYERS / CPU
+	void ApplyForces();
 	void addForce(std::string dir);
 	void removeForce(std::string dir);
-	void GoToPoint(int x, int y);
-	void GoOneDirForever(float x, float y);
 	void UseGoToPoint(bool on);
-	void UseKeyForces(bool on);
-	void UseGoOneDir(bool on);
-	void RotateToDir(bool on);
-	void CalculateRotation();
 	void CheckPlayerBounds();
-	void CheckProjectileBounds();
-	void TurnOnCollider(bool square, bool circle);
-	void UpdateColliders();
-	bool UsingCircleCollider();
 	void CenterPlayers();
 	void SetMousePos(int x, int y);
-	bool IsProjectileDone();
 	void GetBigger();
 	void GetSmaller();
 	void increaseCurrAmmo();
 	void decreaseCurrAmmo();
+	void GoToPoint(int x, int y);
+
+	//BUTTON
 	void UseMouseEffects(bool on, int BulgeOffset);
 	void ApplyMouseEffects(int mouseX, int mouseY);
 	bool m_ClickDown;
 	bool m_Clicked;
 	
+	//PROJECTILE
+	void GoOneDirForever(float x, float y);
+	void CheckProjectileBounds();
+	bool IsProjectileDone();
+
+	//AI
+	void TurnOnAi(bool on);
+
+
+	//MULTIUSED
+	void TurnOnCollider(bool square, bool circle);
+	void UpdateColliders();
+	bool UsingCircleCollider();
+	void UseKeyForces(bool on);
+	void UseGoOneDir(bool on);
+	void RotateToDir(bool on);
+	void CalculateRotation();
+	void SetAlpha(Uint8 alpha); //0xFF
+	void SetScale(int w, int h);
+	void setPos(float x, float y);
+	void setVel(float x, float y);
+	void SetName(std::string name);
+	SDL_Point getCenter();
+	Circle GetCircleCollider();
+	std::string getName();
+	int getCurrAmmo();
+	SDL_Rect* getRect();
+	int getWidth();
+	int getHeight();
+	Vec2* getPos();
+
+	//COLOUR
+	SDL_Color getColor();
+	void SetColor(std::string color); //USED FOR FONTS
+	void SetColorMod(std::string color);
 	
 	std::string m_name;
 	std::string m_color;
@@ -94,6 +103,7 @@ public:
 	static std::string m_P2color;
 
 private:
+	GameMode* m_TheGameMode;
 	SDL_Renderer* m_pTheRenderer;
 	Vec2* m_pPos;
 	Vec2* m_pVel;
@@ -148,6 +158,7 @@ private:
 	bool m_UseGoToPoint;
 	bool m_UseKeyForces;
 	bool m_UseGoOneDirForever;
+	bool m_UseAI;
 	bool m_ProjectileDone;
 	int  m_AccumulatedGrowth;
 	bool m_GetBig;

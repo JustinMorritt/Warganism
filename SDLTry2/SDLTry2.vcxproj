@@ -94,6 +94,7 @@
     <ClInclude Include="randgen.h" />
     <ClInclude Include="SDLHelper.h" />
     <ClInclude Include="GameEntity.h" />
+    <ClInclude Include="StateMachine.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="SDL2-2.0.3\lib\x86\SDL2_mixer.lib" />
