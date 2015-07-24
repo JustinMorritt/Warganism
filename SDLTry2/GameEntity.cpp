@@ -57,8 +57,9 @@ GameEntity::GameEntity(int x, int y, int w, int h, int maxSpeed, int accel, std:
 	m_pCenter			= new SDL_Point;
 	m_pCenter->x		= m_pPos->x + (m_pRect.w/2);
 	m_pCenter->y		= m_pPos->y + (m_pRect.h / 2);
-	m_StartAmmo = 10;
-	m_CurrAmmo = m_StartAmmo;
+	m_StartAmmo			= 10;
+	m_CurrAmmo			= m_StartAmmo;
+	AIDest				= new SDL_Point;
 	CenterPlayers();
 }
 
@@ -635,6 +636,16 @@ void GameEntity::CheckProjectileBounds()
 	UpdateColliders();
 }
 
+void GameEntity::GenerateRandomAIDest()
+{
+	RandGen RG;
+	int randomX = RG(MyWindow::getWidth() - MyWindow::getWidth() / 2) + MyWindow::getWidth() / 2;
+	int randomY = RG(MyWindow::getHeight()) + 1;
+	SDL_Point newPoint{ randomX, randomY };
+	AIDest->x = randomX;
+	AIDest->y = randomY;
+}
+
 void GameEntity::TurnOnCollider(bool square, bool circle)
 {
 	m_UseCircleCollider = circle;
@@ -755,25 +766,59 @@ void GameEntity::TurnOnAi(bool on)
 
 void GameEntity::UpdateAi()
 {
+	
+// 	if (*StateMachine::pCPU == CPUState::RANDOMDESTINATION)
+// 	{
+	//std::cout << *StateMachine::(int)pCPU << std::endl;
+/*	}*/
+
+	m_AITimePassed += m_dt;
+
 	if (*StateMachine::pCPU == CPUState::AIMENEMY)
 	{
+		AIDest->x = P1Pos->x;
+		AIDest->y = P1Pos->y;
 
+		*StateMachine::pCPU = CPUState::MOVE;
+		m_AITimePassed = 0.0f;
 	}
 	else if (*StateMachine::pCPU == CPUState::GETPICKUP)
 	{
 
 	}
-	else if (*StateMachine::pCPU == CPUState::MOVERANDOM)
+	else if (*StateMachine::pCPU == CPUState::MOVE)
 	{
-
+		GoToPoint(AIDest->x, AIDest->y);
+		if (m_AITimePassed > 1) //60times time a second
+		{
+			if (m_CurrAmmo > 0) //60times time a second
+			{
+				*StateMachine::pCPU = CPUState::SHOOTENEMY;
+			}
+			
+			m_AITimePassed = 0.0f;
+		}
+	
 	}
 	else if (*StateMachine::pCPU == CPUState::RANDOMDESTINATION)
 	{
-
+		if (m_AITimePassed > 0.04) //60times time a second
+		{
+			if (m_CurrAmmo > 0)
+			{
+				*StateMachine::pCPU = CPUState::AIMENEMY;
+			}
+			else
+			{
+				*StateMachine::pCPU = CPUState::MOVE;
+				GenerateRandomAIDest();
+			}
+			m_AITimePassed = 0.0f;
+		}
 	}
 	else if (*StateMachine::pCPU == CPUState::SHOOTENEMY)
 	{
-
+		*StateMachine::pCPU = CPUState::RANDOMDESTINATION;
 	}
 }
 

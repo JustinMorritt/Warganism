@@ -8,6 +8,7 @@
 #include <utility>
 #include <cmath>
 #include "MyWindow.h"
+#include "randgen.h"
 
 
 
@@ -70,6 +71,8 @@ public:
 	void UpdateAi();
 	Vec2* getP1Pos(); // USED WITH AI
 	static Vec2* P1Pos;
+	SDL_Point* AIDest = NULL;
+	void GenerateRandomAIDest();
 
 
 	//MULTIUSED

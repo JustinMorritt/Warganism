@@ -1000,6 +1000,13 @@ void SDLHelper::ShowGameOn()
 	m_pInGameAmmoP1->Render();
 	m_pInGameAmmoP2->Render();
 
+	if (*StateMachine::pCPU == CPUState::SHOOTENEMY)
+	{
+		SpawnProjectile(false, true);
+		*StateMachine::pCPU = CPUState::RANDOMDESTINATION;
+		m_pPlayer2->decreaseCurrAmmo();
+	}
+
 
 	if (m_pPlayer1->getWidth() <= 0)
 	{
@@ -1289,6 +1296,8 @@ void SDLHelper::LoadGameOn()
 		m_pPlayer2->RotateToDir(true);			  // Turn on Rotation
 		m_pPlayer2->SetColorMod(GameEntity::m_P2color); //COLOUR FOR PLAYER AND BACKDROP BLOB
 		m_pPlayer2->TurnOnAi(true);
+		m_pPlayer2->UseGoToPoint(true);
+		*StateMachine::pCPU = CPUState::RANDOMDESTINATION;
 	}
 	else
 	{
