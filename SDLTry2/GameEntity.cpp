@@ -13,6 +13,7 @@ GameEntity::GameEntity(int x, int y, int w, int h, int maxSpeed, int accel, std:
 	m_currentFrame		= 0;
 	m_currentAnimation	= 0;
 	m_timePassed		= 0.0f;
+	m_AITimePassed		= 0.0f;
 	m_Animate			= false;
 	m_Animation			= animation;
 	m_pTheRenderer		= renderer;
@@ -152,6 +153,7 @@ void GameEntity::Update(float dt)
 		}
 		if (m_name == "player1" || m_name == "player2")
 		{
+			if (m_name == "player1"){ P1Pos = m_pPos; }
 			if (m_UseGoToPoint){ GoToPoint(m_MouseX,m_MouseY); }
 			if (m_UseKeyForces){ ApplyForces(); }
 			m_timePassed = 0;
@@ -751,13 +753,38 @@ void GameEntity::TurnOnAi(bool on)
 	m_UseAI = on;
 }
 
-
-
 void GameEntity::UpdateAi()
 {
+	if (*StateMachine::pCPU == CPUState::AIMENEMY)
+	{
 
+	}
+	else if (*StateMachine::pCPU == CPUState::GETPICKUP)
+	{
+
+	}
+	else if (*StateMachine::pCPU == CPUState::MOVERANDOM)
+	{
+
+	}
+	else if (*StateMachine::pCPU == CPUState::RANDOMDESTINATION)
+	{
+
+	}
+	else if (*StateMachine::pCPU == CPUState::SHOOTENEMY)
+	{
+
+	}
 }
+
+Vec2* GameEntity::getP1Pos()
+{
+	return GameEntity::P1Pos;
+}
+
+
 
 //STATIC STUFF
 std::string GameEntity::m_P1color = "";
 std::string GameEntity::m_P2color = "";
+Vec2* GameEntity::P1Pos = new Vec2;

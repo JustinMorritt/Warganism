@@ -68,6 +68,8 @@ public:
 	//AI
 	void TurnOnAi(bool on);
 	void UpdateAi();
+	Vec2* getP1Pos(); // USED WITH AI
+	static Vec2* P1Pos;
 
 
 	//MULTIUSED
@@ -91,6 +93,7 @@ public:
 	int getWidth();
 	int getHeight();
 	Vec2* getPos();
+	
 
 	//COLOUR
 	SDL_Color getColor();
@@ -103,6 +106,7 @@ public:
 	static std::string m_P1color;
 	static std::string m_P2color;
 
+
 private:
 	SDL_Renderer* m_pTheRenderer;
 	Vec2* m_pPos;
@@ -111,6 +115,7 @@ private:
 	Circle* m_pCircleCollider;
 	SDL_Point* m_pCenter;
 	float m_timePassed;
+	float m_AITimePassed;
 	float m_maxSpeed;
 	float m_accel;
 	SDL_Texture* m_pTexture;

@@ -543,7 +543,7 @@ void SDLHelper::MouseHandler(SDL_Event &e)
 	case SDL_MOUSEBUTTONDOWN:
 		if (*StateMachine::pGameState == GameState::GAMEON && *StateMachine::pLoadedState == LoadedState::GAMEON)
 		{
-			if (m_pPlayer2->getCurrAmmo() > 0 && *StateMachine::pGameState != GameState::PAUSED)
+			if (m_pPlayer2->getCurrAmmo() > 0 && *StateMachine::pGameState != GameState::PAUSED && *StateMachine::pGameMode == GameMode::PVP)
 			{
 				SpawnProjectile(false, true);
 				m_pPlayer2->decreaseCurrAmmo();
@@ -1043,8 +1043,15 @@ void SDLHelper::LoadP2Win()
 	
 	if (!m_Buttons.empty())	{m_Buttons.clear();}
 
+	if (*StateMachine::pGameMode == GameMode::PVCPU)
+	{
+		winBut->m_pButtonTex->LoadFile("Pics/CPUWins.png");
+	}
+	else
+	{
+		winBut->m_pButtonTex->LoadFile("Pics/P2Wins.png");
+	}
 	
-	winBut->m_pButtonTex->LoadFile("Pics/P2Wins.png");
 	winBut->m_pButtonTex->UseMouseEffects(false,0);
 	quitBut->m_pButtonTex->LoadFile("Pics/quitButt.png");
 	retryBut->m_pButtonTex->LoadFile("Pics/restartButt.png");
@@ -1203,15 +1210,27 @@ void SDLHelper::LoadGameOn()
 	m_pPlayer1->UseKeyForces(true);
 	m_pPlayer1->SetColorMod(GameEntity::m_P1color); //COLOUR FOR PLAYER AND BACKDROP BLOB
 
-	if (*StateMachine::pGameMode == GameMode::PVP){}
-	//PLAYER 2
-	//SET UP CHARACTER       x   y    w    h   maxS Accel					
-	m_pPlayer2 = new GameEntity((SCREEN_WIDTH / 2) + (SCREEN_WIDTH / 4) - 64, (SCREEN_HEIGHT / 2) - (SCREEN_HEIGHT / 4) + 64, 128, 128, 350, 20, "player2", m_pRenderer, false);
-	m_pPlayer2->LoadFile("Pics/blobee.png");  // Load Up The Full Sprite Sheet
-	m_pPlayer2->TurnOnCollider(false, true);  // Turn on colliders
-	m_pPlayer2->RotateToDir(true);			  // Turn on Rotation
-	m_pPlayer2->UseGoToPoint(true);
-	m_pPlayer2->SetColorMod(GameEntity::m_P2color); //COLOUR FOR PLAYER AND BACKDROP BLOB
+	if (*StateMachine::pGameMode == GameMode::PVCPU)
+	{
+		m_pPlayer2 = new GameEntity((SCREEN_WIDTH / 2) + (SCREEN_WIDTH / 4) - 64, (SCREEN_HEIGHT / 2) - (SCREEN_HEIGHT / 4) + 64, 128, 128, 350, 20, "CPU", m_pRenderer, false);
+		m_pPlayer2->LoadFile("Pics/blobee.png");  // Load Up The Full Sprite Sheet
+		m_pPlayer2->TurnOnCollider(false, true);  // Turn on colliders
+		m_pPlayer2->RotateToDir(true);			  // Turn on Rotation
+		m_pPlayer2->SetColorMod(GameEntity::m_P2color); //COLOUR FOR PLAYER AND BACKDROP BLOB
+		m_pPlayer2->TurnOnAi(true);
+	}
+	else
+	{
+		//PLAYER 2
+		//SET UP CHARACTER       x   y    w    h   maxS Accel					
+		m_pPlayer2 = new GameEntity((SCREEN_WIDTH / 2) + (SCREEN_WIDTH / 4) - 64, (SCREEN_HEIGHT / 2) - (SCREEN_HEIGHT / 4) + 64, 128, 128, 350, 20, "player2", m_pRenderer, false);
+		m_pPlayer2->LoadFile("Pics/blobee.png");  // Load Up The Full Sprite Sheet
+		m_pPlayer2->TurnOnCollider(false, true);  // Turn on colliders
+		m_pPlayer2->RotateToDir(true);			  // Turn on Rotation
+		m_pPlayer2->UseGoToPoint(true);
+		m_pPlayer2->SetColorMod(GameEntity::m_P2color); //COLOUR FOR PLAYER AND BACKDROP BLOB
+	}
+
 
 	if (!m_P1PickUps.empty())
 	{

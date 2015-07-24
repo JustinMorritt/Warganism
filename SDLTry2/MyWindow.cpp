@@ -78,6 +78,7 @@ void MyWindow::handleEvent(SDL_Event& e)
 				break;
 
 			case SDL_WINDOWEVENT_MAXIMIZED:
+				//if (*StateMachine::pGameState == GameState::GAMEON){ *StateMachine::pGameState = GameState::GAMEON; }
 				m_Minimized = false;
 				break;
 
