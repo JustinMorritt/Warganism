@@ -135,7 +135,7 @@ void GameEntity::Update(float dt)
 		if (m_GoDown || m_GoLeft || m_GoRight || m_GoUp || m_UseGoToPoint){ CalculateRotation(); } //ONLY IF A KEY BEING PRESSED 
 	}
 	
-	m_dt = dt; //Assigned for use in SpriteAnimation
+	m_dt = dt;//Assigned for use in SpriteAnimation
 	m_timePassed += dt;
 
 	//UPDATE SPRITE ANIMATIONS
@@ -156,9 +156,13 @@ void GameEntity::Update(float dt)
 			if (m_UseKeyForces){ ApplyForces(); }
 			m_timePassed = 0;
 		}
+		else if	(m_name == "CPU")
+		{
+			UpdateAi();
+		}
 	}
 
-	if (m_name == "player1" || m_name == "player2"){ CheckPlayerBounds(); }
+	if (m_name == "player1" || m_name == "player2" || m_name == "CPU"){ CheckPlayerBounds(); }
 	else
 	{
 		m_pPos->x += m_pVel->x * dt; //STEP ON THE X 
@@ -503,8 +507,6 @@ void GameEntity::UseGoToPoint(bool on)
 	m_UseGoToPoint = on;
 }
 
-
-
 void GameEntity::UseKeyForces(bool on)
 {
 	m_UseKeyForces = on;
@@ -551,7 +553,7 @@ void GameEntity::CheckPlayerBounds()
 
 	}
 	//*****PLAYER 2*****
-	else if (m_name == "player2")		//CHECK COLLISION ON X
+	else if (m_name == "player2" || m_name == "CPU")		//CHECK COLLISION ON X
 	{
 		if (m_pCenter->x - m_pCircleCollider->r < MyWindow::m_Width / 2 || m_pCenter->x + m_pCircleCollider->r > MyWindow::m_Width)
 		{
@@ -568,7 +570,7 @@ void GameEntity::CheckPlayerBounds()
 	UpdateColliders();
 	if ((m_pCenter->y - m_pCircleCollider->r < 0) || (m_pCenter->y + m_pCircleCollider->r > MyWindow::m_Height))
 	{
-		if (m_name == "player2")
+		if (m_name == "player2" || m_name == "CPU")
 		{
 			collision = true;
 			m_pPos->y -= m_pVel->y * m_dt;
@@ -581,6 +583,8 @@ void GameEntity::CheckPlayerBounds()
 		}
 		UpdateColliders();
 	}
+
+	//GET BIG OR SMALL CALCULATION
 	if (!collision)
 	{
 		if (m_GetBig)
@@ -593,7 +597,7 @@ void GameEntity::CheckPlayerBounds()
 				SetScale(getWidth() - 1, getHeight() - 1);
 				UpdateColliders();
 			}
-			if (m_name == "player2")		//CHECK COLLISION ON X
+			if (m_name == "player2" || m_name == "CPU")		//CHECK COLLISION ON X
 			{
 				if (m_pCenter->x - m_pCircleCollider->r < MyWindow::m_Width / 2 || m_pCenter->x + m_pCircleCollider->r > MyWindow::m_Width)
 				{
@@ -604,12 +608,13 @@ void GameEntity::CheckPlayerBounds()
 			m_AccumulatedGrowth -= 1;
 			if (m_AccumulatedGrowth <= 0){ m_GetBig = false; }
 		}
-		if (m_GetSmall)
-		{
-			SetScale(getWidth() - 1, getHeight() - 1);
-			m_AccumulatedGrowth += 1;
-			if (m_AccumulatedGrowth >= 0){ m_GetSmall = false; }
-		}
+	}
+
+	if (m_GetSmall)
+	{
+		SetScale(getWidth() - 1, getHeight() - 1);
+		m_AccumulatedGrowth += 1;
+		if (m_AccumulatedGrowth >= 0){ m_GetSmall = false; }
 	}
 }
 
@@ -749,6 +754,11 @@ void GameEntity::TurnOnAi(bool on)
 }
 
 
+
+void GameEntity::UpdateAi()
+{
+
+}
 
 //STATIC STUFF
 std::string GameEntity::m_P1color = "";

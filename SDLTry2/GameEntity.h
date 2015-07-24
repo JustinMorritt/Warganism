@@ -67,6 +67,7 @@ public:
 
 	//AI
 	void TurnOnAi(bool on);
+	void UpdateAi();
 
 
 	//MULTIUSED
