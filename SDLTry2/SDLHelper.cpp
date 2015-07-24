@@ -42,9 +42,6 @@ SDLHelper::SDLHelper() : m_dt(0.0f), m_done(false)
 	m_pMyWindow = new MyWindow();
 	m_pMyWindow->init();
 
-	//CREATE THE WINDOW APPLICATION
-	//m_pWindow = SDL_CreateWindow("SDL HELPER BY JUSTIN !", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN | SDL_RENDERER_PRESENTVSYNC | SDL_WINDOW_RESIZABLE);
-
 	//Create renderer for window
 	m_pRenderer = m_pMyWindow->createRenderer();
 	if (m_pRenderer == NULL)
@@ -186,8 +183,6 @@ void SDLHelper::SetDT(float dt)
 void SDLHelper::Update()
 {
 
-	//std::cout << "GameState = " + std::to_string((int)*m_pGameState) << std::endl;
-	//std::cout << "GameState = " + std::to_string((int)*m_pLoadedState) << std::endl;
 	HandleEvents();
 
 	//Clear screen

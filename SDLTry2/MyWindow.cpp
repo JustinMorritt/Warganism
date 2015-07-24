@@ -41,6 +41,10 @@ void MyWindow::handleEvent(SDL_Event& e)
 			m_Height = int(e.window.data2); //NEW HEIGHT
 			resetP1Pos = true;
 			resetP2Pos = true;
+			if (*StateMachine::pGameState == GameState::MAINMENU)
+			{
+				*StateMachine::pLoadedState = LoadedState::NONE;
+			}
 			SDL_RenderPresent(m_pTheRenderer);
 			break;
 

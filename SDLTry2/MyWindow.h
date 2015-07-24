@@ -2,6 +2,7 @@
 
 #include <SDL.h>
 #include <sstream>
+#include "StateMachine.h"
 
 class SDLHelper;
 class GameEntity;
