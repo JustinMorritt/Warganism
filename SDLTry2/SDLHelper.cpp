@@ -1475,13 +1475,31 @@ void SDLHelper::LoadGameOn()
 
 
 	//TITLE
+	m_pInGameTitle->Free();
 	m_pInGameTitle->LoadTextFile(m_pFont2, "Fight !", "royalblue");
-
+	
 
 	//PLAYER BG 
+	if (m_pP1BG != NULL)
+	{
+		SDL_DestroyTexture(m_pP1BG);
+		m_pP1BG = NULL;
+	}
 	m_pP1BG = loadTexture("Pics/p1BG.png");
+
+	if (m_pP2BG != NULL)
+	{
+		SDL_DestroyTexture(m_pP2BG);
+		m_pP2BG = NULL;
+	}
 	m_pP2BG = loadTexture("Pics/p2BG.png");
 
+
+	if (m_pbackground != NULL)
+	{
+		SDL_DestroyTexture(m_pbackground);
+		m_pbackground = NULL;
+	}
 	m_pbackground = loadTexture("Pics/background.png");
 
 	m_pInGameTitle->setPos((MyWindow::m_Width / 2) - (m_pInGameTitle->getWidth() / 2), 0);
