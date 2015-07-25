@@ -65,6 +65,26 @@ GameEntity::GameEntity(int x, int y, int w, int h, int maxSpeed, int accel, std:
 GameEntity::~GameEntity()
 {
 	Free();
+
+	m_pTheRenderer = nullptr;
+
+	delete m_pPos;
+	m_pPos = nullptr;
+
+	delete m_pVel;
+	m_pVel = nullptr;
+
+	delete m_pcurrSpeed;
+	m_pcurrSpeed = nullptr;
+
+	delete m_pCircleCollider;
+	m_pCircleCollider = nullptr;
+
+	delete m_pCenter;
+	m_pCenter = nullptr;
+
+	delete m_pFont;
+	m_pFont = nullptr;
 }
 
 void GameEntity::LoadFile(std::string path)
@@ -122,6 +142,8 @@ void GameEntity::Free()
 		SDL_DestroyTexture(m_pTexture);
 		m_pTexture = NULL;
 	}
+
+
 }
 
 void GameEntity::Update(float dt)

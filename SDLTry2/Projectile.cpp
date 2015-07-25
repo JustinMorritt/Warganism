@@ -25,4 +25,6 @@ Projectile::Projectile(int x, int y, int w, int h, double DIR, std::string color
 Projectile::~Projectile()
 {
 	m_pProjTex->Free();
+	delete m_pProjTex;
+	m_pProjTex = nullptr;
 }
