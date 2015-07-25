@@ -304,6 +304,7 @@ void SDLHelper::UpdatePickUp()
 
 			if (Collision::CircleVsCircle(m_P1PickUps[i]->m_pPickUpTex->GetCircleCollider(), m_pPlayer1->GetCircleCollider()))
 			{
+				m_P1PickUps[i]->m_pPickUpTex->Free();
 				delete m_P1PickUps[i];
 				m_P1PickUps[i] = nullptr;
 				m_P1PickUps.erase(m_P1PickUps.begin() + i);
@@ -325,6 +326,7 @@ void SDLHelper::UpdatePickUp()
 
 			if (Collision::CircleVsCircle(m_P2PickUps[i]->m_pPickUpTex->GetCircleCollider(), m_pPlayer2->GetCircleCollider()))
 			{
+				m_P2PickUps[i]->m_pPickUpTex->Free();
 				delete m_P2PickUps[i];
 				m_P2PickUps[i] = nullptr;
 				m_P2PickUps.erase(m_P2PickUps.begin() + i);
@@ -370,6 +372,7 @@ void SDLHelper::UpdateProjectiles()
 
 			if (m_P1Projectiles[i]->m_pProjTex->IsProjectileDone() || m_P1Projectiles[i]->m_pProjTex->GetAnimDone())
 			{
+				m_P1Projectiles[i]->m_pProjTex->Free();
 				delete m_P1Projectiles[i];
 				m_P1Projectiles[i] = nullptr;
 				//std::cout << "Erased a P1 Projectile -- OFF SCREEN" << std::endl;
@@ -405,6 +408,7 @@ void SDLHelper::UpdateProjectiles()
 			}
 			if (m_P2Projectiles[i]->m_pProjTex->IsProjectileDone() || m_P2Projectiles[i]->m_pProjTex->GetAnimDone())
 			{
+				m_P2Projectiles[i]->m_pProjTex->Free();
 				delete m_P2Projectiles[i];
 				m_P2Projectiles[i] = nullptr;
 				//std::cout << "Erased a P2 Projectile  -- OFF SCREEN" << std::endl;
@@ -430,6 +434,7 @@ void SDLHelper::UpdateSlime()
 			m_RSlime[i]->m_pSlimeTex->Render();
 			if (m_RSlime[i]->getDead())
 			{
+				m_RSlime[i]->m_pSlimeTex->Free();
 				delete m_RSlime[i];
 				m_RSlime[i] = nullptr;
 				m_RSlime.erase(m_RSlime.begin() + i);
@@ -450,6 +455,7 @@ void SDLHelper::UpdateSlime()
 			m_LSlime[i]->m_pSlimeTex->Render();
 			if (m_LSlime[i]->getDead())
 			{
+				m_LSlime[i]->m_pSlimeTex->Free();
 				delete m_LSlime[i];
 				m_LSlime[i] = nullptr;
 				m_LSlime.erase(m_LSlime.begin() + i);
@@ -1067,11 +1073,13 @@ void SDLHelper::LoadMainMenu()
 	{
 		for (int i = 0; i < m_Buttons.size(); i++)
 		{
+			m_Buttons[i]->m_pButtonTex->Free();
 			delete m_Buttons[i];
 			m_Buttons[i] = nullptr;
 		}
 		m_Buttons.clear();
 	}
+	
 	
 
 	//ADD BUTTONS
@@ -1120,6 +1128,7 @@ void SDLHelper::LoadPaused()
 	{
 		for (int i = 0; i < m_Buttons.size(); i++)
 		{
+			m_Buttons[i]->m_pButtonTex->Free();
 			delete m_Buttons[i];
 			m_Buttons[i] = nullptr;
 		}
@@ -1147,6 +1156,7 @@ void SDLHelper::LoadP1Win()
 	{
 		for (int i = 0; i < m_Buttons.size(); i++)
 		{
+			m_Buttons[i]->m_pButtonTex->Free();
 			delete m_Buttons[i];
 			m_Buttons[i] = nullptr;
 		}
@@ -1174,6 +1184,7 @@ void SDLHelper::LoadP2Win()
 	{
 		for (int i = 0; i < m_Buttons.size(); i++)
 		{
+			m_Buttons[i]->m_pButtonTex->Free();
 			delete m_Buttons[i];
 			m_Buttons[i] = nullptr;
 		}
@@ -1204,6 +1215,7 @@ void SDLHelper::LoadCharSelection()
 	{ 
 		for (int i = 0; i < m_Buttons.size(); i++)
 		{
+			m_Buttons[i]->m_pButtonTex->Free();
 			delete m_Buttons[i];
 			m_Buttons[i] = nullptr;
 		}
@@ -1315,6 +1327,16 @@ void SDLHelper::LoadCharSelection()
 
 void SDLHelper::LoadGameOn()
 {
+	if (!m_Buttons.empty())
+	{
+		for (int i = 0; i < m_Buttons.size(); i++)
+		{
+			m_Buttons[i]->m_pButtonTex->Free();
+			delete m_Buttons[i];
+			m_Buttons[i] = nullptr;
+		}
+		m_Buttons.clear();
+	}
 	// 	//SET UP CHARACTER       x   y    w    h  maxS Accel					
 	// 	m_pTexture = new Texture(30, 30, 128, 128, 350, 20, "Guy", m_pRenderer, true);
 	// 	m_pTexture->LoadFile("Pics/walkGuy.png");				   // Load Up The Full Sprite Sheet
@@ -1339,6 +1361,12 @@ void SDLHelper::LoadGameOn()
 
 
 	//TITLE
+	if (m_pInGameTitle != NULL){ m_pInGameTitle->Free(); delete m_pInGameTitle; }
+	if (m_pInGameSizeP1 != NULL){ m_pInGameSizeP1->Free(); delete m_pInGameSizeP1; }
+	if (m_pInGameSizeP2 != NULL){ m_pInGameSizeP2->Free(); delete m_pInGameSizeP2; }
+	if (m_pInGameAmmoP1 != NULL){ m_pInGameAmmoP1->Free(); delete m_pInGameAmmoP1; }
+	if (m_pInGameAmmoP2 != NULL){ m_pInGameAmmoP2->Free(); delete m_pInGameAmmoP2; }
+
 	m_pInGameTitle = new GameEntity(0, 0, 300, 100, 100, 5, "Title", m_pRenderer, false);
 
 	m_pInGameSizeP1 = new GameEntity(0, 0, 180, 40, 0, 0, "P1Size", m_pRenderer, false);
@@ -1346,6 +1374,8 @@ void SDLHelper::LoadGameOn()
 	m_pInGameAmmoP1 = new GameEntity(0, 0, 180, 40, 0, 0, "P1Ammo", m_pRenderer, false);
 	m_pInGameAmmoP2 = new GameEntity(0, 0, 180, 40, 0, 0, "P2Ammo", m_pRenderer, false);
 
+
+	if (m_pPlayer1 != NULL){ m_pPlayer1->Free(); delete m_pPlayer1; }
 	//PLAYER 1
 	//SET UP CHARACTER       x   y    w    h   maxS Accel					
 	m_pPlayer1 = new GameEntity((SCREEN_WIDTH / 2) - (SCREEN_WIDTH / 4) - 64, (SCREEN_HEIGHT / 2) - (SCREEN_HEIGHT / 4) + 64, 128, 128, 350, 20, "player1", m_pRenderer, false);
@@ -1357,6 +1387,8 @@ void SDLHelper::LoadGameOn()
 
 	if (*StateMachine::pGameMode == GameMode::PVCPU)
 	{
+		if (m_pPlayer2 != NULL){ m_pPlayer2->Free(); delete m_pPlayer2; }
+
 		m_pPlayer2 = new GameEntity((SCREEN_WIDTH / 2) + (SCREEN_WIDTH / 4) - 64, (SCREEN_HEIGHT / 2) - (SCREEN_HEIGHT / 4) + 64, 128, 128, 350, 20, "CPU", m_pRenderer, false);
 		m_pPlayer2->LoadFile("Pics/blobee.png");  // Load Up The Full Sprite Sheet
 		m_pPlayer2->TurnOnCollider(false, true);  // Turn on colliders
@@ -1368,6 +1400,7 @@ void SDLHelper::LoadGameOn()
 	}
 	else
 	{
+		if (m_pPlayer2 != NULL){ m_pPlayer2->Free(); delete m_pPlayer2; }
 		//PLAYER 2
 		//SET UP CHARACTER       x   y    w    h   maxS Accel					
 		m_pPlayer2 = new GameEntity((SCREEN_WIDTH / 2) + (SCREEN_WIDTH / 4) - 64, (SCREEN_HEIGHT / 2) - (SCREEN_HEIGHT / 4) + 64, 128, 128, 350, 20, "player2", m_pRenderer, false);
@@ -1383,6 +1416,7 @@ void SDLHelper::LoadGameOn()
 	{
 		for (int i = 0; i < m_P1PickUps.size(); i++)
 		{
+			m_P1PickUps[i]->m_pPickUpTex->Free();
 			delete m_P1PickUps[i];
 			m_P1PickUps[i] = nullptr;
 		}
@@ -1392,6 +1426,7 @@ void SDLHelper::LoadGameOn()
 	{
 		for (int i = 0; i < m_P2PickUps.size(); i++)
 		{
+			m_P2PickUps[i]->m_pPickUpTex->Free();
 			delete m_P2PickUps[i];
 			m_P2PickUps[i] = nullptr;
 		}
@@ -1401,6 +1436,7 @@ void SDLHelper::LoadGameOn()
 	{
 		for (int i = 0; i < m_RSlime.size(); i++)
 		{
+			m_RSlime[i]->m_pSlimeTex->Free();
 			delete m_RSlime[i];
 			m_RSlime[i] = nullptr;
 		}
@@ -1410,6 +1446,7 @@ void SDLHelper::LoadGameOn()
 	{
 		for (int i = 0; i < m_LSlime.size(); i++)
 		{
+			m_LSlime[i]->m_pSlimeTex->Free();
 			delete m_LSlime[i];
 			m_LSlime[i] = nullptr;
 		}
@@ -1419,6 +1456,7 @@ void SDLHelper::LoadGameOn()
 	{
 		for (int i = 0; i < m_P1Projectiles.size(); i++)
 		{
+			m_P1Projectiles[i]->m_pProjTex->Free();
 			delete m_P1Projectiles[i];
 			m_P1Projectiles[i] = nullptr;
 		}
@@ -1428,6 +1466,7 @@ void SDLHelper::LoadGameOn()
 	{
 		for (int i = 0; i < m_P2Projectiles.size(); i++)
 		{
+			m_P2Projectiles[i]->m_pProjTex->Free();
 			delete m_P2Projectiles[i];
 			m_P2Projectiles[i] = nullptr;
 		}
