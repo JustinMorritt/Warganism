@@ -1011,6 +1011,10 @@ void SDLHelper::ShowGameOn()
 
 
 	//UI STUFF 
+	m_pInGameSizeP1->Free();
+	m_pInGameSizeP2->Free();
+	m_pInGameAmmoP1->Free();
+	m_pInGameAmmoP2->Free();
 
 	m_pInGameSizeP1->LoadTextFile(m_pFont2, "Size: " + std::to_string(m_pPlayer1->getWidth()) + "mm", "black");
 	m_pInGameSizeP2->LoadTextFile(m_pFont2, "Size: " + std::to_string(m_pPlayer2->getWidth()) + "mm", "black");
