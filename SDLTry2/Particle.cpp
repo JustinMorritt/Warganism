@@ -19,6 +19,8 @@ Particle::Particle(int x, int y, int w, int h, double DIR, std::string color, SD
 Particle::~Particle()
 {
 	m_pSlimeTex->Free();
+	delete m_pSlimeTex;
+	m_pSlimeTex = nullptr;
 }
 
 void Particle::Update(float dt)

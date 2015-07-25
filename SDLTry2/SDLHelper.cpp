@@ -304,6 +304,8 @@ void SDLHelper::UpdatePickUp()
 
 			if (Collision::CircleVsCircle(m_P1PickUps[i]->m_pPickUpTex->GetCircleCollider(), m_pPlayer1->GetCircleCollider()))
 			{
+				delete m_P1PickUps[i];
+				m_P1PickUps[i] = nullptr;
 				m_P1PickUps.erase(m_P1PickUps.begin() + i);
 				if (*StateMachine::pSoundState == SoundState::SOUNDON){ Mix_PlayChannel(-1, m_pGrow, 0); }
 				m_pPlayer1->GetBigger();
@@ -323,7 +325,10 @@ void SDLHelper::UpdatePickUp()
 
 			if (Collision::CircleVsCircle(m_P2PickUps[i]->m_pPickUpTex->GetCircleCollider(), m_pPlayer2->GetCircleCollider()))
 			{
+				delete m_P2PickUps[i];
+				m_P2PickUps[i] = nullptr;
 				m_P2PickUps.erase(m_P2PickUps.begin() + i);
+				
 				if (*StateMachine::pSoundState == SoundState::SOUNDON){ Mix_PlayChannel(-1, m_pGrow, 0); }
 				m_pPlayer2->GetBigger();
 				m_pPlayer2->increaseCurrAmmo();
@@ -365,6 +370,8 @@ void SDLHelper::UpdateProjectiles()
 
 			if (m_P1Projectiles[i]->m_pProjTex->IsProjectileDone() || m_P1Projectiles[i]->m_pProjTex->GetAnimDone())
 			{
+				delete m_P1Projectiles[i];
+				m_P1Projectiles[i] = nullptr;
 				//std::cout << "Erased a P1 Projectile -- OFF SCREEN" << std::endl;
 				m_P1Projectiles.erase(m_P1Projectiles.begin() + i);
 			}
@@ -398,6 +405,8 @@ void SDLHelper::UpdateProjectiles()
 			}
 			if (m_P2Projectiles[i]->m_pProjTex->IsProjectileDone() || m_P2Projectiles[i]->m_pProjTex->GetAnimDone())
 			{
+				delete m_P2Projectiles[i];
+				m_P2Projectiles[i] = nullptr;
 				//std::cout << "Erased a P2 Projectile  -- OFF SCREEN" << std::endl;
 				m_P2Projectiles.erase(m_P2Projectiles.begin() + i);
 			}
@@ -421,6 +430,8 @@ void SDLHelper::UpdateSlime()
 			m_RSlime[i]->m_pSlimeTex->Render();
 			if (m_RSlime[i]->getDead())
 			{
+				delete m_RSlime[i];
+				m_RSlime[i] = nullptr;
 				m_RSlime.erase(m_RSlime.begin() + i);
 			}
 		}
@@ -439,6 +450,8 @@ void SDLHelper::UpdateSlime()
 			m_LSlime[i]->m_pSlimeTex->Render();
 			if (m_LSlime[i]->getDead())
 			{
+				delete m_LSlime[i];
+				m_LSlime[i] = nullptr;
 				m_LSlime.erase(m_LSlime.begin() + i);
 			}
 		}
