@@ -1071,6 +1071,12 @@ void SDLHelper::LoadMainMenu()
 
 	GameEntity::m_P1color = "";
 	GameEntity::m_P2color = "";
+	
+	if (m_pbackground != NULL)
+	{
+		SDL_DestroyTexture(m_pbackground);
+		m_pbackground = NULL;
+	}
 	m_pbackground = loadTexture("Pics/mainmenu.png");
 
 	if (!m_Buttons.empty())	
@@ -1123,6 +1129,7 @@ void SDLHelper::LoadMainMenu()
 
 void SDLHelper::LoadPaused()
 {
+
 	m_pPaused->LoadTextFile(m_pFont2, "PAUSED ", "royalblue");
 
 	Button* quitBut = new Button(MyWindow::getWidth() / 2 - 200, MyWindow::getHeight() / 2 + 150, 300, 150, 0, m_pRenderer, "quitButt", 20);
@@ -1324,6 +1331,11 @@ void SDLHelper::LoadCharSelection()
 
 	m_Buttons.push_back(playBut0); //pushed back last for efficiency .. if in loop ..ya
 
+	if (m_pbackground != NULL)
+	{
+		SDL_DestroyTexture(m_pbackground);
+		m_pbackground = NULL;
+	}
 	m_pbackground = loadTexture("Pics/charmenu.png");
 
 	*StateMachine::pLoadedState = LoadedState::CHARACTERSELECT;
