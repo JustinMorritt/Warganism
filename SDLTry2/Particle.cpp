@@ -9,9 +9,10 @@ Particle::Particle(int x, int y, int w, int h, double DIR, std::string color, SD
 	m_pSlimeTex->m_Roation = DIR;
 	m_pSlimeTex->CalculateRotation();
 	m_isDead = false;
-	m_deadTime = 0.75;
-	m_currAlpha = 255;
+	m_deadTime = 2.75;
+	m_currAlpha = 150;
 	m_sizeMultipler = 1.30;
+
 
 }
 
@@ -46,7 +47,15 @@ void Particle::fadeOut()
 	}
 	else
 	{
-		m_currAlpha -= 5;
+		m_currAlpha -= 1;
+		if (m_pSlimeTex->getWidth() != 0)
+		{
+			m_pSlimeTex->SetScale(m_pSlimeTex->getWidth() - 1, m_pSlimeTex->getHeight() - 1);
+		}
+		else
+		{
+			m_isDead = true;
+		}
 	}
 	m_pSlimeTex->SetAlpha(m_currAlpha);
 }

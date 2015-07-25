@@ -43,6 +43,7 @@ public:
 
 	//PLAYERS / CPU
 	void ApplyForces();
+	bool IsMoving();
 	void addForce(std::string dir);
 	void removeForce(std::string dir);
 	void UseGoToPoint(bool on);

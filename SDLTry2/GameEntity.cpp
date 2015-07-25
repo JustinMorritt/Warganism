@@ -297,6 +297,8 @@ Vec2* GameEntity::getPos()
 	return m_pPos;
 }
 
+
+
 void GameEntity::SetAnimation(int x, int y, int numFrames, int frameW, int frameH, float delay, bool loop)
 {
 	std::vector<SDL_Rect> frames;
@@ -381,6 +383,11 @@ void GameEntity::ApplyForces()
 	//ASSIGN NEW VELOCITYS 
 	m_pVel->x = (m_pcurrSpeed->x);
 	m_pVel->y = (m_pcurrSpeed->y);
+}
+
+bool GameEntity::IsMoving()
+{
+	return m_pVel->x != 0 | m_pVel->y != 0; 
 }
 
 void GameEntity::SetAnimate(bool on)
@@ -672,38 +679,6 @@ void GameEntity::CheckProjectileBounds()
 	UpdateColliders();
 }
 
-void GameEntity::GenerateRandomAIDest()
-{
-	
-	RandGen RG;
-	int randomX = RG(MyWindow::getWidth() - MyWindow::getWidth() / 2) + MyWindow::getWidth() / 2;
-	int randomY = RG(MyWindow::getHeight()) + 1;
-	SDL_Point newPoint{ randomX, randomY };
-	AIDest->x = randomX;
-	AIDest->y = randomY;
-}
-
-bool GameEntity::AimingCorrect()
-{
-	// 	normalize both Direction and vector Created from Center to Center .. Dot Product Them
-	// 		if its 1 then they are Facing Exact Direction 
-
-	Vec2 myDir = VectorMath::Normalize(m_pVel);
-	Vec2 direction = { P1Pos->x - m_pCenter->x, P1Pos->y - m_pCenter->y };
-	Vec2 normDir = VectorMath::Normalize(&direction);
-
-	//DOT PRODUCT
-	float DP = (myDir.x * normDir.x) + (myDir.y * normDir.y); // If 1 facig exact;
-
-	//std::cout << DP << std::endl;
-
-	if (DP > 0.9){ return true; }
-
-
-	return false;
-	//from me to target
-}
-
 void GameEntity::TurnOnCollider(bool square, bool circle)
 {
 	m_UseCircleCollider = circle;
@@ -822,6 +797,26 @@ void GameEntity::TurnOnAi(bool on)
 	m_UseAI = on;
 }
 
+bool GameEntity::AimingCorrect()
+{
+	// 	normalize both Direction and vector Created from Center to Center .. Dot Product Them
+	// 		if its 1 then they are Facing Exact Direction 
+
+	Vec2 myDir = VectorMath::Normalize(m_pVel);
+	Vec2 direction = { P1Pos->x - m_pCenter->x, P1Pos->y - m_pCenter->y };
+	Vec2 normDir = VectorMath::Normalize(&direction);
+
+	//DOT PRODUCT
+	float DP = (myDir.x * normDir.x) + (myDir.y * normDir.y); // If 1 facig exact;
+
+	//std::cout << DP << std::endl;
+
+	if (DP > 0.9){ return true; }
+
+
+	return false;
+	//from me to target
+}
 
 void GameEntity::UpdateAi()
 {
@@ -891,6 +886,16 @@ void GameEntity::UpdateAi()
 	}
 }
 
+void GameEntity::GenerateRandomAIDest()
+{
+
+	RandGen RG;
+	int randomX = RG(MyWindow::getWidth() - MyWindow::getWidth() / 2) + MyWindow::getWidth() / 2;
+	int randomY = RG(MyWindow::getHeight()) + 1;
+	SDL_Point newPoint{ randomX, randomY };
+	AIDest->x = randomX;
+	AIDest->y = randomY;
+}
 
 
 
