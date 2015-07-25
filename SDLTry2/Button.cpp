@@ -13,4 +13,6 @@ Button::Button(int x, int y, int w, int h, double DIR, SDL_Renderer* theRenderer
 Button::~Button()
 {
 	m_pButtonTex->Free();
+	delete m_pButtonTex;
+	m_pButtonTex = nullptr;
 }

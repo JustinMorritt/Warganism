@@ -1063,7 +1063,15 @@ void SDLHelper::LoadMainMenu()
 	GameEntity::m_P2color = "";
 	m_pbackground = loadTexture("Pics/mainmenu.png");
 
-	if (!m_Buttons.empty())	{m_Buttons.clear();}
+	if (!m_Buttons.empty())	
+	{
+		for (int i = 0; i < m_Buttons.size(); i++)
+		{
+			delete m_Buttons[i];
+			m_Buttons[i] = nullptr;
+		}
+		m_Buttons.clear();
+	}
 	
 
 	//ADD BUTTONS
@@ -1108,7 +1116,15 @@ void SDLHelper::LoadPaused()
 	Button* quitBut = new Button(MyWindow::getWidth() / 2 - 200, MyWindow::getHeight() / 2 + 150, 300, 150, 0, m_pRenderer, "quitButt", 20);
 	Button* retryBut = new Button(MyWindow::getWidth() / 2 + 200, MyWindow::getHeight() / 2 + 150, 300, 150, 0, m_pRenderer, "retryButt", 20);
 
-	if (!m_Buttons.empty()){ m_Buttons.clear(); }
+	if (!m_Buttons.empty())
+	{
+		for (int i = 0; i < m_Buttons.size(); i++)
+		{
+			delete m_Buttons[i];
+			m_Buttons[i] = nullptr;
+		}
+		m_Buttons.clear(); 
+	}
 
 
 	quitBut->m_pButtonTex->LoadFile("Pics/quitButt.png");
@@ -1127,7 +1143,15 @@ void SDLHelper::LoadP1Win()
 	Button* quitBut = new Button(MyWindow::getWidth() / 2 - 200 , MyWindow::getHeight() / 2 + 150, 300, 150, 0, m_pRenderer, "quitButt", 20);
 	Button* retryBut = new Button(MyWindow::getWidth() / 2 + 200, MyWindow::getHeight() / 2 + 150, 300, 150, 0, m_pRenderer, "retryButt", 20);
 
-	if (!m_Buttons.empty()){m_Buttons.clear();}
+	if (!m_Buttons.empty())
+	{
+		for (int i = 0; i < m_Buttons.size(); i++)
+		{
+			delete m_Buttons[i];
+			m_Buttons[i] = nullptr;
+		}
+		m_Buttons.clear();
+	}
 
 	winBut->m_pButtonTex->LoadFile("Pics/P1Wins.png");
 	winBut->m_pButtonTex->UseMouseEffects(false,0);
@@ -1146,7 +1170,15 @@ void SDLHelper::LoadP2Win()
 	Button* quitBut = new Button(MyWindow::getWidth() / 2 - 200, MyWindow::getHeight() / 2 + 150, 300, 150, 0, m_pRenderer, "quitButt", 20);
 	Button* retryBut = new Button(MyWindow::getWidth() / 2 + 200, MyWindow::getHeight() / 2 + 150, 300, 150, 0, m_pRenderer, "retryButt", 20);
 	
-	if (!m_Buttons.empty())	{m_Buttons.clear();}
+	if (!m_Buttons.empty())	
+	{
+		for (int i = 0; i < m_Buttons.size(); i++)
+		{
+			delete m_Buttons[i];
+			m_Buttons[i] = nullptr;
+		}
+		m_Buttons.clear();
+	}
 
 	if (*StateMachine::pGameMode == GameMode::PVCPU)
 	{
@@ -1168,7 +1200,15 @@ void SDLHelper::LoadP2Win()
 
 void SDLHelper::LoadCharSelection()
 {
-	if (!m_Buttons.empty())	{ m_Buttons.clear(); }
+	if (!m_Buttons.empty())	
+	{ 
+		for (int i = 0; i < m_Buttons.size(); i++)
+		{
+			delete m_Buttons[i];
+			m_Buttons[i] = nullptr;
+		}
+		m_Buttons.clear(); 
+	}
 
 	Button* playBut0 = new Button(MyWindow::m_Width / 2, MyWindow::m_Height / 2 - 120, 450, 220, 0, m_pRenderer, "Player1", 20);
 	playBut0->m_pButtonTex->LoadFile("Pics/player1.png");
@@ -1341,22 +1381,58 @@ void SDLHelper::LoadGameOn()
 
 	if (!m_P1PickUps.empty())
 	{
+		for (int i = 0; i < m_P1PickUps.size(); i++)
+		{
+			delete m_P1PickUps[i];
+			m_P1PickUps[i] = nullptr;
+		}
 		m_P1PickUps.clear();
 	}
 	if (!m_P2PickUps.empty())
 	{
+		for (int i = 0; i < m_P2PickUps.size(); i++)
+		{
+			delete m_P2PickUps[i];
+			m_P2PickUps[i] = nullptr;
+		}
 		m_P2PickUps.clear();
 	}
 	if (!m_RSlime.empty())
 	{
+		for (int i = 0; i < m_RSlime.size(); i++)
+		{
+			delete m_RSlime[i];
+			m_RSlime[i] = nullptr;
+		}
 		m_RSlime.clear();
 	}
 	if (!m_LSlime.empty())
 	{
+		for (int i = 0; i < m_LSlime.size(); i++)
+		{
+			delete m_LSlime[i];
+			m_LSlime[i] = nullptr;
+		}
 		m_LSlime.clear();
 	}
-	if (!m_P1Projectiles.empty()) { m_P1Projectiles.clear(); }
-	if (!m_P2Projectiles.empty()) { m_P2Projectiles.clear(); }
+	if (!m_P1Projectiles.empty()) 
+	{
+		for (int i = 0; i < m_P1Projectiles.size(); i++)
+		{
+			delete m_P1Projectiles[i];
+			m_P1Projectiles[i] = nullptr;
+		}
+		m_P1Projectiles.clear();
+	}
+	if (!m_P2Projectiles.empty()) 
+	{
+		for (int i = 0; i < m_P2Projectiles.size(); i++)
+		{
+			delete m_P2Projectiles[i];
+			m_P2Projectiles[i] = nullptr;
+		}
+		m_P2Projectiles.clear(); 
+	}
 
 
 	//TITLE
