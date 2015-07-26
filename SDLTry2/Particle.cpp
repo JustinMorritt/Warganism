@@ -7,12 +7,12 @@ Particle::Particle(int x, int y, int w, int h, double DIR, std::string color, SD
 	m_pSlimeTex->LoadFile("Pics/particle.png"); // Load Up The Full Sprite Sheet
 	m_pSlimeTex->SetColorMod(color);
 	m_pSlimeTex->m_Roation = DIR;
-	m_pSlimeTex->CalculateRotation();
+	//m_pSlimeTex->CalculateRotation();
 	m_isDead = false;
 	m_deadTime = 2.75;
-	m_currAlpha = 150;
+	m_currAlpha = 50;
 	m_sizeMultipler = 1.30;
-
+	
 
 }
 

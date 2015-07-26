@@ -253,13 +253,17 @@ void SDLHelper::SpawnRPickUp()
 
 void SDLHelper::SpawnLSlime()
 {
+	if (m_pPlayer1->IsMoving())
+	{
 		int x = m_pPlayer1->getCenter().x;
 		int y = m_pPlayer1->getCenter().y;
 		int dir = m_pPlayer1->m_Roation;
-		int size = m_pPlayer1->getWidth()/2;
+		int size = m_pPlayer1->getWidth() / 2;
 		std::string color = m_pPlayer1->m_color;
 		Particle* slime = new Particle(x, y, size, size, dir, color, m_pRenderer, "Slime");
 		m_LSlime.push_back(slime);
+	}
+
 }
 
 void SDLHelper::SpawnRSlime()
