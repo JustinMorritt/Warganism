@@ -1036,8 +1036,10 @@ void SDLHelper::ShowGameOn()
 	m_pInGameSizeP1->Render();
 	m_pInGameSizeP2->Render();
 	m_pInGameAmmoP1->Render();
-	m_pInGameAmmoP2->Render();
-
+	if (*StateMachine::pGameMode != GameMode::PVCPU)
+	{
+		m_pInGameAmmoP2->Render();
+	}
 	if (*StateMachine::pCPU == CPUState::SHOOTENEMY)
 	{
 		SpawnProjectile(false, true);
