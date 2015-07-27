@@ -1022,7 +1022,7 @@ void SDLHelper::ShowGameOn()
 	m_pInGameSizeP2->LoadTextFile(m_pFont2, "Size: " + std::to_string(m_pPlayer2->getWidth()) + "mm", "black");
 
 	m_pInGameAmmoP1->LoadTextFile(m_pFont2, "Amoeba: " + std::to_string(m_pPlayer1->getCurrAmmo()), "black");
-	m_pInGameAmmoP2->LoadTextFile(m_pFont2, "Amoeba: " + std::to_string(m_pPlayer2->getCurrAmmo()), "black");
+	if (*StateMachine::pGameMode != GameMode::PVCPU){ m_pInGameAmmoP2->LoadTextFile(m_pFont2, "Amoeba: " + std::to_string(m_pPlayer2->getCurrAmmo()), "black"); }
 
 	//RE-POSITION ... if window size changes
 	m_pInGameTitle->setPos((MyWindow::m_Width / 2) - (m_pInGameTitle->getWidth() / 2), 0);
@@ -1036,7 +1036,7 @@ void SDLHelper::ShowGameOn()
 	m_pInGameSizeP1->Render();
 	m_pInGameSizeP2->Render();
 	m_pInGameAmmoP1->Render();
-	m_pInGameAmmoP2->Render();
+	if (*StateMachine::pGameMode != GameMode::PVCPU){ m_pInGameAmmoP2->Render(); }
 
 	if (*StateMachine::pCPU == CPUState::SHOOTENEMY)
 	{
